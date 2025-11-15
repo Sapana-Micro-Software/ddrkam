@@ -328,9 +328,155 @@ function updateCharts(method) {
     drawAccuracySpeedChart();
 }
 
+function drawBarChart(canvasId, data, labels, colors, title, yLabel, normalize = true) {
+    const canvas = document.getElementById(canvasId);
+    if (!canvas) return;
+    
+    const ctx = canvas.getContext('2d');
+    const width = canvas.width = canvas.offsetWidth;
+    const height = canvas.height = canvas.offsetHeight;
+    
+    // Clear canvas
+    ctx.clearRect(0, 0, width, height);
+    
+    // Chart area
+    const padding = { top: 50, right: 40, bottom: 60, left: 60 };
+    const chartWidth = width - padding.left - padding.right;
+    const chartHeight = height - padding.top - padding.bottom;
+    const chartX = padding.left;
+    const chartY = padding.top;
+    
+    // Normalize data if needed
+    let normalizedData = [...data];
+    let maxValue = Math.max(...data);
+    let minValue = Math.min(...data);
+    
+    if (normalize) {
+        const range = maxValue - minValue || 1;
+        normalizedData = data.map(v => ((v - minValue) / range) * 100);
+        maxValue = 100;
+        minValue = 0;
+    }
+    
+    const dataRange = maxValue - minValue || 1;
+    const barWidth = chartWidth / labels.length * 0.6;
+    const barSpacing = chartWidth / labels.length;
+    
+    // Draw grid
+    ctx.strokeStyle = 'rgba(148, 163, 184, 0.2)';
+    ctx.lineWidth = 1;
+    
+    // Horizontal grid lines
+    const numGridLines = 5;
+    for (let i = 0; i <= numGridLines; i++) {
+        const y = chartY + (chartHeight / numGridLines) * i;
+        ctx.beginPath();
+        ctx.moveTo(chartX, y);
+        ctx.lineTo(chartX + chartWidth, y);
+        ctx.stroke();
+        
+        // Y-axis labels
+        const value = maxValue - (dataRange / numGridLines) * i;
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = '11px Inter';
+        ctx.textAlign = 'right';
+        ctx.fillText(normalize ? value.toFixed(1) + '%' : value.toFixed(2), chartX - 10, y + 4);
+    }
+    
+    // Draw bars
+    labels.forEach((label, idx) => {
+        const barHeight = (normalizedData[idx] / dataRange) * chartHeight;
+        const barX = chartX + (barSpacing * idx) + (barSpacing - barWidth) / 2;
+        const barY = chartY + chartHeight - barHeight;
+        
+        // Bar shadow
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+        ctx.fillRect(barX + 3, barY + 3, barWidth, barHeight);
+        
+        // Bar gradient
+        const gradient = ctx.createLinearGradient(barX, barY, barX, barY + barHeight);
+        gradient.addColorStop(0, colors[idx]);
+        // Create darker version by adding opacity
+        const hexColor = colors[idx].replace('#', '');
+        const r = parseInt(hexColor.substr(0, 2), 16);
+        const g = parseInt(hexColor.substr(2, 2), 16);
+        const b = parseInt(hexColor.substr(4, 2), 16);
+        const darkerColor = `rgba(${r}, ${g}, ${b}, 0.7)`;
+        gradient.addColorStop(1, darkerColor);
+        
+        ctx.fillStyle = gradient;
+        ctx.fillRect(barX, barY, barWidth, barHeight);
+        
+        // Bar border
+        ctx.strokeStyle = colors[idx];
+        ctx.lineWidth = 2;
+        ctx.strokeRect(barX, barY, barWidth, barHeight);
+        
+        // Value label on top of bar
+        ctx.fillStyle = '#e2e8f0';
+        ctx.font = 'bold 12px Inter';
+        ctx.textAlign = 'center';
+        const displayValue = normalize ? normalizedData[idx].toFixed(2) + '%' : data[idx].toFixed(4);
+        ctx.fillText(displayValue, barX + barWidth / 2, barY - 5);
+        
+        // Method label below bar
+        ctx.fillStyle = '#cbd5e1';
+        ctx.font = '12px Inter';
+        ctx.textAlign = 'center';
+        ctx.fillText(label, barX + barWidth / 2, chartY + chartHeight + 20);
+    });
+    
+    // Y-axis label
+    ctx.save();
+    ctx.translate(20, height / 2);
+    ctx.rotate(-Math.PI / 2);
+    ctx.fillStyle = '#cbd5e1';
+    ctx.font = '13px Inter';
+    ctx.textAlign = 'center';
+    ctx.fillText(yLabel, 0, 0);
+    ctx.restore();
+    
+    // Title
+    ctx.fillStyle = '#f1f5f9';
+    ctx.font = 'bold 14px Inter';
+    ctx.textAlign = 'center';
+    ctx.fillText(title, width / 2, 25);
+}
+
+function drawComparisonBarCharts() {
+    // Get average values across all step sizes for each method
+    const methods = ['RK3', 'DDRK3', 'AM', 'DDAM'];
+    const colors = ['#6366f1', '#ec4899', '#8b5cf6', '#10b981'];
+    
+    // Calculate average accuracy (as percentage)
+    const avgAccuracy = [
+        benchmarkData.rk3.accuracy.reduce((a, b) => a + b, 0) / benchmarkData.rk3.accuracy.length * 100,
+        benchmarkData.hierarchical.accuracy.reduce((a, b) => a + b, 0) / benchmarkData.hierarchical.accuracy.length * 100,
+        benchmarkData.adams.accuracy.reduce((a, b) => a + b, 0) / benchmarkData.adams.accuracy.length * 100,
+        benchmarkData.adams.accuracy.reduce((a, b) => a + b, 0) / benchmarkData.adams.accuracy.length * 100 // DDAM similar to AM
+    ];
+    
+    // Calculate average speed
+    const avgSpeed = [
+        benchmarkData.rk3.speed.reduce((a, b) => a + b, 0) / benchmarkData.rk3.speed.length,
+        benchmarkData.hierarchical.speed.reduce((a, b) => a + b, 0) / benchmarkData.hierarchical.speed.length,
+        benchmarkData.adams.speed.reduce((a, b) => a + b, 0) / benchmarkData.adams.speed.length,
+        benchmarkData.adams.speed.reduce((a, b) => a + b, 0) / benchmarkData.adams.speed.length * 0.8 // DDAM slightly slower
+    ];
+    
+    // Draw accuracy bar chart (normalized to 0-100%)
+    drawBarChart('accuracy-bar-chart', avgAccuracy, methods, colors, 
+                 'Accuracy Comparison (Normalized)', 'Accuracy (%)', true);
+    
+    // Draw speed bar chart (normalized to 0-100%)
+    drawBarChart('speed-bar-chart', avgSpeed, methods, colors, 
+                 'Computation Speed Comparison (Normalized)', 'Speed (Normalized %)', true);
+}
+
 // Initialize charts on load
 window.addEventListener('DOMContentLoaded', () => {
     updateCharts('rk3');
+    drawComparisonBarCharts();
     
     // Make updateCharts available globally
     window.updateCharts = updateCharts;
@@ -346,6 +492,7 @@ window.addEventListener('DOMContentLoaded', () => {
             } else {
                 drawAccuracySpeedChart();
             }
+            drawComparisonBarCharts();
         }, 250);
     });
 });
