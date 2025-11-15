@@ -2464,6 +2464,11 @@ int export_comparison_csv(const char* filename, const ComparisonResults* results
                results->multiple_search_tree_time, results->multiple_search_tree_steps, results->multiple_search_tree_error,
                results->multiple_search_tree_accuracy * 100);
     }
+    if (results->directed_diffusion_time > 0) {
+        fprintf(fp, "Directed_Diffusion,%.6f,%zu,%.6e,%.6f,1.00,1\n",
+               results->directed_diffusion_time, results->directed_diffusion_steps, results->directed_diffusion_error,
+               results->directed_diffusion_accuracy * 100);
+    }
     
     fclose(fp);
     return 0;
