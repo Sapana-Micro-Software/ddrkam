@@ -143,6 +143,174 @@ function drawChart(canvasId, data, labels, color, type = 'line') {
     ctx.fillText('Step Size (h)', width / 2, height - 5);
 }
 
+function drawAccuracySpeedChart() {
+    const canvas = document.getElementById('accuracy-speed-chart');
+    if (!canvas) return;
+    
+    const ctx = canvas.getContext('2d');
+    const width = canvas.width = canvas.offsetWidth;
+    const height = canvas.height = canvas.offsetHeight;
+    
+    // Clear canvas
+    ctx.clearRect(0, 0, width, height);
+    
+    // Chart area
+    const padding = 60;
+    const chartWidth = width - 2 * padding;
+    const chartHeight = height - 2 * padding;
+    const chartX = padding;
+    const chartY = padding;
+    
+    // Find min/max for scaling
+    const allSpeeds = [
+        ...benchmarkData.rk3.speed,
+        ...benchmarkData.adams.speed,
+        ...benchmarkData.hierarchical.speed
+    ];
+    const allAccuracies = [
+        ...benchmarkData.rk3.accuracy.map(a => a * 100),
+        ...benchmarkData.adams.accuracy.map(a => a * 100),
+        ...benchmarkData.hierarchical.accuracy.map(a => a * 100)
+    ];
+    
+    const minSpeed = Math.min(...allSpeeds);
+    const maxSpeed = Math.max(...allSpeeds);
+    const minAccuracy = Math.min(...allAccuracies);
+    const maxAccuracy = Math.max(...allAccuracies);
+    
+    const speedRange = maxSpeed - minSpeed || 1;
+    const accuracyRange = maxAccuracy - minAccuracy || 1;
+    const speedScale = chartWidth / speedRange;
+    const accuracyScale = chartHeight / accuracyRange;
+    
+    // Draw grid
+    ctx.strokeStyle = 'rgba(148, 163, 184, 0.2)';
+    ctx.lineWidth = 1;
+    
+    // Horizontal grid lines (accuracy)
+    for (let i = 0; i <= 5; i++) {
+        const y = chartY + (chartHeight / 5) * i;
+        ctx.beginPath();
+        ctx.moveTo(chartX, y);
+        ctx.lineTo(chartX + chartWidth, y);
+        ctx.stroke();
+        
+        // Y-axis labels (accuracy)
+        const value = maxAccuracy - (accuracyRange / 5) * i;
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = '11px Inter';
+        ctx.textAlign = 'right';
+        ctx.fillText(value.toFixed(2) + '%', chartX - 10, y + 4);
+    }
+    
+    // Vertical grid lines (speed)
+    for (let i = 0; i <= 5; i++) {
+        const x = chartX + (chartWidth / 5) * i;
+        ctx.beginPath();
+        ctx.moveTo(x, chartY);
+        ctx.lineTo(x, chartY + chartHeight);
+        ctx.stroke();
+        
+        // X-axis labels (speed)
+        const value = minSpeed + (speedRange / 5) * i;
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = '11px Inter';
+        ctx.textAlign = 'center';
+        ctx.fillText((value / 1000).toFixed(0) + 'K', x, chartY + chartHeight + 20);
+    }
+    
+    // Draw data points for each method
+    const methods = [
+        { name: 'RK3', data: benchmarkData.rk3, color: '#6366f1' },
+        { name: 'Adams', data: benchmarkData.adams, color: '#8b5cf6' },
+        { name: 'DDRK3', data: benchmarkData.hierarchical, color: '#ec4899' }
+    ];
+    
+    methods.forEach(method => {
+        const speeds = method.data.speed;
+        const accuracies = method.data.accuracy.map(a => a * 100);
+        
+        // Draw lines connecting points
+        ctx.strokeStyle = method.color;
+        ctx.lineWidth = 2;
+        ctx.globalAlpha = 0.3;
+        ctx.beginPath();
+        
+        for (let i = 0; i < speeds.length; i++) {
+            const x = chartX + (speeds[i] - minSpeed) * speedScale;
+            const y = chartY + chartHeight - (accuracies[i] - minAccuracy) * accuracyScale;
+            
+            if (i === 0) {
+                ctx.moveTo(x, y);
+            } else {
+                ctx.lineTo(x, y);
+            }
+        }
+        ctx.stroke();
+        ctx.globalAlpha = 1.0;
+        
+        // Draw data points
+        for (let i = 0; i < speeds.length; i++) {
+            const x = chartX + (speeds[i] - minSpeed) * speedScale;
+            const y = chartY + chartHeight - (accuracies[i] - minAccuracy) * accuracyScale;
+            
+            // Outer glow
+            ctx.shadowColor = method.color;
+            ctx.shadowBlur = 15;
+            ctx.fillStyle = method.color;
+            ctx.beginPath();
+            ctx.arc(x, y, 8, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.shadowBlur = 0;
+            
+            // Inner point
+            ctx.fillStyle = '#ffffff';
+            ctx.beginPath();
+            ctx.arc(x, y, 4, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Method color overlay
+            ctx.fillStyle = method.color;
+            ctx.beginPath();
+            ctx.arc(x, y, 3, 0, Math.PI * 2);
+            ctx.fill();
+        }
+    });
+    
+    // Y-axis label (Accuracy)
+    ctx.save();
+    ctx.translate(20, height / 2);
+    ctx.rotate(-Math.PI / 2);
+    ctx.fillStyle = '#cbd5e1';
+    ctx.font = '13px Inter';
+    ctx.textAlign = 'center';
+    ctx.fillText('Accuracy (%)', 0, 0);
+    ctx.restore();
+    
+    // X-axis label (Speed)
+    ctx.fillStyle = '#cbd5e1';
+    ctx.font = '13px Inter';
+    ctx.textAlign = 'center';
+    ctx.fillText('Computational Speed (steps/sec)', width / 2, height - 10);
+    
+    // Legend
+    const legendX = chartX + chartWidth - 150;
+    const legendY = chartY + 20;
+    methods.forEach((method, idx) => {
+        const y = legendY + idx * 25;
+        
+        // Color box
+        ctx.fillStyle = method.color;
+        ctx.fillRect(legendX, y - 8, 15, 15);
+        
+        // Label
+        ctx.fillStyle = '#e2e8f0';
+        ctx.font = '12px Inter';
+        ctx.textAlign = 'left';
+        ctx.fillText(method.name, legendX + 20, y + 4);
+    });
+}
+
 function updateCharts(method) {
     const data = benchmarkData[method];
     
@@ -155,6 +323,9 @@ function updateCharts(method) {
     
     // Error chart (log scale visualization)
     drawChart('error-chart', data.error, data.labels, data.color, 'error');
+    
+    // Accuracy vs Speed chart (all methods)
+    drawAccuracySpeedChart();
 }
 
 // Initialize charts on load
@@ -172,6 +343,8 @@ window.addEventListener('DOMContentLoaded', () => {
             const activeBtn = document.querySelector('.benchmark-btn.active');
             if (activeBtn) {
                 updateCharts(activeBtn.dataset.method);
+            } else {
+                drawAccuracySpeedChart();
             }
         }, 250);
     });
