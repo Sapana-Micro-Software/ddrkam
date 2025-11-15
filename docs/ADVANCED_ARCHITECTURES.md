@@ -323,7 +323,7 @@ Based on https://github.com/shyamalschandra/STARR. Semantic and associative memo
 
 ## References
 
-- Chord: Stoica et al. (2001). "Chord: A Scalable Peer-to-peer Lookup Service"
+- **Chord**: Stoica, I., Morris, R., Karger, D., Kaashoek, M. F., & Balakrishnan, H. (2001). "Chord: A Scalable Peer-to-peer Lookup Service for Internet Applications." <em>ACM SIGCOMM Computer Communication Review</em>, 31(4), 149-160. DOI: 10.1145/964723.383071. Available at: https://en.wikipedia.org/wiki/Chord_(peer-to-peer)
 - Robert Morris: Morris, R. (1978). "Counting Large Numbers of Events in Small Registers"
 - Korf, R. E. (1999). "Frontier Search"
 - TrueNorth: Merolla et al. (2014). "A million spiking-neuron integrated circuit"
