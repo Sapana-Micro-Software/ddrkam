@@ -30,6 +30,110 @@
 
 This manual provides comprehensive documentation for the DDRKAM (Data-Driven Runge-Kutta and Adams Methods) framework. The framework implements numerical methods for solving ordinary differential equations (ODEs) with support for traditional and hierarchical data-driven approaches.
 
+The framework includes:
+\begin{itemize}
+\item Euler's Method (1st order)
+\item Data-Driven Euler's Method (DDEuler)
+\item Runge-Kutta 3rd Order Method (RK3)
+\item Data-Driven Runge-Kutta 3rd Order (DDRK3)
+\item Adams Methods (AM)
+\item Data-Driven Adams Methods (DDAM)
+\end{itemize}
+
+\section{Euler's Method}
+
+\subsection{Overview}
+
+Euler's Method is the simplest numerical method for solving ODEs. It is a first-order explicit method with local truncation error $O(h^2)$.
+
+\subsection{Algorithm}
+
+\begin{equation}
+y_{n+1} = y_n + h \cdot f(t_n, y_n)
+\end{equation}
+
+where $h$ is the step size, $f$ is the ODE function, and $y_n$ is the state at time $t_n$.
+
+\subsection{API Reference}
+
+\subsubsection{euler\_step}
+
+Performs a single integration step using Euler's method.
+
+\begin{lstlisting}
+double euler_step(ODEFunction f, double t0, double* y0, 
+                  size_t n, double h, void* params);
+\end{lstlisting}
+
+\textbf{Parameters:}
+\begin{itemize}
+\item \texttt{f}: Function pointer to the ODE system
+\item \texttt{t0}: Current time
+\item \texttt{y0}: Current state vector (modified in-place)
+\item \texttt{n}: Dimension of the system
+\item \texttt{h}: Step size
+\item \texttt{params}: User-defined parameters
+\end{itemize}
+
+\textbf{Returns:} New time value (t0 + h)
+
+\subsubsection{euler\_solve}
+
+Solves an ODE system over a time interval using Euler's method.
+
+\begin{lstlisting}
+size_t euler_solve(ODEFunction f, double t0, double t_end, 
+                   const double* y0, size_t n, double h, 
+                   void* params, double* t_out, double* y_out);
+\end{lstlisting}
+
+\section{Data-Driven Euler's Method}
+
+\subsection{Overview}
+
+Data-Driven Euler's Method (DDEuler) extends standard Euler's method with a hierarchical transformer-inspired architecture that applies adaptive corrections to improve accuracy.
+
+\subsection{Algorithm}
+
+\begin{equation}
+y_{n+1} = y_n + h \cdot f(t_n, y_n) + h \cdot \alpha \cdot \text{Attention}(y_n)
+\end{equation}
+
+where $\alpha$ is a learning rate and $\text{Attention}(y_n)$ is computed through hierarchical transformer layers.
+
+\subsection{API Reference}
+
+\subsubsection{hierarchical\_euler\_init}
+
+Initializes a Data-Driven Euler solver.
+
+\begin{lstlisting}
+int hierarchical_euler_init(HierarchicalEulerSolver* solver, 
+                            size_t num_layers, size_t state_dim, 
+                            size_t hidden_dim);
+\end{lstlisting}
+
+\subsubsection{hierarchical\_euler\_step}
+
+Performs a single integration step using Data-Driven Euler.
+
+\begin{lstlisting}
+double hierarchical_euler_step(HierarchicalEulerSolver* solver, 
+                               ODEFunction f, double t, double* y, 
+                               double h, void* params);
+\end{lstlisting}
+
+\subsubsection{hierarchical\_euler\_solve}
+
+Solves an ODE system using Data-Driven Euler over a time interval.
+
+\begin{lstlisting}
+size_t hierarchical_euler_solve(HierarchicalEulerSolver* solver, 
+                                 ODEFunction f, double t0, double t_end, 
+                                 const double* y0, double h, void* params, 
+                                 double* t_out, double* y_out);
+\end{lstlisting}
+
 \section{Runge-Kutta 3rd Order Method}
 
 \subsection{Overview}

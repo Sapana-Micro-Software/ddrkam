@@ -4,6 +4,8 @@
  */
 
 #include "comparison.h"
+#include "euler.h"
+#include "hierarchical_euler.h"
 #include "rk3.h"
 #include "hierarchical_rk.h"
 #include "adams.h"
@@ -117,8 +119,51 @@ int compare_methods(ODEFunction f, double t0, double t_end, const double* y0,
     
     clock_t start, end;
     
-    // Test RK3
+    // Test Euler's Method
     double* y0_copy = (double*)malloc(n * sizeof(double));
+    memcpy(y0_copy, y0, n * sizeof(double));
+    
+    start = clock();
+    size_t euler_steps = euler_solve(f, t0, t_end, y0_copy, n, h, params, t_out, y_out);
+    end = clock();
+    
+    results->euler_time = ((double)(end - start)) / CLOCKS_PER_SEC;
+    results->euler_steps = euler_steps;
+    
+    if (euler_steps > 0) {
+        double* final_euler = &y_out[(euler_steps - 1) * n];
+        results->euler_error = compute_error(final_euler, exact_solution, n);
+        results->euler_accuracy = compute_accuracy(final_euler, exact_solution, n);
+    }
+    
+    free(y0_copy);
+    
+    // Test DDEuler (Data-Driven Euler)
+    HierarchicalEulerSolver ddeuler_solver;
+    if (hierarchical_euler_init(&ddeuler_solver, 3, n, 16) == 0) {
+        y0_copy = (double*)malloc(n * sizeof(double));
+        memcpy(y0_copy, y0, n * sizeof(double));
+        
+        start = clock();
+        size_t ddeuler_steps = hierarchical_euler_solve(&ddeuler_solver, f, t0, t_end, y0_copy,
+                                                       h, params, t_out, y_out);
+        end = clock();
+        
+        results->ddeuler_time = ((double)(end - start)) / CLOCKS_PER_SEC;
+        results->ddeuler_steps = ddeuler_steps;
+        
+        if (ddeuler_steps > 0) {
+            double* final_ddeuler = &y_out[(ddeuler_steps - 1) * n];
+            results->ddeuler_error = compute_error(final_ddeuler, exact_solution, n);
+            results->ddeuler_accuracy = compute_accuracy(final_ddeuler, exact_solution, n);
+        }
+        
+        hierarchical_euler_free(&ddeuler_solver);
+        free(y0_copy);
+    }
+    
+    // Test RK3
+    y0_copy = (double*)malloc(n * sizeof(double));
     memcpy(y0_copy, y0, n * sizeof(double));
     
     start = clock();
@@ -293,10 +338,14 @@ void print_comparison_results(const ComparisonResults* results) {
     
     printf("\n");
     printf("╔════════════════════════════════════════════════════════════════╗\n");
-    printf("║          METHOD COMPARISON: RK3 vs DDRK3 vs AM vs DDAM         ║\n");
+    printf("║   METHOD COMPARISON: Euler, DDEuler, RK3, DDRK3, AM, DDAM      ║\n");
     printf("╠════════════════════════════════════════════════════════════════╣\n");
-    printf("║ Method │ Time (s) │ Steps │ Error      │ Accuracy              ║\n");
+    printf("║ Method  │ Time (s) │ Steps │ Error      │ Accuracy             ║\n");
     printf("╠════════╪══════════╪═══════╪════════════╪═══════════════════════╣\n");
+    printf("║ Euler  │ %8.6f │ %5zu │ %10.6e │ %19.6f%% ║\n",
+           results->euler_time, results->euler_steps, results->euler_error, results->euler_accuracy * 100);
+    printf("║ DDEuler│ %8.6f │ %5zu │ %10.6e │ %19.6f%% ║\n",
+           results->ddeuler_time, results->ddeuler_steps, results->ddeuler_error, results->ddeuler_accuracy * 100);
     printf("║ RK3    │ %8.6f │ %5zu │ %10.6e │ %19.6f%% ║\n",
            results->rk3_time, results->rk3_steps, results->rk3_error, results->rk3_accuracy * 100);
     printf("║ DDRK3  │ %8.6f │ %5zu │ %10.6e │ %19.6f%% ║\n",
@@ -309,8 +358,16 @@ void print_comparison_results(const ComparisonResults* results) {
     printf("\n");
     
     // Find best method
-    const char* best_time = "RK3";
-    double min_time = results->rk3_time;
+    const char* best_time = "Euler";
+    double min_time = results->euler_time;
+    if (results->ddeuler_time > 0 && results->ddeuler_time < min_time) {
+        min_time = results->ddeuler_time;
+        best_time = "DDEuler";
+    }
+    if (results->rk3_time > 0 && results->rk3_time < min_time) {
+        min_time = results->rk3_time;
+        best_time = "RK3";
+    }
     if (results->ddrk3_time > 0 && results->ddrk3_time < min_time) {
         min_time = results->ddrk3_time;
         best_time = "DDRK3";
@@ -324,8 +381,16 @@ void print_comparison_results(const ComparisonResults* results) {
         best_time = "DDAM";
     }
     
-    const char* best_accuracy = "RK3";
-    double max_accuracy = results->rk3_accuracy;
+    const char* best_accuracy = "Euler";
+    double max_accuracy = results->euler_accuracy;
+    if (results->ddeuler_accuracy > max_accuracy) {
+        max_accuracy = results->ddeuler_accuracy;
+        best_accuracy = "DDEuler";
+    }
+    if (results->rk3_accuracy > max_accuracy) {
+        max_accuracy = results->rk3_accuracy;
+        best_accuracy = "RK3";
+    }
     if (results->ddrk3_accuracy > max_accuracy) {
         max_accuracy = results->ddrk3_accuracy;
         best_accuracy = "DDRK3";
@@ -355,6 +420,10 @@ int export_comparison_csv(const char* filename, const ComparisonResults* results
     }
     
     fprintf(fp, "Method,Time(s),Steps,Error,Accuracy(%%)\n");
+    fprintf(fp, "Euler,%.6f,%zu,%.6e,%.6f\n",
+            results->euler_time, results->euler_steps, results->euler_error, results->euler_accuracy * 100);
+    fprintf(fp, "DDEuler,%.6f,%zu,%.6e,%.6f\n",
+            results->ddeuler_time, results->ddeuler_steps, results->ddeuler_error, results->ddeuler_accuracy * 100);
     fprintf(fp, "RK3,%.6f,%zu,%.6e,%.6f\n",
             results->rk3_time, results->rk3_steps, results->rk3_error, results->rk3_accuracy * 100);
     fprintf(fp, "DDRK3,%.6f,%zu,%.6e,%.6f\n",

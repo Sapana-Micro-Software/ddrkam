@@ -13,12 +13,32 @@
 \maketitle
 
 \begin{abstract}
-This paper presents a comprehensive implementation of the Runge-Kutta 3rd order method and Adams methods for solving nonlinear differential equations. We introduce a novel data-driven hierarchical architecture inspired by transformer networks that enhances traditional numerical integration methods. The framework is implemented in C/C++ with Objective-C visualization capabilities, making it suitable for macOS and VisionOS platforms.
+This paper presents a comprehensive implementation of numerical methods for solving nonlinear differential equations, including Euler's Method, Data-Driven Euler's Method, Runge-Kutta 3rd order method, Data-Driven Runge-Kutta, Adams Methods, and Data-Driven Adams Methods. We introduce novel data-driven hierarchical architectures inspired by transformer networks that enhance traditional numerical integration methods. The framework is implemented in C/C++ with Objective-C visualization capabilities, making it suitable for macOS and VisionOS platforms.
 \end{abstract}
 
 \section{Introduction}
 
-Numerical methods for solving ordinary differential equations (ODEs) are fundamental tools in scientific computing. The Runge-Kutta family of methods, particularly the 3rd order variant, provides a good balance between accuracy and computational efficiency.
+Numerical methods for solving ordinary differential equations (ODEs) are fundamental tools in scientific computing. We present a comprehensive framework including Euler's Method, Data-Driven Euler's Method, Runge-Kutta 3rd order, Data-Driven Runge-Kutta, Adams Methods, and Data-Driven Adams Methods.
+
+\section{Euler's Method}
+
+Euler's Method is the simplest numerical method for solving ODEs. It is a first-order explicit method:
+
+\begin{equation}
+y_{n+1} = y_n + h \cdot f(t_n, y_n)
+\end{equation}
+
+where $h$ is the step size, $f$ is the ODE function, and $y_n$ is the state at time $t_n$. The local truncation error is $O(h^2)$, making it a first-order method.
+
+\subsection{Data-Driven Euler's Method}
+
+We extend Euler's Method with a hierarchical transformer-inspired architecture:
+
+\begin{equation}
+y_{n+1} = y_n + h \cdot f(t_n, y_n) + h \cdot \alpha \cdot \text{Attention}(y_n)
+\end{equation}
+
+where $\alpha$ is a learning rate and $\text{Attention}(y_n)$ is a hierarchical attention mechanism that refines the Euler step using multiple transformer layers.
 
 \section{Runge-Kutta 3rd Order Method}
 

@@ -23,21 +23,29 @@ typedef void (*ODEFunction)(double t, const double* y, double* dydt, void* param
  * Comparison results structure
  */
 typedef struct {
+    double euler_time;
+    double ddeuler_time;
     double rk3_time;
     double ddrk3_time;
     double am_time;
     double ddam_time;
     
+    double euler_error;
+    double ddeuler_error;
     double rk3_error;
     double ddrk3_error;
     double am_error;
     double ddam_error;
     
+    double euler_accuracy;
+    double ddeuler_accuracy;
     double rk3_accuracy;
     double ddrk3_accuracy;
     double am_accuracy;
     double ddam_accuracy;
     
+    size_t euler_steps;
+    size_t ddeuler_steps;
     size_t rk3_steps;
     size_t ddrk3_steps;
     size_t am_steps;

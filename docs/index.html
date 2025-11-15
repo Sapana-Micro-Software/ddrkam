@@ -213,6 +213,40 @@
             <div class="methods-grid">
                 <div class="method-card">
                     <div class="method-header">
+                        <h3>Euler</h3>
+                        <span class="method-badge">ODE Solver</span>
+                    </div>
+                    <p class="method-description">Euler's Method (1st order). Simple explicit method: y_{n+1} = y_n + h·f(t_n, y_n). Local truncation error O(h²).</p>
+                    <div class="method-formula">
+                        <code>y_{n+1} = y_n + h·f(t_n, y_n)</code>
+                    </div>
+                    <ul class="method-features">
+                        <li>✓ Simplest numerical method</li>
+                        <li>✓ First-order accuracy</li>
+                        <li>✓ Fast computation</li>
+                        <li>✓ Good for simple systems</li>
+                    </ul>
+                </div>
+                
+                <div class="method-card">
+                    <div class="method-header">
+                        <h3>DDEuler</h3>
+                        <span class="method-badge">Data-Driven</span>
+                    </div>
+                    <p class="method-description">Data-Driven Euler with hierarchical transformer architecture. Combines standard Euler with adaptive refinement.</p>
+                    <div class="method-formula">
+                        <code>y = y_Euler + h·α·Attention(y)</code>
+                    </div>
+                    <ul class="method-features">
+                        <li>✓ Hierarchical layers</li>
+                        <li>✓ Attention mechanisms</li>
+                        <li>✓ Adaptive correction</li>
+                        <li>✓ Enhanced accuracy</li>
+                    </ul>
+                </div>
+                
+                <div class="method-card">
+                    <div class="method-header">
                         <h3>RK3</h3>
                         <span class="method-badge">ODE Solver</span>
                     </div>
@@ -283,9 +317,17 @@
     <section id="comparison" class="comparison">
         <div class="container">
             <h2 class="section-title">Method Comparison</h2>
-            <p class="section-subtitle">Side-by-side comparison of all four methods</p>
+            <p class="section-subtitle">Side-by-side comparison of all six methods: Euler, DDEuler, RK3, DDRK3, AM, DDAM</p>
             
             <div class="comparison-cards">
+                <div class="comparison-card">
+                    <h3>Euler</h3>
+                    <p>Euler's Method<br>1st order, simplest</p>
+                </div>
+                <div class="comparison-card">
+                    <h3>DDEuler</h3>
+                    <p>Data-Driven Euler<br>Hierarchical, enhanced</p>
+                </div>
                 <div class="comparison-card">
                     <h3>RK3</h3>
                     <p>Traditional Runge-Kutta<br>High accuracy, single-step</p>

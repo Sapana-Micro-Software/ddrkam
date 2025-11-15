@@ -15,11 +15,42 @@
 \begin{frame}
 \frametitle{Overview}
 \begin{itemize}
-\item Runge-Kutta 3rd order method implementation
+\item Euler's Method (1st order)
+\item Data-Driven Euler's Method
+\item Runge-Kutta 3rd order method
+\item Data-Driven Runge-Kutta
 \item Adams-Bashforth and Adams-Moulton methods
+\item Data-Driven Adams Methods
 \item Hierarchical data-driven architecture
 \item Transformer-inspired ODE solver
 \item Objective-C framework for Apple platforms
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Euler's Method}
+\begin{block}{Algorithm}
+$$y_{n+1} = y_n + h \cdot f(t_n, y_n)$$
+\end{block}
+\begin{itemize}
+\item Simplest numerical method
+\item First-order accuracy
+\item Local truncation error: $O(h^2)$
+\item Fast computation
+\item Foundation for higher-order methods
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Data-Driven Euler's Method}
+\begin{block}{Enhanced Algorithm}
+$$y_{n+1} = y_n + h \cdot f(t_n, y_n) + h \cdot \alpha \cdot \text{Attention}(y_n)$$
+\end{block}
+\begin{itemize}
+\item Hierarchical transformer layers
+\item Attention mechanisms
+\item Adaptive correction
+\item Enhanced accuracy over standard Euler
 \end{itemize}
 \end{frame}
 
