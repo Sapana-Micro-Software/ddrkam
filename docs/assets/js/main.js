@@ -1,9 +1,116 @@
 // Main JavaScript for DDRKAM website
 // Copyright (C) 2025, Shyamal Suhana Chandra
+//
+// Implementation Credits:
+// - Intersection Observer API: W3C Standard [9]
+// - Material Design Ripple Effect: Google Material Design [8]
+// - Glassmorphism Effects: Apple Human Interface Guidelines [7]
+// - Modern Web Animations: MDN Web Docs [10]
 
 (function() {
     'use strict';
     
+    // ============================================================================
+    // Loading & Initialization
+    // ============================================================================
+
+    // Loading screen
+    function showLoadingScreen() {
+        const loadingScreen = document.createElement('div');
+        loadingScreen.id = 'loading-screen';
+        loadingScreen.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-darker);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease-out;
+        `;
+
+        loadingScreen.innerHTML = `
+            <div style="text-align: center;">
+                <div style="
+                    width: 60px;
+                    height: 60px;
+                    border: 3px solid rgba(99, 102, 241, 0.3);
+                    border-radius: 50%;
+                    border-top-color: var(--primary-color);
+                    animation: rotate 1s linear infinite;
+                    margin: 0 auto 1rem;
+                "></div>
+                <h2 style="
+                    background: var(--gradient-1);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    background-clip: text;
+                    font-size: 1.5rem;
+                    margin: 0;
+                ">DDRKAM</h2>
+                <p style="color: var(--text-secondary); margin: 0.5rem 0 0;">Loading...</p>
+            </div>
+        `;
+
+        document.body.appendChild(loadingScreen);
+
+        // Hide loading screen after content loads
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                loadingScreen.style.opacity = '0';
+                setTimeout(() => {
+                    loadingScreen.remove();
+                    initializeAnimations();
+                }, 500);
+            }, 1000);
+        });
+    }
+
+    // Initialize scroll-triggered animations
+    function initializeAnimations() {
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const sectionObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    // Stagger child animations
+                    const children = entry.target.querySelectorAll('.feature-card, .doc-card, .stat-card, .chart-container');
+                    children.forEach((child, index) => {
+                        setTimeout(() => {
+                            child.classList.add('fade-in-up');
+                        }, index * 100);
+                    });
+                }
+            });
+        }, observerOptions);
+
+        // Observe all sections
+        document.querySelectorAll('section').forEach(section => {
+            sectionObserver.observe(section);
+        });
+
+        // Add smooth reveal for hero elements
+        const heroElements = document.querySelectorAll('.hero-title, .hero-subtitle, .hero-buttons');
+        heroElements.forEach((element, index) => {
+            setTimeout(() => {
+                element.style.animation = 'fadeInUp 0.8s ease-out forwards';
+            }, index * 200);
+        });
+
+        // Initialize enhanced interactions
+        enhanceButtonInteractions();
+        enhanceCardInteractions();
+        enhanceChartLoading();
+        initializeThemeToggle();
+    }
+
     // ============================================================================
     // Navigation & Smooth Scrolling
     // ============================================================================
@@ -44,24 +151,27 @@
         });
     }
     
+    // ============================================================================
     // Intersection Observer for active nav links
+    // ============================================================================
+
     const sections = document.querySelectorAll('section[id]');
-    const observerOptions = {
+    const navObserverOptions = {
         root: null,
         rootMargin: '-20% 0px -70% 0px',
         threshold: 0
     };
-    
-    const sectionObserver = new IntersectionObserver((entries) => {
+
+    const navObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 const id = entry.target.getAttribute('id');
                 updateActiveNavLink('#' + id);
             }
         });
-    }, observerOptions);
-    
-    sections.forEach(section => sectionObserver.observe(section));
+    }, navObserverOptions);
+
+    sections.forEach(section => navObserver.observe(section));
     
     // ============================================================================
     // Mobile Menu Toggle
@@ -226,6 +336,146 @@
         canvasObserver.observe(canvas);
     }
     
+    // ============================================================================
+    // Theme Toggle Functionality
+    // ============================================================================
+
+    function initializeThemeToggle() {
+        // Create theme toggle button
+        const themeToggle = document.createElement('button');
+        themeToggle.className = 'theme-toggle';
+        themeToggle.setAttribute('aria-label', 'Toggle theme');
+        themeToggle.innerHTML = `
+            <svg class="theme-toggle-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 3V4M12 20V21M4 12H3M6.31412 6.31412L5.5 5.5M17.6859 6.31412L18.5 5.5M6.31412 17.69L5.5 18.5M17.6859 17.69L18.5 18.5M21 12H20M16 12C16 14.2091 14.2091 16 12 16C9.79086 16 8 14.2091 8 12C8 9.79086 9.79086 8 12 8C14.2091 8 16 9.79086 16 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M12 3V4M12 20V21M4 12H3M21 12H20M16 12C16 14.2091 14.2091 16 12 16C9.79086 16 8 14.2091 8 12C8 9.79086 9.79086 8 12 8C14.2091 8 16 9.79086 16 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="sun-rays"/>
+                <circle cx="12" cy="12" r="4" fill="currentColor" class="sun-circle"/>
+                <path d="M12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21C14.4853 21 16.7353 20.0571 18.364 18.636L16.9497 17.2217C15.6141 18.251 13.8774 18.9 12 18.9C8.0257 18.9 4.8 15.6743 4.8 11.7C4.8 7.7257 8.0257 4.5 12 4.5C13.8774 4.5 15.6141 5.14903 16.9497 6.1783L18.364 4.764C16.7353 3.34289 14.4853 2.4 12 2.4V3Z" fill="currentColor" class="moon-path"/>
+            </svg>
+        `;
+
+        document.body.appendChild(themeToggle);
+
+        // Check for saved theme preference or default to dark mode
+        const savedTheme = localStorage.getItem('ddrkam-theme') || 'dark';
+        if (savedTheme === 'light') {
+            document.body.classList.add('light-mode');
+            updateThemeIcon(true);
+        }
+
+        // Toggle theme on click
+        themeToggle.addEventListener('click', () => {
+            const isLight = document.body.classList.toggle('light-mode');
+            localStorage.setItem('ddrkam-theme', isLight ? 'light' : 'dark');
+            updateThemeIcon(isLight);
+
+            // Update charts if they exist
+            if (window.updateCharts) {
+                const activeBtn = document.querySelector('.benchmark-btn.active');
+                if (activeBtn) {
+                    window.updateCharts(activeBtn.dataset.method);
+                }
+            }
+        });
+
+        function updateThemeIcon(isLight) {
+            const icon = themeToggle.querySelector('.theme-toggle-icon');
+            if (isLight) {
+                // Show moon icon for light mode (switch to dark)
+                icon.innerHTML = `
+                    <path d="M12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21C14.4853 21 16.7353 20.0571 18.364 18.636L16.9497 17.2217C15.6141 18.251 13.8774 18.9 12 18.9C8.0257 18.9 4.8 15.6743 4.8 11.7C4.8 7.7257 8.0257 4.5 12 4.5C13.8774 4.5 15.6141 5.14903 16.9497 6.1783L18.364 4.764C16.7353 3.34289 14.4853 2.4 12 2.4V3Z" fill="currentColor"/>
+                `;
+            } else {
+                // Show sun icon for dark mode (switch to light)
+                icon.innerHTML = `
+                    <circle cx="12" cy="12" r="4" fill="currentColor"/>
+                    <path d="M12 3V4M12 20V21M4 12H3M6.31412 6.31412L5.5 5.5M17.6859 6.31412L18.5 5.5M6.31412 17.69L5.5 18.5M17.6859 17.69L18.5 18.5M21 12H20M16 12C16 14.2091 14.2091 16 12 16C9.79086 16 8 14.2091 8 12C8 9.79086 9.79086 8 12 8C14.2091 8 16 9.79086 16 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                `;
+            }
+        }
+    }
+
+    // ============================================================================
+    // Enhanced Interactive Elements
+    // ============================================================================
+
+    // Button click animations
+    function enhanceButtonInteractions() {
+        document.querySelectorAll('.btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                // Create ripple effect
+                const ripple = document.createElement('span');
+                ripple.style.cssText = `
+                    position: absolute;
+                    border-radius: 50%;
+                    background: rgba(255, 255, 255, 0.3);
+                    transform: scale(0);
+                    animation: ripple 0.6s linear;
+                    pointer-events: none;
+                `;
+
+                const rect = this.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
+
+                ripple.style.width = ripple.style.height = size + 'px';
+                ripple.style.left = x + 'px';
+                ripple.style.top = y + 'px';
+
+                this.appendChild(ripple);
+
+                setTimeout(() => ripple.remove(), 600);
+            });
+        });
+
+        // Add CSS for ripple animation
+        if (!document.getElementById('ripple-styles')) {
+            const style = document.createElement('style');
+            style.id = 'ripple-styles';
+            style.textContent = `
+                @keyframes ripple {
+                    to {
+                        transform: scale(4);
+                        opacity: 0;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+    }
+
+    // Enhanced hover effects for cards
+    function enhanceCardInteractions() {
+        document.querySelectorAll('.feature-card, .doc-card, .stat-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                // Add subtle glow effect
+                this.style.boxShadow = `0 20px 40px rgba(0, 0, 0, 0.2), var(--shadow-glow)`;
+            });
+
+            card.addEventListener('mouseleave', function() {
+                // Reset shadow
+                this.style.boxShadow = '';
+            });
+        });
+    }
+
+    // Dynamic content loading for benchmark charts
+    function enhanceChartLoading() {
+        const chartContainers = document.querySelectorAll('.chart-container');
+
+        chartContainers.forEach(container => {
+            // Add loading state
+            container.classList.add('loading');
+
+            // Simulate loading delay for demo
+            setTimeout(() => {
+                container.classList.remove('loading');
+                container.classList.add('loaded');
+            }, Math.random() * 1000 + 500);
+        });
+    }
+
     // ============================================================================
     // Benchmark Statistics Update
     // ============================================================================
@@ -409,10 +659,17 @@
         benchmarkData: benchmarkData
     };
     
+    // ============================================================================
+    // Initialize Application
+    // ============================================================================
+
+    // Start loading screen
+    showLoadingScreen();
+
     // Initialize on DOM ready
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('DDRKAM website initialized');
+            console.log('DDRKAM website DOM loaded');
         });
     } else {
         console.log('DDRKAM website initialized');

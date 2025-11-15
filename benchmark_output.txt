@@ -1,0 +1,145 @@
+gcc -Wall -Wextra -O2 -fPIC -std=c11 -pthread -Iinclude -c src/distributed_solvers.c -o obj/distributed_solvers.o
+gcc -Wall -Wextra -O2 -fPIC -std=c11 -pthread -Iinclude -c src/hierarchical_euler.c -o obj/hierarchical_euler.o
+gcc -Wall -Wextra -O2 -fPIC -std=c11 -pthread -Iinclude -c src/hierarchical_rk.c -o obj/hierarchical_rk.o
+gcc -Wall -Wextra -O2 -fPIC -std=c11 -pthread -Iinclude -c src/mapreduce_solvers.c -o obj/mapreduce_solvers.o
+src/mapreduce_solvers.c:17:44: warning: unused parameter 'key' [-Wunused-parameter]
+   17 | static size_t default_map_func(const char* key, const double* value, size_t value_size,
+      |                                            ^
+src/mapreduce_solvers.c:18:74: warning: unused parameter 'params' [-Wunused-parameter]
+   18 |                                double* output, size_t output_size, void* params) {
+      |                                                                          ^
+src/mapreduce_solvers.c:32:47: warning: unused parameter 'key' [-Wunused-parameter]
+   32 | static size_t default_reduce_func(const char* key, const double* values, size_t num_values,
+      |                                               ^
+src/mapreduce_solvers.c:33:57: warning: unused parameter 'params' [-Wunused-parameter]
+   33 |                                   double* output, void* params) {
+      |                                                         ^
+src/mapreduce_solvers.c:173:13: warning: unused variable 'start_total' [-Wunused-variable]
+  173 |     clock_t start_total = clock();
+      |             ^~~~~~~~~~~
+src/mapreduce_solvers.c:167:43: warning: unused parameter 't_end' [-Wunused-parameter]
+  167 |                         double t0, double t_end, const double* y0,
+      |                                           ^
+src/mapreduce_solvers.c:392:32: warning: unused parameter 't0' [-Wunused-parameter]
+  392 |                         double t0, double t_end, const double* u0,
+      |                                ^
+src/mapreduce_solvers.c:392:43: warning: unused parameter 't_end' [-Wunused-parameter]
+  392 |                         double t0, double t_end, const double* u0,
+      |                                           ^
+src/mapreduce_solvers.c:393:32: warning: unused parameter 'h' [-Wunused-parameter]
+  393 |                         double h, void* params, double* u_out) {
+      |                                ^
+src/mapreduce_solvers.c:393:41: warning: unused parameter 'params' [-Wunused-parameter]
+  393 |                         double h, void* params, double* u_out) {
+      |                                         ^
+10 warnings generated.
+gcc -Wall -Wextra -O2 -fPIC -std=c11 -pthread -Iinclude -c src/nonlinear_solver.c -o obj/nonlinear_solver.o
+src/nonlinear_solver.c:740:12: warning: unused variable 'chunk_size' [-Wunused-variable]
+  740 |     size_t chunk_size = n / solver->num_workers;
+      |            ^~~~~~~~~~
+1 warning generated.
+gcc -Wall -Wextra -O2 -fPIC -std=c11 -pthread -Iinclude -c src/nonorthodox_architectures.c -o obj/nonorthodox_architectures.o
+src/nonorthodox_architectures.c:3677:37: warning: passing 'const double *' to parameter of type 'double *' discards qualifiers [-Wincompatible-pointer-types-discards-qualifiers]
+ 3677 |     solver->root = create_tree_node(y0, state_dim, t0, 0.0, 0.0, 0, NULL);
+      |                                     ^~
+src/nonorthodox_architectures.c:3421:43: note: passing argument to parameter 'state' here
+ 3421 | static TreeNode* create_tree_node(double* state, size_t state_dim, double time, double cost, double heuristic, size_t depth, TreeNode* parent) {
+      |                                           ^
+src/nonorthodox_architectures.c:3467:15: warning: unused function 'compute_heuristic' [-Wunused-function]
+ 3467 | static double compute_heuristic(const double* current, const double* target, size_t state_dim) {
+      |               ^~~~~~~~~~~~~~~~~
+2 warnings generated.
+gcc -Wall -Wextra -O2 -fPIC -std=c11 -pthread -Iinclude -c src/nonparametric_solvers.c -o obj/nonparametric_solvers.o
+gcc -Wall -Wextra -O2 -fPIC -std=c11 -pthread -Iinclude -c src/optimization_solvers.c -o obj/optimization_solvers.o
+src/optimization_solvers.c:343:12: warning: variable 'steps' set but not used [-Wunused-but-set-variable]
+  343 |     size_t steps = 0;
+      |            ^
+src/optimization_solvers.c:29:15: warning: unused function 'uniform_random' [-Wunused-function]
+   29 | static double uniform_random(uint32_t* state) {
+      |               ^~~~~~~~~~~~~~
+2 warnings generated.
+gcc -Wall -Wextra -O2 -fPIC -std=c11 -pthread -Iinclude -c src/parallel_adams.c -o obj/parallel_adams.o
+src/parallel_adams.c:156:36: warning: incompatible pointer types passing 'const double *[3]' to parameter of type 'const double *' [-Wincompatible-pointer-types]
+  156 |         adams_bashforth3(f, t_arr, y_arr_const, n, h, params, y_pred);
+      |                                    ^~~~~~~~~~~
+include/adams.h:31:69: note: passing argument to parameter 'y' here
+   31 | void adams_bashforth3(ODEFunction f, const double* t, const double* y, 
+      |                                                                     ^
+src/parallel_adams.c:167:30: warning: incompatible pointer types passing 'const double *[3]' to parameter of type 'const double *' [-Wincompatible-pointer-types]
+  167 |     adams_moulton3(f, t_arr, y_arr_const, n, h, params, y_pred, y_corr);
+      |                              ^~~~~~~~~~~
+include/adams.h:46:67: note: passing argument to parameter 'y' here
+   46 | void adams_moulton3(ODEFunction f, const double* t, const double* y, 
+      |                                                                   ^
+2 warnings generated.
+gcc -Wall -Wextra -O2 -fPIC -std=c11 -pthread -Iinclude -c src/parallel_euler.c -o obj/parallel_euler.o
+gcc -Wall -Wextra -O2 -fPIC -std=c11 -pthread -Iinclude -c src/parallel_rk.c -o obj/parallel_rk.o
+gcc -Wall -Wextra -O2 -fPIC -std=c11 -pthread -Iinclude -c src/pde_solver.c -o obj/pde_solver.o
+gcc -Wall -Wextra -O2 -fPIC -std=c11 -pthread -Iinclude -c src/realtime_online.c -o obj/realtime_online.o
+gcc -Wall -Wextra -O2 -fPIC -std=c11 -pthread -Iinclude -c src/realtime_stochastic.c -o obj/realtime_stochastic.o
+gcc -Wall -Wextra -O2 -fPIC -std=c11 -pthread -Iinclude -c src/rk3.c -o obj/rk3.o
+gcc -Wall -Wextra -O2 -fPIC -std=c11 -pthread -Iinclude -c src/spark_solvers.c -o obj/spark_solvers.o
+src/spark_solvers.c:232:17: warning: unused variable 'partition_input' [-Wunused-variable]
+  232 |         double* partition_input = solver->state_rdd->partition_data[i];
+      |                 ^~~~~~~~~~~~~~~
+src/spark_solvers.c:178:38: warning: unused parameter 't_end' [-Wunused-parameter]
+  178 |                    double t0, double t_end, const double* y0,
+      |                                      ^
+src/spark_solvers.c:383:12: warning: variable 'total_points' set but not used [-Wunused-but-set-variable]
+  383 |     size_t total_points = 1;
+      |            ^
+src/spark_solvers.c:406:27: warning: unused parameter 't0' [-Wunused-parameter]
+  406 |                    double t0, double t_end, const double* u0,
+      |                           ^
+src/spark_solvers.c:406:38: warning: unused parameter 't_end' [-Wunused-parameter]
+  406 |                    double t0, double t_end, const double* u0,
+      |                                      ^
+src/spark_solvers.c:407:27: warning: unused parameter 'h' [-Wunused-parameter]
+  407 |                    double h, void* params, double* u_out) {
+      |                           ^
+src/spark_solvers.c:407:36: warning: unused parameter 'params' [-Wunused-parameter]
+  407 |                    double h, void* params, double* u_out) {
+      |                                    ^
+7 warnings generated.
+mkdir -p lib
+ar rcs lib/libddrkam.a obj/adams.o obj/additional_methods.o obj/comparison.o obj/ddmcmc.o obj/distributed_solvers.o obj/euler.o obj/hierarchical_euler.o obj/hierarchical_rk.o obj/mapreduce_solvers.o obj/nonlinear_solver.o obj/nonorthodox_architectures.o obj/nonparametric_solvers.o obj/optimization_solvers.o obj/parallel_adams.o obj/parallel_euler.o obj/parallel_rk.o obj/pde_solver.o obj/realtime_online.o obj/realtime_stochastic.o obj/rk3.o obj/spark_solvers.o
+mkdir -p bin
+gcc -Wall -Wextra -O2 -fPIC -std=c11 -pthread -Iinclude tests/test_rk3.c -Llib -lddrkam -lm -o bin/test_rk3
+bin/test_rk3
+=== Runge-Kutta 3rd Order Test Suite ===
+
+Testing exponential decay ODE...
+  Final value: 0.135335, Expected: 0.135335, Error: 1.136854e-08
+  PASS
+
+Testing Lorenz system...
+  Steps: 101
+  Final state: [-9.386416, -8.355359, 29.382629]
+  Final norm: 31.957092
+  PASS
+
+=== Test Summary ===
+Failures: 0
+gcc -Wall -Wextra -O2 -fPIC -std=c11 -pthread -Iinclude tests/test_ddmcmc.c -Llib -lddrkam -lm -o bin/test_ddmcmc
+bin/test_ddmcmc
+=== DDMCMC Test Suite ===
+
+Testing multinomial distribution...
+  PASS
+
+Testing DDMCMC optimization...
+  Optimal value: 0.006173
+  Optimal params: [0.444444, 0.444444]
+  Expected: [0.5, 0.5], value ~0.0
+  PASS
+
+Testing hierarchical DDMCMC optimization...
+  Optimal value: 0.010204
+  Optimal params: [0.571429, 0.571429]
+  PASS
+
+=== Test Summary ===
+Failures: 0
+gcc -Wall -Wextra -O2 -fPIC -std=c11 -pthread -Iinclude tests/test_comparison.c -Llib -lddrkam -lm -o bin/test_comparison
+bin/test_comparison
+make: *** [test] Segmentation fault: 11

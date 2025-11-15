@@ -1,5 +1,9 @@
 // Chart visualization for benchmarks
 // Copyright (C) 2025, Shyamal Suhana Chandra
+//
+// Chart Implementation:
+// - Canvas API: W3C Standard
+// - Modern CSS Animations: MDN Web Docs [10]
 
 // Validated benchmark data from comprehensive test suite
 // Copyright (C) 2025, Shyamal Suhana Chandra
