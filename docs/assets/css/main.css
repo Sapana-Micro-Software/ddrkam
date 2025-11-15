@@ -698,6 +698,88 @@ section {
 }
 
 /* ============================================================================
+   Test Visualizations Section
+   ============================================================================ */
+
+.test-visualizations {
+    padding: 6rem 0;
+    background: var(--bg-dark);
+}
+
+.test-section {
+    margin-bottom: 4rem;
+}
+
+.test-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    text-align: center;
+    background: var(--gradient-1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.test-description {
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    margin-bottom: 2.5rem;
+    line-height: 1.8;
+}
+
+.test-charts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+@media (max-width: 768px) {
+    .test-charts-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.test-chart-container {
+    background: var(--bg-light);
+    padding: 1.5rem;
+    border-radius: 1rem;
+    border: 1px solid rgba(148, 163, 184, 0.1);
+    transition: var(--transition);
+}
+
+.test-chart-container:hover {
+    transform: translateY(-5px);
+    border-color: var(--primary-color);
+    box-shadow: var(--shadow-lg);
+}
+
+.test-chart-container canvas {
+    width: 100%;
+    height: 400px;
+    background: transparent;
+    display: block;
+}
+
+.test-chart-container h4 {
+    text-align: center;
+    margin-top: 1rem;
+    color: var(--text-secondary);
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.test-chart-container .chart-description {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 0.5rem;
+    text-align: center;
+}
+
+/* ============================================================================
    Documentation Section
    ============================================================================ */
 

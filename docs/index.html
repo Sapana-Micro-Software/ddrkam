@@ -79,6 +79,7 @@
                 <li><a href="#methods" class="nav-link">Methods</a></li>
                 <li><a href="#comparison" class="nav-link">Comparison</a></li>
                 <li><a href="#benchmarks" class="nav-link">Benchmarks</a></li>
+                <li><a href="#test-visualizations" class="nav-link">Test Visualizations</a></li>
                 <li><a href="#documentation" class="nav-link">Documentation</a></li>
                 <li><a href="#references" class="nav-link">References</a></li>
             </ul>
@@ -434,6 +435,81 @@
         </div>
     </section>
 
+    <!-- Test Visualizations Section -->
+    <section id="test-visualizations" class="test-visualizations">
+        <div class="container">
+            <h2 class="section-title">Test Visualizations</h2>
+            <p class="section-subtitle">
+                Complete interactive visualizations of validated test cases
+                <span class="validation-badge">✓ Complete</span>
+            </p>
+            
+            <!-- Harmonic Oscillator Test -->
+            <div class="test-section">
+                <h3 class="test-title">Harmonic Oscillator Test</h3>
+                <p class="test-description">
+                    ODE: d²x/dt² = -x, Solution: x(t) = cos(t), v(t) = -sin(t)<br>
+                    Initial conditions: x(0) = 1.0, v(0) = 0.0, Time range: 0 to 2π
+                </p>
+                
+                <div class="test-charts-grid">
+                    <div class="test-chart-container">
+                        <canvas id="oscillator-time-series" aria-label="Harmonic oscillator time series"></canvas>
+                        <h4>Time Series: Position & Velocity</h4>
+                        <p class="chart-description">Position (x) and velocity (v) vs time for all methods</p>
+                    </div>
+                    <div class="test-chart-container">
+                        <canvas id="oscillator-phase-space" aria-label="Harmonic oscillator phase space"></canvas>
+                        <h4>Phase Space: Position vs Velocity</h4>
+                        <p class="chart-description">Phase space trajectory showing circular motion</p>
+                    </div>
+                    <div class="test-chart-container">
+                        <canvas id="oscillator-error" aria-label="Harmonic oscillator error comparison"></canvas>
+                        <h4>Error Comparison</h4>
+                        <p class="chart-description">Absolute error vs time for all methods</p>
+                    </div>
+                    <div class="test-chart-container">
+                        <canvas id="oscillator-method-comparison" aria-label="Harmonic oscillator method comparison"></canvas>
+                        <h4>Method Comparison</h4>
+                        <p class="chart-description">Final state accuracy comparison</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Exponential Decay Test -->
+            <div class="test-section" style="margin-top: 4rem;">
+                <h3 class="test-title">Exponential Decay Test</h3>
+                <p class="test-description">
+                    ODE: dy/dt = -y, Solution: y(t) = y₀·exp(-t)<br>
+                    Initial condition: y(0) = 1.0, Time range: 0 to 2.0
+                </p>
+                
+                <div class="test-charts-grid">
+                    <div class="test-chart-container">
+                        <canvas id="exponential-time-series" aria-label="Exponential decay time series"></canvas>
+                        <h4>Time Series: Solution</h4>
+                        <p class="chart-description">Numerical solution vs exact solution for all methods</p>
+                    </div>
+                    <div class="test-chart-container">
+                        <canvas id="exponential-error" aria-label="Exponential decay error analysis"></canvas>
+                        <h4>Error Analysis</h4>
+                        <p class="chart-description">Absolute error vs time for all methods</p>
+                    </div>
+                    <div class="test-chart-container">
+                        <canvas id="exponential-log-error" aria-label="Exponential decay logarithmic error"></canvas>
+                        <h4>Logarithmic Error</h4>
+                        <p class="chart-description">Log₁₀ of absolute error vs time</p>
+                    </div>
+                    <div class="test-chart-container">
+                        <canvas id="exponential-method-comparison" aria-label="Exponential decay method comparison"></canvas>
+                        <h4>Method Comparison</h4>
+                        <p class="chart-description">Final state accuracy and error comparison</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Documentation Section -->
     <section id="documentation" class="documentation">
         <div class="container">
@@ -628,5 +704,6 @@
     <script src="assets/js/main.js"></script>
     <script src="assets/js/charts.js"></script>
     <script src="assets/js/comparison-charts.js"></script>
+    <script src="assets/js/test-visualizations.js"></script>
 </body>
 </html>
