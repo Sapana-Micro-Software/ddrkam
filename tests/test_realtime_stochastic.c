@@ -18,7 +18,10 @@ static void exp_decay_ode(double t, const double* y, double* dydt, void* params)
 // Callback for real-time solver
 static void realtime_callback(double t, const double* y, size_t n, void* user_data) {
     (void)user_data;
-    printf("  Real-time step: t=%.6f, y[0]=%.6f\n", t, y[0]);
+    (void)n;
+    if (n > 0 && y) {
+        printf("  Real-time step: t=%.6f, y[0]=%.6f\n", t, y[0]);
+    }
 }
 
 int test_realtime_rk3() {

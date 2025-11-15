@@ -14,15 +14,24 @@
 // Simple random number generator (linear congruential)
 static uint32_t rng_state = 1;
 
-static double random_uniform() {
+static double random_uniform(void) {
     rng_state = rng_state * 1103515245 + 12345;
     return ((double)(rng_state & 0x7FFFFFFF)) / 2147483648.0;
 }
 
-static double random_gaussian() {
-    // Box-Muller transform
+static double random_gaussian(void) {
+    // Box-Muller transform with safety checks
     double u1 = random_uniform();
     double u2 = random_uniform();
+    
+    // Ensure u1 is not zero or too small to avoid log(0)
+    while (u1 <= 0.0 || u1 >= 1.0) {
+        u1 = random_uniform();
+    }
+    while (u2 <= 0.0 || u2 >= 1.0) {
+        u2 = random_uniform();
+    }
+    
     return sqrt(-2.0 * log(u1)) * cos(2.0 * M_PI * u2);
 }
 
