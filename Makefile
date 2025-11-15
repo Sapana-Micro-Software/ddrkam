@@ -45,11 +45,11 @@ clean:
 	rm -rf $(OBJ_DIR) $(LIB_DIR) $(BIN_DIR)
 
 test: $(LIBRARY) | $(BIN_DIR)
-	$(CC) $(CFLAGS) -I$(INC_DIR) tests/test_rk3.c -L$(LIB_DIR) -lddrkam -o $(BIN_DIR)/test_rk3
+	$(CC) $(CFLAGS) -I$(INC_DIR) tests/test_rk3.c -L$(LIB_DIR) -lddrkam -lm -o $(BIN_DIR)/test_rk3
 	$(BIN_DIR)/test_rk3
-	$(CC) $(CFLAGS) -I$(INC_DIR) tests/test_ddmcmc.c -L$(LIB_DIR) -lddrkam -o $(BIN_DIR)/test_ddmcmc
+	$(CC) $(CFLAGS) -I$(INC_DIR) tests/test_ddmcmc.c -L$(LIB_DIR) -lddrkam -lm -o $(BIN_DIR)/test_ddmcmc
 	$(BIN_DIR)/test_ddmcmc
-	$(CC) $(CFLAGS) -I$(INC_DIR) tests/test_comparison.c -L$(LIB_DIR) -lddrkam -o $(BIN_DIR)/test_comparison
+	$(CC) $(CFLAGS) -I$(INC_DIR) tests/test_comparison.c -L$(LIB_DIR) -lddrkam -lm -o $(BIN_DIR)/test_comparison
 	$(BIN_DIR)/test_comparison
 	$(CC) $(CFLAGS) -I$(INC_DIR) tests/test_benchmarks.c -L$(LIB_DIR) -lddrkam -lm -o $(BIN_DIR)/test_benchmarks
 	$(BIN_DIR)/test_benchmarks
@@ -57,6 +57,10 @@ test: $(LIBRARY) | $(BIN_DIR)
 	$(BIN_DIR)/test_pde
 	$(CC) $(CFLAGS) -I$(INC_DIR) tests/test_realtime_stochastic.c -L$(LIB_DIR) -lddrkam -lm -o $(BIN_DIR)/test_realtime_stochastic
 	$(BIN_DIR)/test_realtime_stochastic
+	$(CC) $(CFLAGS) -I$(INC_DIR) tests/test_exponential_decay.c -L$(LIB_DIR) -lddrkam -lm -o $(BIN_DIR)/test_exponential_decay
+	$(BIN_DIR)/test_exponential_decay
+	$(CC) $(CFLAGS) -I$(INC_DIR) tests/test_harmonic_oscillator.c -L$(LIB_DIR) -lddrkam -lm -o $(BIN_DIR)/test_harmonic_oscillator
+	$(BIN_DIR)/test_harmonic_oscillator
 
 benchmark: test
 	@echo "Running comprehensive benchmarks..."

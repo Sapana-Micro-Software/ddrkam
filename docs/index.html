@@ -451,7 +451,8 @@
                 <p class="test-description">
                     ODE: d²x/dt² = -x, Solution: x(t) = cos(t), v(t) = -sin(t)<br>
                     Initial conditions: x(0) = 1.0, v(0) = 0.0, Time range: 0 to 2π<br>
-                    <strong>Validated Results:</strong> RK3: 99.682004%, DDRK3: 99.682003%, AM: 99.320833%, DDAM: 99.320914%
+                    <strong>Validated Results:</strong> RK3: 99.682004%, DDRK3: 99.682003%, AM: 99.320833%, DDAM: 99.320914%<br>
+                    <strong>Implementation:</strong> Complete C/C++ test suite (<code>test_harmonic_oscillator.c</code>) and Objective-C framework tests
                 </p>
                 
                 <div class="test-charts-grid">
@@ -484,7 +485,8 @@
                 <p class="test-description">
                     ODE: dy/dt = -y, Solution: y(t) = y₀·exp(-t)<br>
                     Initial condition: y(0) = 1.0, Time range: 0 to 2.0<br>
-                    <strong>Validated Results:</strong> RK3: 99.999992%, DDRK3: 99.999992%, AM: 99.999991%, DDAM: 99.999991%
+                    <strong>Validated Results:</strong> RK3: 99.999992%, DDRK3: 99.999992%, AM: 99.999991%, DDAM: 99.999991%<br>
+                    <strong>Implementation:</strong> Complete C/C++ test suite (<code>test_exponential_decay.c</code>) and Objective-C framework tests
                 </p>
                 
                 <div class="test-charts-grid">
@@ -579,14 +581,14 @@
                     <a href="https://github.com/Sapana-Micro-Software/ddrkam/blob/main/README.md" class="doc-card" target="_blank" rel="noopener">
                         <div class="doc-icon">💻</div>
                         <h3>Quick Start Guide</h3>
-                        <p>Get started with DDRKAM: installation instructions, basic usage examples for ODEs and PDEs, and code samples for C/C++ and Objective-C. Includes PDE solver examples for Heat, Wave, Advection, and more.</p>
+                        <p>Get started with DDRKAM: installation instructions, basic usage examples for ODEs and PDEs, and code samples for C/C++ and Objective-C. Includes PDE solver examples for Heat, Wave, Advection, and more. Complete test implementations for Exponential Decay and Harmonic Oscillator in C/C++ and Objective-C.</p>
                         <span class="doc-link">View on GitHub →</span>
                     </a>
                     
                     <a href="https://github.com/Sapana-Micro-Software/ddrkam" class="doc-card" target="_blank" rel="noopener">
                         <div class="doc-icon">🔗</div>
                         <h3>Source Code</h3>
-                        <p>Browse the complete source code, test suites (including PDE solver tests, real-time/stochastic tests), and implementation details on GitHub. Includes C/C++ PDE solver, real-time/stochastic solvers, and Objective-C wrappers.</p>
+                        <p>Browse the complete source code, test suites (including PDE solver tests, real-time/stochastic tests, Exponential Decay and Harmonic Oscillator tests), and implementation details on GitHub. Includes C/C++ test programs (<code>test_exponential_decay.c</code>, <code>test_harmonic_oscillator.c</code>), Objective-C test suite (<code>test_objectivec_tests.m</code>), PDE solver, real-time/stochastic solvers, and Objective-C wrappers.</p>
                         <span class="doc-link">View Repository →</span>
                     </a>
                     
