@@ -371,7 +371,7 @@ int realtime_adams_init_new(RealtimeAdamsSolver* solver, size_t state_dim, doubl
     solver->buffer = (double*)malloc(1000 * state_dim * sizeof(double));
     
     if (!solver->current_state || !solver->history_t || !solver->history_y || !solver->buffer) {
-        realtime_adams_free(solver);
+        realtime_adams_free_new(solver);
         return -1;
     }
     
@@ -379,7 +379,7 @@ int realtime_adams_init_new(RealtimeAdamsSolver* solver, size_t state_dim, doubl
         solver->history_t[i] = (double*)malloc(sizeof(double));
         solver->history_y[i] = (double*)malloc(state_dim * sizeof(double));
         if (!solver->history_t[i] || !solver->history_y[i]) {
-            realtime_adams_free(solver);
+            realtime_adams_free_new(solver);
             return -1;
         }
     }
