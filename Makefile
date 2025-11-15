@@ -8,15 +8,12 @@ CXXFLAGS = -Wall -Wextra -O2 -fPIC -std=c++11 -pthread
 LDFLAGS = -shared -pthread
 
 # OpenMP support (if available)
-ifneq ($(shell which gcc),)
-  ifeq ($(shell gcc -dumpversion | cut -d. -f1),)
-    OPENMP_FLAG = 
-  else
-    OPENMP_FLAG = -fopenmp
-  endif
+# Check if compiler supports OpenMP
+OPENMP_FLAG = $(shell echo | $(CC) -fopenmp -E - 2>/dev/null && echo "-fopenmp" || echo "")
+ifneq ($(OPENMP_FLAG),)
+  CFLAGS += $(OPENMP_FLAG)
+  LDFLAGS += $(OPENMP_FLAG)
 endif
-CFLAGS += $(OPENMP_FLAG)
-LDFLAGS += $(OPENMP_FLAG)
 
 SRC_DIR = src
 INC_DIR = include
@@ -74,6 +71,8 @@ test: $(LIBRARY) | $(BIN_DIR)
 	$(BIN_DIR)/test_harmonic_oscillator
 	$(CC) $(CFLAGS) -I$(INC_DIR) tests/test_euler.c -L$(LIB_DIR) -lddrkam -lm -o $(BIN_DIR)/test_euler
 	$(BIN_DIR)/test_euler
+	$(CC) $(CFLAGS) -I$(INC_DIR) tests/test_parallel.c -L$(LIB_DIR) -lddrkam -lm -o $(BIN_DIR)/test_parallel
+	$(BIN_DIR)/test_parallel
 
 benchmark: test
 	@echo "Running comprehensive benchmarks..."
