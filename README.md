@@ -4,10 +4,11 @@ Copyright (C) 2025, Shyamal Suhana Chandra
 
 ## Overview
 
-DDRKAM is a comprehensive framework for solving nonlinear differential equations using:
-- Runge-Kutta 3rd order method
-- Adams-Bashforth and Adams-Moulton methods
+DDRKAM is a comprehensive framework for solving differential equations (both **ODEs** and **PDEs**) using:
+- Runge-Kutta 3rd order method (ODEs)
+- Adams-Bashforth and Adams-Moulton methods (ODEs)
 - Hierarchical data-driven architecture (Transformer-inspired)
+- **PDE Solver**: Heat, Wave, Advection, Burgers, Laplace, Poisson equations
 
 ## Features
 
@@ -83,6 +84,24 @@ print_comparison_results(&results);
 
 See `docs/COMPARISON.md` for detailed comparison guide.
 
+## PDE Solving
+
+DDRKAM now supports solving **Partial Differential Equations (PDEs)**:
+
+```c
+#include "pde_solver.h"
+
+// Solve 1D Heat Equation
+PDEProblem problem;
+pde_problem_init(&problem, PDE_HEAT, DIM_1D, 100, 1, 1, 0.01, 1.0, 1.0, 0.0001);
+problem.alpha = 0.1;
+
+PDESolution solution;
+pde_solve_heat_1d(&problem, 0.1, &solution);
+```
+
+See `docs/PDE_GUIDE.md` for complete PDE documentation.
+
 ## Documentation
 
 - Paper: `docs/paper.tex`
@@ -90,6 +109,7 @@ See `docs/COMPARISON.md` for detailed comparison guide.
 - Reference Manual: `docs/reference_manual.tex`
 - DDMCMC Guide: `docs/DDMCMC_README.md`
 - Comparison Guide: `docs/COMPARISON.md`
+- PDE Guide: `docs/PDE_GUIDE.md`
 
 ## License
 
