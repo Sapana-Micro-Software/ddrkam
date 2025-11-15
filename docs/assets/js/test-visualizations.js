@@ -91,11 +91,27 @@
     
     function drawOscillatorTimeSeries() {
         const canvas = document.getElementById('oscillator-time-series');
-        if (!canvas) return;
+        if (!canvas) {
+            console.warn('Canvas not found: oscillator-time-series');
+            return;
+        }
+        
+        // Ensure canvas has dimensions
+        const container = canvas.parentElement;
+        if (!container) return;
+        
+        const width = container.offsetWidth || 600;
+        const height = 400;
+        
+        if (width === 0) {
+            console.warn('Canvas has zero width: oscillator-time-series');
+            return;
+        }
+        
+        canvas.width = width;
+        canvas.height = height;
         
         const ctx = canvas.getContext('2d');
-        const width = canvas.width = canvas.offsetWidth;
-        const height = canvas.height = 400;
         
         ctx.clearRect(0, 0, width, height);
         
@@ -207,9 +223,15 @@
         const canvas = document.getElementById('oscillator-phase-space');
         if (!canvas) return;
         
+        const container = canvas.parentElement;
+        if (!container) return;
+        const width = container.offsetWidth || 600;
+        const height = 400;
+        if (width === 0) return;
+        canvas.width = width;
+        canvas.height = height;
+        
         const ctx = canvas.getContext('2d');
-        const width = canvas.width = canvas.offsetWidth;
-        const height = canvas.height = 400;
         
         ctx.clearRect(0, 0, width, height);
         
@@ -308,9 +330,15 @@
         const canvas = document.getElementById('oscillator-error');
         if (!canvas) return;
         
+        const container = canvas.parentElement;
+        if (!container) return;
+        const width = container.offsetWidth || 600;
+        const height = 400;
+        if (width === 0) return;
+        canvas.width = width;
+        canvas.height = height;
+        
         const ctx = canvas.getContext('2d');
-        const width = canvas.width = canvas.offsetWidth;
-        const height = canvas.height = 400;
         
         ctx.clearRect(0, 0, width, height);
         
@@ -394,9 +422,15 @@
         const canvas = document.getElementById('oscillator-method-comparison');
         if (!canvas) return;
         
+        const container = canvas.parentElement;
+        if (!container) return;
+        const width = container.offsetWidth || 600;
+        const height = 400;
+        if (width === 0) return;
+        canvas.width = width;
+        canvas.height = height;
+        
         const ctx = canvas.getContext('2d');
-        const width = canvas.width = canvas.offsetWidth;
-        const height = canvas.height = 400;
         
         ctx.clearRect(0, 0, width, height);
         
@@ -470,9 +504,15 @@
         const canvas = document.getElementById('exponential-time-series');
         if (!canvas) return;
         
+        const container = canvas.parentElement;
+        if (!container) return;
+        const width = container.offsetWidth || 600;
+        const height = 400;
+        if (width === 0) return;
+        canvas.width = width;
+        canvas.height = height;
+        
         const ctx = canvas.getContext('2d');
-        const width = canvas.width = canvas.offsetWidth;
-        const height = canvas.height = 400;
         
         ctx.clearRect(0, 0, width, height);
         
@@ -575,9 +615,15 @@
         const canvas = document.getElementById('exponential-error');
         if (!canvas) return;
         
+        const container = canvas.parentElement;
+        if (!container) return;
+        const width = container.offsetWidth || 600;
+        const height = 400;
+        if (width === 0) return;
+        canvas.width = width;
+        canvas.height = height;
+        
         const ctx = canvas.getContext('2d');
-        const width = canvas.width = canvas.offsetWidth;
-        const height = canvas.height = 400;
         
         ctx.clearRect(0, 0, width, height);
         
@@ -671,9 +717,15 @@
         const canvas = document.getElementById('exponential-log-error');
         if (!canvas) return;
         
+        const container = canvas.parentElement;
+        if (!container) return;
+        const width = container.offsetWidth || 600;
+        const height = 400;
+        if (width === 0) return;
+        canvas.width = width;
+        canvas.height = height;
+        
         const ctx = canvas.getContext('2d');
-        const width = canvas.width = canvas.offsetWidth;
-        const height = canvas.height = 400;
         
         ctx.clearRect(0, 0, width, height);
         
@@ -769,8 +821,15 @@
         const canvas = document.getElementById('exponential-method-comparison');
         if (!canvas) return;
         
+        const container = canvas.parentElement;
+        if (!container) return;
+        const width = container.offsetWidth || 600;
+        const height = 400;
+        if (width === 0) return;
+        canvas.width = width;
+        canvas.height = height;
+        
         const ctx = canvas.getContext('2d');
-        const width = canvas.width = canvas.offsetWidth;
         const height = canvas.height = 400;
         
         ctx.clearRect(0, 0, width, height);
@@ -842,12 +901,25 @@
     // ============================================================================
     
     function initializeTestVisualizations() {
-        // Wait for DOM to be ready
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', drawAllVisualizations);
-        } else {
-            drawAllVisualizations();
+        // Wait for DOM and layout to be ready
+        function init() {
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', () => {
+                    setTimeout(init, 100);
+                });
+                return;
+            }
+            
+            // Use requestAnimationFrame to ensure layout is complete
+            requestAnimationFrame(() => {
+                // Double-check with a small delay to ensure elements are visible
+                setTimeout(() => {
+                    drawAllVisualizations();
+                }, 150);
+            });
         }
+        
+        init();
         
         // Redraw on window resize
         let resizeTimer;
@@ -855,6 +927,19 @@
             clearTimeout(resizeTimer);
             resizeTimer = setTimeout(drawAllVisualizations, 250);
         });
+        
+        // Also redraw when section becomes visible (Intersection Observer)
+        const testSection = document.getElementById('test-visualizations');
+        if (testSection) {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        setTimeout(drawAllVisualizations, 100);
+                    }
+                });
+            }, { threshold: 0.1 });
+            observer.observe(testSection);
+        }
     }
     
     function drawAllVisualizations() {

@@ -41,11 +41,27 @@ const benchmarkData = {
 
 function drawChart(canvasId, data, labels, color, type = 'line') {
     const canvas = document.getElementById(canvasId);
-    if (!canvas) return;
+    if (!canvas) {
+        console.warn('Canvas not found:', canvasId);
+        return;
+    }
+    
+    // Ensure canvas has dimensions
+    const container = canvas.parentElement;
+    if (!container) return;
+    
+    const width = container.offsetWidth || 600;
+    const height = container.offsetHeight || 400;
+    
+    if (width === 0 || height === 0) {
+        console.warn('Canvas has zero dimensions:', canvasId, width, height);
+        return;
+    }
+    
+    canvas.width = width;
+    canvas.height = height;
     
     const ctx = canvas.getContext('2d');
-    const width = canvas.width = canvas.offsetWidth;
-    const height = canvas.height = canvas.offsetHeight;
     
     // Clear canvas
     ctx.clearRect(0, 0, width, height);
@@ -154,11 +170,27 @@ function drawChart(canvasId, data, labels, color, type = 'line') {
 
 function drawAccuracySpeedChart() {
     const canvas = document.getElementById('accuracy-speed-chart');
-    if (!canvas) return;
+    if (!canvas) {
+        console.warn('Canvas not found: accuracy-speed-chart');
+        return;
+    }
+    
+    // Ensure canvas has dimensions
+    const container = canvas.parentElement;
+    if (!container) return;
+    
+    const width = container.offsetWidth || 800;
+    const height = container.offsetHeight || 500;
+    
+    if (width === 0 || height === 0) {
+        console.warn('Canvas has zero dimensions: accuracy-speed-chart', width, height);
+        return;
+    }
+    
+    canvas.width = width;
+    canvas.height = height;
     
     const ctx = canvas.getContext('2d');
-    const width = canvas.width = canvas.offsetWidth;
-    const height = canvas.height = canvas.offsetHeight;
     
     // Clear canvas
     ctx.clearRect(0, 0, width, height);
@@ -342,11 +374,27 @@ function updateCharts(method) {
 
 function drawBarChart(canvasId, data, labels, colors, title, yLabel, normalize = true) {
     const canvas = document.getElementById(canvasId);
-    if (!canvas) return;
+    if (!canvas) {
+        console.warn('Canvas not found:', canvasId);
+        return;
+    }
+    
+    // Ensure canvas has dimensions
+    const container = canvas.parentElement;
+    if (!container) return;
+    
+    const width = container.offsetWidth || 600;
+    const height = container.offsetHeight || 400;
+    
+    if (width === 0 || height === 0) {
+        console.warn('Canvas has zero dimensions:', canvasId, width, height);
+        return;
+    }
+    
+    canvas.width = width;
+    canvas.height = height;
     
     const ctx = canvas.getContext('2d');
-    const width = canvas.width = canvas.offsetWidth;
-    const height = canvas.height = canvas.offsetHeight;
     
     // Clear canvas
     ctx.clearRect(0, 0, width, height);
@@ -485,28 +533,44 @@ function drawComparisonBarCharts() {
                  'Computation Speed Comparison (Normalized)', 'Speed (Normalized %)', true);
 }
 
-// Initialize charts on load
-window.addEventListener('DOMContentLoaded', () => {
-    updateCharts('rk3');
-    drawComparisonBarCharts();
+// Initialize charts on load with proper timing
+function initializeCharts() {
+    // Wait for layout to complete
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(initializeCharts, 100);
+        });
+        return;
+    }
     
-    // Make updateCharts available globally
-    window.updateCharts = updateCharts;
-    
-    // Handle window resize
-    let resizeTimeout;
-    window.addEventListener('resize', () => {
-        clearTimeout(resizeTimeout);
-        resizeTimeout = setTimeout(() => {
-            const activeBtn = document.querySelector('.benchmark-btn.active');
-            if (activeBtn) {
-                updateCharts(activeBtn.dataset.method);
-            } else {
-                drawAccuracySpeedChart();
-            }
-            drawComparisonBarCharts();
-        }, 250);
+    // Use requestAnimationFrame to ensure layout is complete
+    requestAnimationFrame(() => {
+        updateCharts('rk3');
+        drawComparisonBarCharts();
+        
+        // Make updateCharts available globally
+        window.updateCharts = updateCharts;
+        window.drawComparisonBarCharts = drawComparisonBarCharts;
+        window.drawAccuracySpeedChart = drawAccuracySpeedChart;
     });
+}
+
+// Start initialization
+initializeCharts();
+
+// Handle window resize
+let resizeTimeout;
+window.addEventListener('resize', () => {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(() => {
+        const activeBtn = document.querySelector('.benchmark-btn.active');
+        if (activeBtn) {
+            updateCharts(activeBtn.dataset.method);
+        } else {
+            drawAccuracySpeedChart();
+        }
+        drawComparisonBarCharts();
+    }, 250);
 });
 
 // Update charts when benchmark button is clicked
