@@ -1,27 +1,84 @@
+# Jekyll Configuration for DDRKAM GitHub Pages
+# Copyright (C) 2025, Shyamal Suhana Chandra
+
 title: DDRKAM - Data-Driven Runge-Kutta and Adams Methods
-description: Comprehensive framework for solving nonlinear differential equations
+description: Comprehensive framework for solving differential equations (ODEs & PDEs) with hierarchical transformer architectures, real-time streaming, stochastic methods, and data-driven adaptive control. Complete, unabridged, lossless implementations.
+author: Shyamal Suhana Chandra
+email: sapanamicrosoftware@duck.com
+url: https://sapana-micro-software.github.io
+baseurl: /ddrkam
+
+# Theme
 theme: minima
 plugins:
   - jekyll-feed
-
-# GitHub Pages settings
-github: [metadata]
-baseurl: ""
-url: "https://sapana-micro-software.github.io/ddrkam"
+  - jekyll-sitemap
+  - jekyll-seo-tag
 
 # Build settings
 markdown: kramdown
 highlighter: rouge
+permalink: pretty
+
+# Exclude files
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor
+  - README.md
+  - .git
+  - .gitignore
+
+# Include files
+include:
+  - _pages
+
+# Collections
+collections:
+  docs:
+    output: true
+    permalink: /:collection/:name
+
+# Defaults
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: default
+      author: Shyamal Suhana Chandra
+
+# GitHub Pages settings
+github: [metadata]
+
+# SEO
+lang: en
+timezone: UTC
+
+# Social
+twitter:
+  username: ""
+  
+github:
+  username: Sapana-Micro-Software
+  repository: ddrkam
 
 # Navigation
 navigation:
   - title: Home
     url: /
-  - title: Paper
-    url: /paper
-  - title: Presentation
-    url: /presentation
-  - title: Reference Manual
-    url: /reference
+  - title: Features
+    url: /#features
+  - title: Methods
+    url: /#methods
   - title: Benchmarks
-    url: /benchmarks
+    url: /#benchmarks
+  - title: Documentation
+    url: /#documentation
+  - title: References
+    url: /#references
+
+# Footer
+footer:
+  copyright: "Copyright © 2025 Shyamal Suhana Chandra"
+  contact: "sapanamicrosoftware@duck.com"
