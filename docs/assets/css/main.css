@@ -308,7 +308,77 @@ p, h1, h2, h3, h4, h5, h6, li, ul, ol, span, div {
     font-size: 1.1rem;
     color: var(--text-secondary);
     line-height: 1.8;
-    margin-bottom: 2.5rem;
+    margin-bottom: 2rem;
+}
+
+.hero-research-highlight {
+    background: var(--bg-glass-light);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-research-highlight::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.05), transparent);
+    transition: left 0.8s ease;
+}
+
+.hero-research-highlight:hover::before {
+    left: 100%;
+}
+
+.research-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--gradient-1);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 2rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+}
+
+.research-summary {
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+    font-weight: 500;
+}
+
+.research-summary strong {
+    color: var(--primary-color);
+}
+
+.research-link {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: var(--transition);
+}
+
+.research-link:hover {
+    gap: 0.75rem;
+    color: var(--secondary-color);
 }
 
 .hero-buttons {
@@ -858,6 +928,44 @@ section.visible {
     font-size: 0.75rem;
     opacity: 0.8;
     color: var(--text-muted);
+}
+
+.benchmark-citation {
+    background: var(--bg-glass-light);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    margin-top: 2rem;
+    text-align: center;
+}
+
+.citation-text {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+.citation-text strong {
+    color: var(--primary-color);
+}
+
+.citation-link {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: var(--transition);
+}
+
+.citation-link:hover {
+    gap: 0.75rem;
+    color: var(--secondary-color);
 }
 
 .validation-notice {
