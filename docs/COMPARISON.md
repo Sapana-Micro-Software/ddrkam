@@ -210,6 +210,32 @@ The comparison framework evaluates:
 - **Comparative Analysis**: [To be added from paper]
 - **Performance Statistics**: [To be added from paper]
 
+### Racetrack Memory Statistics and Data
+
+**Racetrack Memory**: [Available at Wikipedia](https://en.wikipedia.org/wiki/Racetrack_memory)
+
+*Racetrack memory (also known as domain-wall memory) is a non-volatile memory technology developed by IBM Research. The following statistics and data from the Wikipedia article and related research can be integrated for comprehensive analysis:*
+
+#### Racetrack Memory Performance Statistics
+
+- **Storage Density**: [To be added from Wikipedia/research]
+- **Read/Write Speed**: [To be added from Wikipedia/research]
+- **Power Consumption**: [To be added from Wikipedia/research]
+- **Endurance Cycles**: [To be added from Wikipedia/research]
+- **3D Stacking Benefits**: [To be added from Wikipedia/research]
+- **Domain Wall Velocity**: [To be added from Wikipedia/research]
+- **Access Time**: [To be added from Wikipedia/research]
+- **Energy Efficiency**: [To be added from Wikipedia/research]
+
+#### Racetrack Memory Architecture Data
+
+- **Track Dimensions**: [To be added from Wikipedia/research]
+- **Domain Wall Characteristics**: [To be added from Wikipedia/research]
+- **Bit Storage Capacity**: [To be added from Wikipedia/research]
+- **Scalability Metrics**: [To be added from Wikipedia/research]
+- **Comparison with DRAM/Flash**: [To be added from Wikipedia/research]
+- **Manufacturing Considerations**: [To be added from Wikipedia/research]
+
 ## Visual Charts and Diagrams
 
 The following SVG charts provide visual comparisons of all methods:
