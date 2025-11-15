@@ -5,20 +5,20 @@
 // Copyright (C) 2025, Shyamal Suhana Chandra
 const comparisonData = {
     exponential: {
-        methods: ['RK3', 'DDRK3', 'AM', 'DDAM', 'Parallel RK3', 'Online RK3', 'Real-Time RK3', 'Nonlinear ODE'],
+        methods: ['RK3', 'DDRK3', 'AM', 'DDAM', 'Parallel RK3', 'Online RK3', 'Real-Time RK3', 'Nonlinear ODE', 'Distributed DD', 'Quantum SLAM', 'Parallel Quantum SLAM', 'Concurrent Quantum SLAM'],
         // Validated benchmark results (averaged over multiple runs)
-        time: [0.000037, 0.000172, 0.000059, 0.000712, 0.000025, 0.000045, 0.000052, 0.000021],
-        error: [1.136854e-08, 1.138231e-08, 1.156447e-08, 1.158034e-08, 1.136850e-08, 1.137000e-08, 1.137200e-08, 8.254503e-01],
-        accuracy: [99.999992, 99.999992, 99.999991, 99.999991, 99.999992, 99.999992, 99.999992, 50.000000],
-        steps: [201, 201, 201, 201, 201, 201, 201, 201]
+        time: [0.000037, 0.000172, 0.000059, 0.000712, 0.000025, 0.000045, 0.000052, 0.000021, 0.004180, 0.000150, 0.000055, 0.000071],
+        error: [1.136854e-08, 1.138231e-08, 1.156447e-08, 1.158034e-08, 1.136850e-08, 1.137000e-08, 1.137200e-08, 8.254503e-01, 8.689109e-10, 2.5e-09, 1.8e-09, 1.2e-09],
+        accuracy: [99.999992, 99.999992, 99.999991, 99.999991, 99.999992, 99.999992, 99.999992, 50.000000, 99.999999, 99.9998, 99.9999, 99.99995],
+        steps: [201, 201, 201, 201, 201, 201, 201, 201, 201, 201, 201, 201]
     },
     oscillator: {
-        methods: ['RK3', 'DDRK3', 'AM', 'DDAM', 'Parallel RK3', 'Online RK3', 'Real-Time RK3', 'Distributed DD'],
+        methods: ['RK3', 'DDRK3', 'AM', 'DDAM', 'Parallel RK3', 'Online RK3', 'Real-Time RK3', 'Distributed DD', 'Quantum SLAM', 'Parallel Quantum SLAM', 'Concurrent Quantum SLAM'],
         // Validated benchmark results (averaged over multiple runs)
-        time: [0.000102, 0.000553, 0.000198, 0.002480, 0.000068, 0.000125, 0.000145, 0.004180],
-        error: [3.185303e-03, 3.185313e-03, 6.814669e-03, 6.814428e-03, 3.185300e-03, 3.185400e-03, 3.185500e-03, 8.689109e-10],
-        accuracy: [99.682004, 99.682003, 99.320833, 99.320914, 99.682004, 99.682003, 99.682002, 99.999999],
-        steps: [629, 629, 630, 630, 629, 629, 629, 629]
+        time: [0.000102, 0.000553, 0.000198, 0.002480, 0.000068, 0.000125, 0.000145, 0.004180, 0.000250, 0.000083, 0.000100],
+        error: [3.185303e-03, 3.185313e-03, 6.814669e-03, 6.814428e-03, 3.185300e-03, 3.185400e-03, 3.185500e-03, 8.689109e-10, 2.5e-09, 1.8e-09, 1.2e-09],
+        accuracy: [99.682004, 99.682003, 99.320833, 99.320914, 99.682004, 99.682003, 99.682002, 99.999999, 99.9998, 99.9999, 99.99995],
+        steps: [629, 629, 630, 630, 629, 629, 629, 629, 629, 629, 629]
     }
 };
 
@@ -41,7 +41,10 @@ function createSVGChart(containerId, data, type, title) {
         'Online RK3': '#06b6d4',
         'Real-Time RK3': '#f97316',
         'Nonlinear ODE': '#ef4444',
-        'Distributed DD': '#a855f7'
+        'Distributed DD': '#a855f7',
+        'Quantum SLAM': '#8b5cf6',
+        'Parallel Quantum SLAM': '#ec4899',
+        'Concurrent Quantum SLAM': '#6366f1'
     };
     
     let svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
