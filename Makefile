@@ -61,6 +61,8 @@ test: $(LIBRARY) | $(BIN_DIR)
 	$(BIN_DIR)/test_exponential_decay
 	$(CC) $(CFLAGS) -I$(INC_DIR) tests/test_harmonic_oscillator.c -L$(LIB_DIR) -lddrkam -lm -o $(BIN_DIR)/test_harmonic_oscillator
 	$(BIN_DIR)/test_harmonic_oscillator
+	$(CC) $(CFLAGS) -I$(INC_DIR) tests/test_euler.c -L$(LIB_DIR) -lddrkam -lm -o $(BIN_DIR)/test_euler
+	$(BIN_DIR)/test_euler
 
 benchmark: test
 	@echo "Running comprehensive benchmarks..."
