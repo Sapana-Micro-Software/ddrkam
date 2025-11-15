@@ -138,6 +138,21 @@ All benchmarks have been validated through comprehensive C/C++/Objective-C test 
 
 *Note: Statistics and performance metrics from this paper can be integrated here for comparative analysis with DDRKAM framework results.*
 
+**IEEE Xplore Document 8259423**: [Available at IEEE Xplore](https://ieeexplore.ieee.org/abstract/document/8259423)
+
+*This paper provides additional statistics, performance data, and comparative analysis relevant to numerical methods, computational architectures, and solver performance. Statistics and data from this paper can be integrated here for comprehensive comparison with DDRKAM framework benchmark results.*
+
+#### Statistics from IEEE Document 8259423
+
+*Note: The following section can be populated with specific statistics, performance metrics, and data from the IEEE Xplore document 8259423:*
+
+- **Performance Metrics**: [To be added from paper]
+- **Accuracy Comparisons**: [To be added from paper]
+- **Computational Complexity**: [To be added from paper]
+- **Benchmark Results**: [To be added from paper]
+- **Architecture Comparisons**: [To be added from paper]
+- **Speedup Analysis**: [To be added from paper]
+
 ### Lorenz System Test
 - **RK3**: 0.000018s, 101 steps
 - **DDRK3**: 0.000649s, 101 steps
