@@ -81,6 +81,39 @@ typedef struct {
     size_t stacked_am_steps;
     size_t stacked_euler_steps;
     
+    // Real-time methods
+    double realtime_rk3_time;
+    double realtime_am_time;
+    double realtime_euler_time;
+    double realtime_rk3_error;
+    double realtime_am_error;
+    double realtime_euler_error;
+    double realtime_rk3_accuracy;
+    double realtime_am_accuracy;
+    double realtime_euler_accuracy;
+    
+    // Online methods
+    double online_rk3_time;
+    double online_am_time;
+    double online_euler_time;
+    double online_rk3_error;
+    double online_am_error;
+    double online_euler_error;
+    double online_rk3_accuracy;
+    double online_am_accuracy;
+    double online_euler_accuracy;
+    
+    // Dynamic methods
+    double dynamic_rk3_time;
+    double dynamic_am_time;
+    double dynamic_euler_time;
+    double dynamic_rk3_error;
+    double dynamic_am_error;
+    double dynamic_euler_error;
+    double dynamic_rk3_accuracy;
+    double dynamic_am_accuracy;
+    double dynamic_euler_accuracy;
+    
     // Parallel performance metrics
     double speedup_rk3;      // Speedup factor for parallel RK3
     double speedup_am;        // Speedup factor for parallel AM

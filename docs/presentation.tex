@@ -92,7 +92,40 @@ $$y_{n+1} = y_n + \frac{h}{12}(5f_{n+1} + 8f_n - f_{n-1})$$
 \end{frame}
 
 \begin{frame}
-\frametitle{Hierarchical Architecture}
+\frametitle{Parallel and Distributed Execution}
+\begin{block}{Execution Modes}
+\begin{itemize}
+\item OpenMP: Shared-memory multi-threading
+\item pthreads: POSIX threads for fine control
+\item MPI: Distributed computing
+\item Hybrid: MPI + OpenMP
+\end{itemize}
+\end{block}
+\begin{itemize}
+\item Parallel speedup up to N× with N workers
+\item Distributed scaling across nodes
+\item Concurrent execution of multiple methods
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Real-Time, Online, and Dynamic Methods}
+\begin{block}{Execution Modes}
+\begin{itemize}
+\item Real-Time: Streaming data, minimal latency
+\item Online: Adaptive learning, incremental updates
+\item Dynamic: Adaptive step sizes, parameter tuning
+\end{itemize}
+\end{block}
+\begin{itemize}
+\item Suitable for live data feeds
+\item Adaptive to system changes
+\item Optimized for continuous operation
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Stacked and Hierarchical Architecture}
 \begin{itemize}
 \item Transformer-inspired design
 \item Multiple processing layers

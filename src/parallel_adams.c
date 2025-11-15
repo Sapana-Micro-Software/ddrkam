@@ -152,7 +152,8 @@ double parallel_adams_step(ParallelAdamsSolver* solver, ODEFunction f,
 #endif
     } else {
         // Simplified predictor (needs derivative computation)
-        adams_bashforth3(f, t_arr, (const double**)y_arr, n, h, params, y_pred);
+        const double* y_arr_const[3] = {y_arr[0], y_arr[1], y_arr[2]};
+        adams_bashforth3(f, t_arr, y_arr_const, n, h, params, y_pred);
     }
     
     // Corrector step (Adams-Moulton 3)
@@ -162,7 +163,8 @@ double parallel_adams_step(ParallelAdamsSolver* solver, ODEFunction f,
         return t;
     }
     
-    adams_moulton3(f, t_arr, (const double**)y_arr, n, h, params, y_pred, y_corr);
+    const double* y_arr_const[3] = {y_arr[0], y_arr[1], y_arr[2]};
+    adams_moulton3(f, t_arr, y_arr_const, n, h, params, y_pred, y_corr);
     
     // Update state (parallelized)
     if (solver->mode == PARALLEL_OPENMP) {

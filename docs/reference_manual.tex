@@ -134,6 +134,59 @@ size_t hierarchical_euler_solve(HierarchicalEulerSolver* solver,
                                  double* t_out, double* y_out);
 \end{lstlisting}
 
+\section{Parallel and Distributed Methods}
+
+\subsection{Overview}
+
+All methods support parallel, distributed, concurrent, hierarchical, and stacked execution modes. This enables:
+\begin{itemize}
+\item Multi-threaded execution (OpenMP, pthreads)
+\item Distributed computing (MPI)
+\item Concurrent execution of multiple methods
+\item Hierarchical/stacked architectures
+\item Enhanced performance and scalability
+\end{itemize}
+
+\subsection{Parallel Runge-Kutta}
+
+\subsubsection{parallel\_rk\_init}
+
+Initialize parallel RK3 solver.
+
+\begin{lstlisting}
+int parallel_rk_init(ParallelRKSolver* solver, size_t state_dim,
+                     size_t num_workers, ParallelMode mode,
+                     StackedConfig* stacked);
+\end{lstlisting}
+
+\subsubsection{parallel\_rk\_step}
+
+Perform parallel RK3 step.
+
+\begin{lstlisting}
+double parallel_rk_step(ParallelRKSolver* solver, ODEFunction f,
+                        double t, double* y, double h, void* params);
+\end{lstlisting}
+
+\subsubsection{stacked\_rk\_step}
+
+Perform stacked/hierarchical RK3 step.
+
+\begin{lstlisting}
+double stacked_rk_step(ParallelRKSolver* solver, ODEFunction f,
+                      double t, double* y, double h, void* params);
+\end{lstlisting}
+
+\subsubsection{concurrent\_rk\_execute}
+
+Execute multiple RK3 instances concurrently.
+
+\begin{lstlisting}
+int concurrent_rk_execute(ParallelRKSolver* solvers[], size_t num_solvers,
+                          ODEFunction f, double t, const double* y, double h,
+                          void* params, double** results);
+\end{lstlisting}
+
 \section{Runge-Kutta 3rd Order Method}
 
 \subsection{Overview}

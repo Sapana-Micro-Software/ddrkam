@@ -12,6 +12,7 @@
 #include "parallel_rk.h"
 #include "parallel_adams.h"
 #include "parallel_euler.h"
+#include "realtime_online.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -444,6 +445,85 @@ int compare_methods(ODEFunction f, double t0, double t_end, const double* y0,
         free(y0_copy);
     }
     
+    // Test Real-Time RK3
+    RealtimeRKSolver realtime_rk3_solver;
+    if (realtime_rk_init(&realtime_rk3_solver, n, h, NULL, NULL) == 0) {
+        y0_copy = (double*)malloc(n * sizeof(double));
+        memcpy(y0_copy, y0, n * sizeof(double));
+        
+        start = clock();
+        double t_current = t0;
+        size_t realtime_steps = 0;
+        while (t_current < t_end && realtime_steps < max_steps) {
+            double h_actual = (t_current + h > t_end) ? (t_end - t_current) : h;
+            t_current = realtime_rk_step(&realtime_rk3_solver, f, t_current, y0_copy, h_actual, params);
+            realtime_steps++;
+        }
+        end = clock();
+        
+        results->realtime_rk3_time = ((double)(end - start)) / CLOCKS_PER_SEC;
+        
+        if (realtime_steps > 0) {
+            results->realtime_rk3_error = compute_error(y0_copy, exact_solution, n);
+            results->realtime_rk3_accuracy = compute_accuracy(y0_copy, exact_solution, n);
+        }
+        
+        realtime_rk_free(&realtime_rk3_solver);
+        free(y0_copy);
+    }
+    
+    // Test Online RK3
+    OnlineRKSolver online_rk3_solver;
+    if (online_rk_init(&online_rk3_solver, n, h, 0.01) == 0) {
+        y0_copy = (double*)malloc(n * sizeof(double));
+        memcpy(y0_copy, y0, n * sizeof(double));
+        
+        start = clock();
+        double t_current = t0;
+        size_t online_steps = 0;
+        while (t_current < t_end && online_steps < max_steps) {
+            t_current = online_rk_step(&online_rk3_solver, f, t_current, y0_copy, params);
+            online_steps++;
+        }
+        end = clock();
+        
+        results->online_rk3_time = ((double)(end - start)) / CLOCKS_PER_SEC;
+        
+        if (online_steps > 0) {
+            results->online_rk3_error = compute_error(y0_copy, exact_solution, n);
+            results->online_rk3_accuracy = compute_accuracy(y0_copy, exact_solution, n);
+        }
+        
+        online_rk_free(&online_rk3_solver);
+        free(y0_copy);
+    }
+    
+    // Test Dynamic RK3
+    DynamicRKSolver dynamic_rk3_solver;
+    if (dynamic_rk_init(&dynamic_rk3_solver, n, h, 0.01) == 0) {
+        y0_copy = (double*)malloc(n * sizeof(double));
+        memcpy(y0_copy, y0, n * sizeof(double));
+        
+        start = clock();
+        double t_current = t0;
+        size_t dynamic_steps = 0;
+        while (t_current < t_end && dynamic_steps < max_steps) {
+            t_current = dynamic_rk_step(&dynamic_rk3_solver, f, t_current, y0_copy, params);
+            dynamic_steps++;
+        }
+        end = clock();
+        
+        results->dynamic_rk3_time = ((double)(end - start)) / CLOCKS_PER_SEC;
+        
+        if (dynamic_steps > 0) {
+            results->dynamic_rk3_error = compute_error(y0_copy, exact_solution, n);
+            results->dynamic_rk3_accuracy = compute_accuracy(y0_copy, exact_solution, n);
+        }
+        
+        dynamic_rk_free(&dynamic_rk3_solver);
+        free(y0_copy);
+    }
+    
     free(t_out);
     free(y_out);
     
@@ -455,23 +535,54 @@ void print_comparison_results(const ComparisonResults* results) {
     
     printf("\n");
     printf("╔════════════════════════════════════════════════════════════════╗\n");
-    printf("║   METHOD COMPARISON: Euler, DDEuler, RK3, DDRK3, AM, DDAM      ║\n");
+    printf("║  METHOD COMPARISON: Standard + Parallel + Stacked Methods      ║\n");
     printf("╠════════════════════════════════════════════════════════════════╣\n");
-    printf("║ Method  │ Time (s) │ Steps │ Error      │ Accuracy             ║\n");
-    printf("╠════════╪══════════╪═══════╪════════════╪═══════════════════════╣\n");
-    printf("║ Euler  │ %8.6f │ %5zu │ %10.6e │ %19.6f%% ║\n",
+    printf("║ Method      │ Time (s) │ Steps │ Error      │ Accuracy          ║\n");
+    printf("╠═════════════╪══════════╪═══════╪════════════╪═══════════════════╣\n");
+    printf("║ Euler       │ %8.6f │ %5zu │ %10.6e │ %17.6f%% ║\n",
            results->euler_time, results->euler_steps, results->euler_error, results->euler_accuracy * 100);
-    printf("║ DDEuler│ %8.6f │ %5zu │ %10.6e │ %19.6f%% ║\n",
+    printf("║ DDEuler     │ %8.6f │ %5zu │ %10.6e │ %17.6f%% ║\n",
            results->ddeuler_time, results->ddeuler_steps, results->ddeuler_error, results->ddeuler_accuracy * 100);
-    printf("║ RK3    │ %8.6f │ %5zu │ %10.6e │ %19.6f%% ║\n",
+    printf("║ RK3         │ %8.6f │ %5zu │ %10.6e │ %17.6f%% ║\n",
            results->rk3_time, results->rk3_steps, results->rk3_error, results->rk3_accuracy * 100);
-    printf("║ DDRK3  │ %8.6f │ %5zu │ %10.6e │ %19.6f%% ║\n",
+    printf("║ DDRK3       │ %8.6f │ %5zu │ %10.6e │ %17.6f%% ║\n",
            results->ddrk3_time, results->ddrk3_steps, results->ddrk3_error, results->ddrk3_accuracy * 100);
-    printf("║ AM     │ %8.6f │ %5zu │ %10.6e │ %19.6f%% ║\n",
+    printf("║ AM          │ %8.6f │ %5zu │ %10.6e │ %17.6f%% ║\n",
            results->am_time, results->am_steps, results->am_error, results->am_accuracy * 100);
-    printf("║ DDAM   │ %8.6f │ %5zu │ %10.6e │ %19.6f%% ║\n",
+    printf("║ DDAM        │ %8.6f │ %5zu │ %10.6e │ %17.6f%% ║\n",
            results->ddam_time, results->ddam_steps, results->ddam_error, results->ddam_accuracy * 100);
-    printf("╚════════╧══════════╧═══════╧════════════╧═══════════════════════╝\n");
+    if (results->parallel_rk3_time > 0) {
+        printf("║ Parallel RK3 │ %8.6f │ %5zu │ %10.6e │ %17.6f%% ║\n",
+               results->parallel_rk3_time, results->parallel_rk3_steps, results->parallel_rk3_error, results->parallel_rk3_accuracy * 100);
+        printf("║   (Speedup: %.2fx) │\n", results->speedup_rk3);
+    }
+    if (results->stacked_rk3_time > 0) {
+        printf("║ Stacked RK3  │ %8.6f │ %5zu │ %10.6e │ %17.6f%% ║\n",
+               results->stacked_rk3_time, results->stacked_rk3_steps, results->stacked_rk3_error, results->stacked_rk3_accuracy * 100);
+    }
+    if (results->parallel_am_time > 0) {
+        printf("║ Parallel AM  │ %8.6f │ %5zu │ %10.6e │ %17.6f%% ║\n",
+               results->parallel_am_time, results->parallel_am_steps, results->parallel_am_error, results->parallel_am_accuracy * 100);
+        printf("║   (Speedup: %.2fx) │\n", results->speedup_am);
+    }
+    if (results->parallel_euler_time > 0) {
+        printf("║ Parallel Euler│ %8.6f │ %5zu │ %10.6e │ %17.6f%% ║\n",
+               results->parallel_euler_time, results->parallel_euler_steps, results->parallel_euler_error, results->parallel_euler_accuracy * 100);
+        printf("║   (Speedup: %.2fx) │\n", results->speedup_euler);
+    }
+    if (results->realtime_rk3_time > 0) {
+        printf("║ Real-Time RK3  │ %8.6f │   N/A │ %10.6e │ %17.6f%% ║\n",
+               results->realtime_rk3_time, results->realtime_rk3_error, results->realtime_rk3_accuracy * 100);
+    }
+    if (results->online_rk3_time > 0) {
+        printf("║ Online RK3     │ %8.6f │   N/A │ %10.6e │ %17.6f%% ║\n",
+               results->online_rk3_time, results->online_rk3_error, results->online_rk3_accuracy * 100);
+    }
+    if (results->dynamic_rk3_time > 0) {
+        printf("║ Dynamic RK3    │ %8.6f │   N/A │ %10.6e │ %17.6f%% ║\n",
+               results->dynamic_rk3_time, results->dynamic_rk3_error, results->dynamic_rk3_accuracy * 100);
+    }
+    printf("╚═════════════╧══════════╧═══════╧════════════╧═══════════════════╝\n");
     printf("\n");
     
     // Find best method
@@ -536,19 +647,54 @@ int export_comparison_csv(const char* filename, const ComparisonResults* results
         return -1;
     }
     
-    fprintf(fp, "Method,Time(s),Steps,Error,Accuracy(%%)\n");
-    fprintf(fp, "Euler,%.6f,%zu,%.6e,%.6f\n",
+    fprintf(fp, "Method,Time(s),Steps,Error,Accuracy(%%),Speedup,Workers\n");
+    fprintf(fp, "Euler,%.6f,%zu,%.6e,%.6f,1.00,1\n",
             results->euler_time, results->euler_steps, results->euler_error, results->euler_accuracy * 100);
-    fprintf(fp, "DDEuler,%.6f,%zu,%.6e,%.6f\n",
+    fprintf(fp, "DDEuler,%.6f,%zu,%.6e,%.6f,1.00,1\n",
             results->ddeuler_time, results->ddeuler_steps, results->ddeuler_error, results->ddeuler_accuracy * 100);
-    fprintf(fp, "RK3,%.6f,%zu,%.6e,%.6f\n",
+    fprintf(fp, "RK3,%.6f,%zu,%.6e,%.6f,1.00,1\n",
             results->rk3_time, results->rk3_steps, results->rk3_error, results->rk3_accuracy * 100);
-    fprintf(fp, "DDRK3,%.6f,%zu,%.6e,%.6f\n",
+    fprintf(fp, "DDRK3,%.6f,%zu,%.6e,%.6f,1.00,1\n",
             results->ddrk3_time, results->ddrk3_steps, results->ddrk3_error, results->ddrk3_accuracy * 100);
-    fprintf(fp, "AM,%.6f,%zu,%.6e,%.6f\n",
+    fprintf(fp, "AM,%.6f,%zu,%.6e,%.6f,1.00,1\n",
             results->am_time, results->am_steps, results->am_error, results->am_accuracy * 100);
-    fprintf(fp, "DDAM,%.6f,%zu,%.6e,%.6f\n",
+    fprintf(fp, "DDAM,%.6f,%zu,%.6e,%.6f,1.00,1\n",
             results->ddam_time, results->ddam_steps, results->ddam_error, results->ddam_accuracy * 100);
+    if (results->parallel_rk3_time > 0) {
+        fprintf(fp, "Parallel_RK3,%.6f,%zu,%.6e,%.6f,%.2f,%zu\n",
+                results->parallel_rk3_time, results->parallel_rk3_steps, results->parallel_rk3_error,
+                results->parallel_rk3_accuracy * 100, results->speedup_rk3, results->num_workers);
+    }
+    if (results->stacked_rk3_time > 0) {
+        fprintf(fp, "Stacked_RK3,%.6f,%zu,%.6e,%.6f,1.00,%zu\n",
+                results->stacked_rk3_time, results->stacked_rk3_steps, results->stacked_rk3_error,
+                results->stacked_rk3_accuracy * 100, results->num_workers);
+    }
+    if (results->parallel_am_time > 0) {
+        fprintf(fp, "Parallel_AM,%.6f,%zu,%.6e,%.6f,%.2f,%zu\n",
+                results->parallel_am_time, results->parallel_am_steps, results->parallel_am_error,
+                results->parallel_am_accuracy * 100, results->speedup_am, results->num_workers);
+    }
+    if (results->parallel_euler_time > 0) {
+        fprintf(fp, "Parallel_Euler,%.6f,%zu,%.6e,%.6f,%.2f,%zu\n",
+                results->parallel_euler_time, results->parallel_euler_steps, results->parallel_euler_error,
+                results->parallel_euler_accuracy * 100, results->speedup_euler, results->num_workers);
+    }
+    if (results->realtime_rk3_time > 0) {
+        fprintf(fp, "RealTime_RK3,%.6f,0,%.6e,%.6f,1.00,1\n",
+                results->realtime_rk3_time, results->realtime_rk3_error,
+                results->realtime_rk3_accuracy * 100);
+    }
+    if (results->online_rk3_time > 0) {
+        fprintf(fp, "Online_RK3,%.6f,0,%.6e,%.6f,1.00,1\n",
+                results->online_rk3_time, results->online_rk3_error,
+                results->online_rk3_accuracy * 100);
+    }
+    if (results->dynamic_rk3_time > 0) {
+        fprintf(fp, "Dynamic_RK3,%.6f,0,%.6e,%.6f,1.00,1\n",
+                results->dynamic_rk3_time, results->dynamic_rk3_error,
+                results->dynamic_rk3_accuracy * 100);
+    }
     
     fclose(fp);
     return 0;

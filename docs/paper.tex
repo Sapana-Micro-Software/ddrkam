@@ -71,16 +71,76 @@ The corrector step:
 y_{n+1} = y_n + \frac{h}{12}(5f_{n+1} + 8f_n - f_{n-1})
 \end{equation}
 
-\section{Hierarchical Data-Driven Architecture}
+\section{Parallel, Distributed, and Concurrent Execution}
 
-We propose a hierarchical architecture inspired by transformer networks that processes ODE solutions through multiple layers with attention mechanisms. Each layer applies transformations to the state space, enabling adaptive refinement of the numerical solution.
+We extend all numerical methods with comprehensive parallel and distributed computing support:
 
-The hierarchical solver consists of:
+\subsection{Parallel Execution Modes}
+
+\begin{itemize}
+\item \textbf{OpenMP}: Shared-memory multi-threading for single-node parallelization
+\item \textbf{POSIX Threads (pthreads)}: Fine-grained thread control
+\item \textbf{MPI}: Distributed computing across multiple nodes
+\item \textbf{Hybrid}: Combined MPI + OpenMP for hierarchical parallelism
+\end{itemize}
+
+\subsection{Concurrent Execution}
+
+Multiple methods can execute simultaneously, enabling real-time comparison and ensemble approaches. The concurrent execution framework manages resource allocation and synchronization across parallel method instances.
+
+\subsection{Real-Time, Online, and Dynamic Methods}
+
+We extend all numerical methods with real-time, online, and dynamic execution capabilities:
+
+\subsubsection{Real-Time Methods}
+
+Real-time methods process streaming data with minimal latency, suitable for live data feeds and continuous monitoring applications. They feature:
+\begin{itemize}
+\item Streaming data buffers for continuous processing
+\item Callback mechanisms for immediate result delivery
+\item Low-latency execution optimized for real-time constraints
+\end{itemize}
+
+\subsubsection{Online Methods}
+
+Online methods adapt to incoming data with incremental learning, adjusting parameters based on observed errors:
+\begin{itemize}
+\item Adaptive step size control based on error estimates
+\item Learning rate mechanisms for parameter adjustment
+\item History tracking for adaptive refinement
+\end{itemize}
+
+\subsubsection{Dynamic Methods}
+
+Dynamic methods provide fully adaptive execution with dynamic step sizes and parameter adaptation:
+\begin{itemize}
+\item Real-time error and stability estimation
+\item Dynamic step size adjustment
+\item Parameter history tracking
+\item Adaptive mode switching
+\end{itemize}
+
+\section{Hierarchical and Stacked Architecture}
+
+We propose hierarchical and stacked architectures inspired by transformer networks that process ODE solutions through multiple layers with attention mechanisms. Each layer applies transformations to the state space, enabling adaptive refinement of the numerical solution.
+
+The hierarchical/stacked solver consists of:
 \begin{itemize}
 \item Multiple processing layers with learnable weights
 \item Attention mechanisms for state-space transformations
+\item Residual connections for gradient flow
 \item Adaptive step size control based on hierarchical features
+\item Stacked configurations for deep hierarchical processing
 \end{itemize}
+
+\subsection{Stacked Configurations}
+
+Stacked methods process solutions through multiple hierarchical layers:
+\begin{equation}
+y^{(l+1)} = \text{Attention}(y^{(l)}) + \text{Residual}(y^{(l)})
+\end{equation}
+
+where $l$ denotes the layer index and the attention mechanism applies transformer-like transformations.
 
 \section{Implementation}
 
