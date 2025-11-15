@@ -1229,6 +1229,7 @@ KernelizedSPSBSConfig config = {
 - Davies et al. (2018). "Loihi: A Neuromorphic Manycore Processor"
 - IEEE Xplore Document 7229264: [Available at IEEE Xplore](https://ieeexplore.ieee.org/abstract/document/7229264)
 - IEEE Xplore Document 8259423: [Available at IEEE Xplore](https://ieeexplore.ieee.org/abstract/document/8259423)
+- Racetrack Memory: [Available at Wikipedia](https://en.wikipedia.org/wiki/Racetrack_memory)
 - Parkin et al. (2008). "Magnetic Domain-Wall Racetrack Memory"
 - Burr et al. (2010). "Phase change memory technology"
 - MIT CSAIL Probabilistic Computing (Lyric)
