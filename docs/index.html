@@ -280,14 +280,14 @@
             <div class="publications-section">
                 <h3 class="subsection-title">📚 Academic Publications (PDF)</h3>
                 <p style="text-align: center; color: var(--text-secondary); margin-bottom: 3rem; font-size: 1.1rem;">
-                    All publications are available as downloadable PDFs. Updated with latest features including DDMCMC optimization, method comparison framework (RK3 vs DDRK3 vs AM vs DDAM), and comprehensive benchmarks. Click any card to view or download.
+                    All publications are available as downloadable PDFs. Updated with latest features including DDMCMC optimization, method comparison framework (RK3 vs DDRK3 vs AM vs DDAM), comprehensive benchmarks, and <strong>PDE solver capabilities</strong> for both ordinary and partial differential equations (Heat, Wave, Advection, Burgers, Laplace, Poisson). Click any card to view or download.
                 </p>
                 <div class="docs-grid">
                     <a href="paper.pdf" class="doc-card pdf-card" target="_blank" download="DDRKAM_Paper.pdf">
                         <div class="doc-icon">📄</div>
                         <h3>Academic Paper</h3>
                         <p class="doc-meta">3 pages • 144 KB • PDF • Updated 2025</p>
-                        <p>Complete mathematical formulation and theoretical analysis of Runge-Kutta 3rd order (RK3), Data-Driven RK3 (DDRK3), Adams methods (AM), Data-Driven Adams (DDAM), hierarchical transformer-inspired architectures, and DDMCMC optimization for solving nonlinear differential equations. Includes comprehensive method comparison framework.</p>
+                        <p>Complete mathematical formulation and theoretical analysis of Runge-Kutta 3rd order (RK3), Data-Driven RK3 (DDRK3), Adams methods (AM), Data-Driven Adams (DDAM), hierarchical transformer-inspired architectures, DDMCMC optimization, and <strong>PDE solver</strong> for both ordinary and partial differential equations. Includes comprehensive method comparison framework and finite difference methods for Heat, Wave, Advection, Burgers, Laplace, and Poisson equations.</p>
                         <div class="pdf-badge">PDF Available</div>
                         <span class="doc-link">Download PDF →</span>
                     </a>
@@ -295,7 +295,7 @@
                         <div class="doc-icon">📽️</div>
                         <h3>Beamer Presentation</h3>
                         <p class="doc-meta">8 slides • 123 KB • PDF • Updated 2025</p>
-                        <p>Comprehensive presentation covering key concepts, algorithms, performance benchmarks, method comparison (RK3 vs DDRK3 vs AM vs DDAM), DDMCMC optimization for multinomial variables, efficient search algorithms, and applications of the DDRKAM framework. Invented by Shyamal Suhana Chandra.</p>
+                        <p>Comprehensive presentation covering key concepts, algorithms, performance benchmarks, method comparison (RK3 vs DDRK3 vs AM vs DDAM), DDMCMC optimization for multinomial variables, efficient search algorithms, <strong>PDE solving capabilities</strong> (Heat, Wave, Advection, Burgers, Laplace, Poisson equations), and applications of the DDRKAM framework. Invented by Shyamal Suhana Chandra.</p>
                         <div class="pdf-badge">PDF Available</div>
                         <span class="doc-link">Download PDF →</span>
                     </a>
@@ -303,7 +303,7 @@
                         <div class="doc-icon">📖</div>
                         <h3>Reference Manual</h3>
                         <p class="doc-meta">8 pages • 112 KB • PDF • Updated 2025</p>
-                        <p>Complete API documentation with function signatures, usage examples, DDMCMC methods for multinomial optimization, method comparison framework (RK3/DDRK3/AM/DDAM), and implementation guidelines for C/C++ and Objective-C interfaces. Includes timing, error, and accuracy metrics.</p>
+                        <p>Complete API documentation with function signatures, usage examples, DDMCMC methods for multinomial optimization, method comparison framework (RK3/DDRK3/AM/DDAM), <strong>PDE solver API</strong> for Heat, Wave, Advection, Burgers, Laplace, and Poisson equations (1D & 2D), and implementation guidelines for C/C++ and Objective-C interfaces. Includes timing, error, accuracy metrics, and stability conditions.</p>
                         <div class="pdf-badge">PDF Available</div>
                         <span class="doc-link">Download PDF →</span>
                     </a>
@@ -312,7 +312,7 @@
                 <div class="pdf-download-all" style="text-align: center; margin-top: 3rem; padding: 2rem; background: var(--bg-light); border-radius: 1rem; border: 1px solid rgba(148, 163, 184, 0.1);">
                     <h4 style="color: var(--text-primary); margin-bottom: 1.5rem; font-size: 1.25rem;">Quick Download All PDFs</h4>
                     <p style="color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 0.95rem;">
-                        All publications updated with DDMCMC, method comparison, and latest features
+                        All publications updated with DDMCMC, method comparison, <strong>PDE solver capabilities</strong> (ODEs & PDEs), and latest features. Includes comprehensive documentation for Heat, Wave, Advection, Burgers, Laplace, and Poisson equation solvers.
                     </p>
                     <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
                         <a href="paper.pdf" download="DDRKAM_Paper.pdf" class="btn btn-primary" style="margin: 0.5rem;">📄 Download Paper</a>
@@ -332,14 +332,20 @@
                     <a href="https://github.com/Sapana-Micro-Software/ddrkam/blob/main/README.md" class="doc-card" target="_blank">
                         <div class="doc-icon">💻</div>
                         <h3>Quick Start Guide</h3>
-                        <p>Get started with DDRKAM: installation instructions, basic usage examples, and code samples for C/C++ and Objective-C.</p>
+                        <p>Get started with DDRKAM: installation instructions, basic usage examples for ODEs and PDEs, and code samples for C/C++ and Objective-C. Includes PDE solver examples for Heat, Wave, Advection, and more.</p>
                         <span class="doc-link">View on GitHub →</span>
                     </a>
                     <a href="https://github.com/Sapana-Micro-Software/ddrkam" class="doc-card" target="_blank">
                         <div class="doc-icon">🔗</div>
                         <h3>Source Code</h3>
-                        <p>Browse the complete source code, test suites, and implementation details on GitHub.</p>
+                        <p>Browse the complete source code, test suites (including PDE solver tests), and implementation details on GitHub. Includes C/C++ PDE solver and Objective-C wrappers.</p>
                         <span class="doc-link">View Repository →</span>
+                    </a>
+                    <a href="PDE_GUIDE.md" class="doc-card" target="_blank">
+                        <div class="doc-icon">🌊</div>
+                        <h3>PDE Solver Guide</h3>
+                        <p>Complete guide for solving partial differential equations: Heat, Wave, Advection, Burgers, Laplace, and Poisson equations with examples and stability conditions.</p>
+                        <span class="doc-link">View Guide →</span>
                     </a>
                 </div>
             </div>
