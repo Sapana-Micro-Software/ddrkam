@@ -195,6 +195,21 @@ The comparison framework evaluates:
 
 *This paper provides additional statistics, performance metrics, and comparative analysis relevant to numerical methods and computational architectures. Statistics and information from this paper can be integrated for comprehensive comparison with DDRKAM framework results.*
 
+**IEEE Xplore Document 8259423**: [Available at IEEE Xplore](https://ieeexplore.ieee.org/abstract/document/8259423)
+
+*This paper provides additional statistics, performance data, and comparative analysis relevant to numerical methods, computational architectures, and solver performance. Statistics and data from this paper can be integrated for comprehensive comparison with DDRKAM framework results.*
+
+#### Statistics and Data from IEEE Document 8259423
+
+*The following statistics and data from IEEE Xplore Document 8259423 can be integrated for comparative analysis:*
+
+- **Method Performance**: [To be added from paper]
+- **Accuracy Metrics**: [To be added from paper]
+- **Computational Efficiency**: [To be added from paper]
+- **Architecture Benchmarks**: [To be added from paper]
+- **Comparative Analysis**: [To be added from paper]
+- **Performance Statistics**: [To be added from paper]
+
 ## Visual Charts and Diagrams
 
 The following SVG charts provide visual comparisons of all methods:
