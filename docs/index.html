@@ -227,6 +227,23 @@
                 </div>
             </div>
             
+            <!-- Bar Chart Comparisons -->
+            <div style="margin-top: 3rem;">
+                <h4 style="text-align: center; color: var(--text-primary); margin-bottom: 2rem; font-size: 1.5rem;">Method Comparison Bar Charts</h4>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); gap: 2rem;">
+                    <div class="chart-container">
+                        <canvas id="accuracy-bar-chart"></canvas>
+                        <h4>Accuracy Comparison (Normalized)</h4>
+                        <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem;">All Methods - Normalized to 0-100%</p>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="speed-bar-chart"></canvas>
+                        <h4>Computation Speed Comparison (Normalized)</h4>
+                        <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem;">All Methods - Normalized to 0-100%</p>
+                    </div>
+                </div>
+            </div>
+            
             <!-- Additional SVG Charts -->
             <div style="margin-top: 3rem;">
                 <h4 style="text-align: center; color: var(--text-primary); margin-bottom: 2rem; font-size: 1.5rem;">Detailed Benchmark Visualizations</h4>
