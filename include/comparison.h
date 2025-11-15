@@ -328,6 +328,14 @@ typedef struct {
     size_t multiple_search_tree_steps;
     size_t multiple_search_tree_nodes_expanded;
     size_t multiple_search_tree_nodes_generated;
+    
+    // Directed Diffusion (Chandra, Shyamal)
+    double directed_diffusion_time;
+    double directed_diffusion_error;
+    double directed_diffusion_accuracy;
+    size_t directed_diffusion_steps;
+    size_t directed_diffusion_flood_iterations;
+    size_t directed_diffusion_gradient_updates;
 } ComparisonResults;
 
 /**

@@ -2688,6 +2688,7 @@ const char* architecture_type_name(ArchitectureType type) {
         case ARCH_FPGA_AWS_F1: return "FPGA (AWS F1)";
         case ARCH_ASAP_ARRAY: return "AsAP (Asynchronous Array)";
         case ARCH_COPROCESSOR_XEON_PHI: return "Coprocessor (Xeon Phi)";
+        case ARCH_DIRECTED_DIFFUSION_CHANDRA: return "Directed Diffusion (Chandra)";
         default: return "Unknown";
     }
 }

@@ -82,7 +82,8 @@ typedef enum {
     // Additional Architectures
     ARCH_FPGA_AWS_F1,
     ARCH_ASAP_ARRAY,
-    ARCH_COPROCESSOR_XEON_PHI
+    ARCH_COPROCESSOR_XEON_PHI,
+    ARCH_DIRECTED_DIFFUSION_CHANDRA
 } ArchitectureType;
 
 // ============================================================================
@@ -1653,6 +1654,57 @@ int coprocessor_xeon_phi_ode_solve(CoprocessorXeonPhiSolver* solver, ODEFunction
                                     double t0, double t_end, const double* y0,
                                     double h, void* params, double* y_out);
 void coprocessor_xeon_phi_ode_free(CoprocessorXeonPhiSolver* solver);
+
+// ============================================================================
+// Directed Diffusion with Manhattan Distance (Chandra, Shyamal)
+// Inspired by Deborah Estrin and Ramesh Govindan et al.
+// Flood fill focusing on statics rather than dynamics
+// ============================================================================
+
+/**
+ * Directed Diffusion Configuration
+ * Uses Manhattan distance with flood fill to focus on static state distribution
+ * rather than dynamic evolution, inspired by sensor network routing protocols
+ */
+typedef struct {
+    size_t grid_size;                 // Grid size for spatial discretization
+    size_t num_sources;               // Number of source nodes
+    size_t num_sinks;                 // Number of sink nodes
+    double diffusion_rate;            // Diffusion rate coefficient
+    double manhattan_weight;          // Weight for Manhattan distance
+    double flood_fill_threshold;      // Threshold for flood fill propagation
+    int enable_static_focus;          // Focus on statics rather than dynamics
+    int enable_gradient_repair;       // Enable gradient-based repair
+    size_t max_flood_iterations;      // Maximum flood fill iterations
+    double interest_decay_rate;       // Interest decay rate (from Estrin et al.)
+    double data_aggregation_rate;    // Data aggregation rate
+} DirectedDiffusionConfig;
+
+/**
+ * Directed Diffusion Solver
+ * Implements flood fill with Manhattan distance for static state focus
+ */
+typedef struct {
+    size_t state_dim;
+    DirectedDiffusionConfig config;
+    double* grid_state;               // Grid state representation
+    double* gradient_field;            // Gradient field for diffusion
+    size_t* manhattan_distances;      // Manhattan distance matrix
+    int* visited;                      // Visited flags for flood fill
+    size_t* sources;                    // Source node indices
+    size_t* sinks;                      // Sink node indices
+    size_t flood_iterations;
+    size_t gradient_updates;
+    double computation_time;
+    double diffusion_time;
+} DirectedDiffusionSolver;
+
+int directed_diffusion_ode_init(DirectedDiffusionSolver* solver, size_t state_dim,
+                                const DirectedDiffusionConfig* config);
+int directed_diffusion_ode_solve(DirectedDiffusionSolver* solver, ODEFunction f,
+                                  double t0, double t_end, const double* y0,
+                                  double h, void* params, double* y_out);
+void directed_diffusion_ode_free(DirectedDiffusionSolver* solver);
 
 // Utility functions
 const char* architecture_type_name(ArchitectureType type);

@@ -321,9 +321,81 @@ Based on https://github.com/shyamalschandra/STARR. Semantic and associative memo
 | Semantic Lexo BS | O(log n) | Medium | Search |
 | Kernelized SPS BS | O(kernels) | Medium | Multi-kernel |
 
+## Directed Diffusion with Manhattan Distance (Chandra, Shyamal)
+
+### Concept
+
+Directed Diffusion with Manhattan Distance uses flood fill algorithms to focus on static state distribution rather than dynamic evolution. Inspired by the sensor network routing protocol by Deborah Estrin and Ramesh Govindan et al., this method adapts the directed diffusion concept for ODE solving.
+
+### Architecture
+
+- **Manhattan Distance**: L1 distance metric for spatial routing
+- **Flood Fill**: Propagates state information from sources to sinks
+- **Static Focus**: Emphasizes static state distribution over dynamic evolution
+- **Gradient Repair**: Gradient-based state repair mechanism
+- **Interest Decay**: Interest decay rate from Estrin et al. protocol
+- **Data Aggregation**: Aggregates data at sink nodes
+
+### Key Features
+
+- ✅ Manhattan distance-based routing (L1 norm)
+- ✅ Flood fill propagation from multiple sources
+- ✅ Focus on statics rather than dynamics
+- ✅ Gradient-based repair for state consistency
+- ✅ Interest decay mechanism (from Estrin et al.)
+- ✅ Data aggregation at sink nodes
+
+### Configuration
+
+```c
+DirectedDiffusionConfig config = {
+    .grid_size = 32,
+    .num_sources = 4,
+    .num_sinks = 4,
+    .diffusion_rate = 0.1,
+    .manhattan_weight = 0.5,
+    .flood_fill_threshold = 5.0,
+    .enable_static_focus = 1,  // Focus on statics
+    .enable_gradient_repair = 1,
+    .max_flood_iterations = 1000,
+    .interest_decay_rate = 0.01,  // From Estrin et al.
+    .data_aggregation_rate = 0.1
+};
+```
+
+### Manhattan Distance
+
+The Manhattan distance (L1 norm) between two grid points (i1, j1) and (i2, j2):
+```
+d = |i1 - i2| + |j1 - j2|
+```
+
+### Flood Fill Algorithm
+
+The flood fill propagates state information using Manhattan distance:
+- Starts from source nodes
+- Propagates to neighbors within threshold distance
+- Applies diffusion based on Manhattan distance weight
+- Updates visited flags to prevent cycles
+
+### Gradient Repair
+
+Gradient-based repair mechanism:
+- Computes gradient field from grid state
+- Smooths state based on gradient magnitude
+- Repairs inconsistencies using neighbor averaging
+
+### Complexity
+
+- **Flood Fill**: O(n) where n is grid size
+- **Manhattan Distance**: O(1) per pair
+- **Gradient Repair**: O(n) for n grid points
+- **Overall**: O(n²) for full grid processing
+
 ## References
 
 - **Chord**: Stoica, I., Morris, R., Karger, D., Kaashoek, M. F., & Balakrishnan, H. (2001). "Chord: A Scalable Peer-to-peer Lookup Service for Internet Applications." <em>ACM SIGCOMM Computer Communication Review</em>, 31(4), 149-160. DOI: 10.1145/964723.383071. Available at: https://en.wikipedia.org/wiki/Chord_(peer-to-peer)
+- **Directed Diffusion**: Estrin, D., Govindan, R., Heidemann, J., & Kumar, S. (1999). "Next Century Challenges: Scalable Coordination in Sensor Networks." <em>Proceedings of the 5th Annual ACM/IEEE International Conference on Mobile Computing and Networking (MobiCom)</em>, 263-270. DOI: 10.1145/313451.313556
 - Robert Morris: Morris, R. (1978). "Counting Large Numbers of Events in Small Registers"
 - Korf, R. E. (1999). "Frontier Search"
 - TrueNorth: Merolla et al. (2014). "A million spiking-neuron integrated circuit"

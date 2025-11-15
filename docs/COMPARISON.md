@@ -41,6 +41,9 @@ This document provides a comprehensive comparison of numerical methods implement
 **Search-Based Solvers:**
 - **Multiple-Search Representation Tree Algorithm**: ⭐ Uses multiple search strategies (BFS, DFS, A*, Best-First) with tree/graph state representations for optimal pathfinding in ODE solving
 
+**Diffusion-Based Solvers:**
+- **Directed Diffusion with Manhattan Distance**: ⭐ Flood fill focusing on statics rather than dynamics (Chandra, Shyamal, inspired by Estrin & Govindan et al.)
+
 **Distributed & Cloud Computing:**
 - **Map/Reduce Framework**: Distributed ODE solving on commodity hardware with redundancy-based fault tolerance
 - **Apache Spark Framework**: RDD-based distributed computation with lineage-based recovery and caching
@@ -165,6 +168,7 @@ The comparison framework evaluates:
 - **Online RK3**: Systems with varying dynamics, adaptive control
 - **Nonlinear ODE**: Constrained optimization problems, nonlinear programming
 - **Karmarkar's Algorithm**: Linear programming problems, constrained optimization with linear constraints
+- **Directed Diffusion**: Static state distribution problems, flood fill with Manhattan distance routing
 - **Multiple-Search Representation Tree**: Optimal pathfinding, complex state space exploration, multiple solution paths
 - **Interior Point Methods**: Non-convex optimization, constrained problems
 - **Distributed Data-Driven**: Large-scale distributed systems, cloud computing

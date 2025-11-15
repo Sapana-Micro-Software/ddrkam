@@ -1780,6 +1780,47 @@ int compare_methods(ODEFunction f, double t0, double t_end, const double* y0,
         free(y0_copy);
     }
     
+    // Test Directed Diffusion with Manhattan Distance (Chandra, Shyamal)
+    // Inspired by Deborah Estrin and Ramesh Govindan et al.
+    DirectedDiffusionSolver directed_diffusion;
+    DirectedDiffusionConfig dd_config = {
+        .grid_size = 32,
+        .num_sources = 4,
+        .num_sinks = 4,
+        .diffusion_rate = 0.1,
+        .manhattan_weight = 0.5,
+        .flood_fill_threshold = 5.0,
+        .enable_static_focus = 1,  // Focus on statics rather than dynamics
+        .enable_gradient_repair = 1,
+        .max_flood_iterations = 1000,
+        .interest_decay_rate = 0.01,  // From Estrin et al.
+        .data_aggregation_rate = 0.1
+    };
+    
+    if (directed_diffusion_ode_init(&directed_diffusion, n, &dd_config) == 0) {
+        y0_copy = (double*)malloc(n * sizeof(double));
+        memcpy(y0_copy, y0, n * sizeof(double));
+        
+        start = clock();
+        double* y_dd = (double*)malloc(n * sizeof(double));
+        if (y_dd) {
+            if (directed_diffusion_ode_solve(&directed_diffusion, f, t0, t_end, y0_copy, h, params, y_dd) == 0) {
+                end = clock();
+                
+                results->directed_diffusion_time = ((double)(end - start)) / CLOCKS_PER_SEC;
+                results->directed_diffusion_steps = (size_t)((t_end - t0) / h);
+                results->directed_diffusion_flood_iterations = directed_diffusion.flood_iterations;
+                results->directed_diffusion_gradient_updates = directed_diffusion.gradient_updates;
+                results->directed_diffusion_error = compute_error(y_dd, exact_solution, n);
+                results->directed_diffusion_accuracy = compute_accuracy(y_dd, exact_solution, n);
+            }
+            free(y_dd);
+        }
+        
+        directed_diffusion_ode_free(&directed_diffusion);
+        free(y0_copy);
+    }
+    
     free(t_out);
     free(y_out);
     
@@ -2036,6 +2077,13 @@ void print_comparison_results(const ComparisonResults* results) {
         printf("║   (Expanded: %zu, Generated: %zu) │\n",
                results->multiple_search_tree_nodes_expanded, results->multiple_search_tree_nodes_generated);
     }
+    if (results->directed_diffusion_time > 0) {
+        printf("║ Directed Diffusion │ %8.6f │ %5zu │ %10.6e │ %17.6f%% ║\n",
+               results->directed_diffusion_time, results->directed_diffusion_steps, results->directed_diffusion_error,
+               results->directed_diffusion_accuracy * 100);
+        printf("║   (Flood: %zu, Gradient: %zu) │\n",
+               results->directed_diffusion_flood_iterations, results->directed_diffusion_gradient_updates);
+    }
     printf("╚═════════════╧══════════╧═══════╧════════════╧═══════════════════╝\n");
     printf("\n");
     
@@ -2124,6 +2172,14 @@ void print_comparison_results(const ComparisonResults* results) {
     if (results->ddam_accuracy > max_accuracy) {
         max_accuracy = results->ddam_accuracy;
         best_accuracy = "DDAM";
+    }
+    if (results->directed_diffusion_time > 0 && results->directed_diffusion_time < min_time) {
+        min_time = results->directed_diffusion_time;
+        best_time = "Directed Diffusion";
+    }
+    if (results->directed_diffusion_accuracy > max_accuracy) {
+        max_accuracy = results->directed_diffusion_accuracy;
+        best_accuracy = "Directed Diffusion";
     }
     if (results->karmarkar_time > 0 && results->karmarkar_time < min_time) {
         min_time = results->karmarkar_time;
