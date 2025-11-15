@@ -550,12 +550,14 @@
         const chartWidth = width - padding.left - padding.right;
         const chartHeight = height - padding.top - padding.bottom;
         
+        console.log('[TestViz] Generating exponential decay data...');
         const methods = [
             { name: 'RK3', color: '#6366f1', data: generateExponentialData('rk3', 0, 2.0, 0.01, 1.0) },
             { name: 'DDRK3', color: '#ec4899', data: generateExponentialData('ddrk3', 0, 2.0, 0.01, 1.0) },
             { name: 'AM', color: '#8b5cf6', data: generateExponentialData('am', 0, 2.0, 0.01, 1.0) },
             { name: 'DDAM', color: '#10b981', data: generateExponentialData('ddam', 0, 2.0, 0.01, 1.0) }
         ];
+        console.log('[TestViz] Generated exponential data for', methods.length, 'methods, sample size:', methods[0].data.t.length);
         
         const maxT = 2.0;
         const minY = 0;
