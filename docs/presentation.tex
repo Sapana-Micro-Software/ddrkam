@@ -108,29 +108,13 @@ $$y_{n+1} = y_n + \frac{h}{12}(5f_{n+1} + 8f_n - f_{n-1})$$
 $$\frac{dy}{dt} = -y, \quad y(0) = 1.0$$
 Exact: $y(t) = \exp(-t)$
 \end{block}
-\begin{columns}
-\column{0.5\textwidth}
-\begin{block}{C/C++}
-\begin{verbatim}
-void exponential_ode(double t, 
-    const double* y, 
-    double* dydt, void* params) {
-    dydt[0] = -y[0];
-}
-\end{verbatim}
+\begin{block}{C/C++ Implementation}
+\small
+\texttt{void exponential\_ode(double t, const double* y,}\\
+\texttt{~~double* dydt, void* params) \{}\\
+\texttt{~~dydt[0] = -y[0];}\\
+\texttt{\}}
 \end{block}
-
-\column{0.5\textwidth}
-\begin{block}{Objective-C}
-\begin{verbatim}
-[solver solveWithFunction:^(
-    double t, const double* y, 
-    double* dydt, void* params) {
-    dydt[0] = -y[0];
-} ...];
-\end{verbatim}
-\end{block}
-\end{columns}
 \begin{block}{Results}
 All methods: 99.99999\% accuracy
 \end{block}
@@ -142,31 +126,14 @@ All methods: 99.99999\% accuracy
 $$\frac{d^2x}{dt^2} = -x, \quad x(0) = 1.0, v(0) = 0.0$$
 Exact: $x(t) = \cos(t)$, $v(t) = -\sin(t)$
 \end{block}
-\begin{columns}
-\column{0.5\textwidth}
-\begin{block}{C/C++}
-\begin{verbatim}
-void oscillator_ode(double t, 
-    const double* y, 
-    double* dydt, void* params) {
-    dydt[0] = y[1];
-    dydt[1] = -y[0];
-}
-\end{verbatim}
+\begin{block}{C/C++ Implementation}
+\small
+\texttt{void oscillator\_ode(double t, const double* y,}\\
+\texttt{~~double* dydt, void* params) \{}\\
+\texttt{~~dydt[0] = y[1];   // dx/dt = v}\\
+\texttt{~~dydt[1] = -y[0];  // dv/dt = -x}\\
+\texttt{\}}
 \end{block}
-
-\column{0.5\textwidth}
-\begin{block}{Objective-C}
-\begin{verbatim}
-[solver solveWithFunction:^(
-    double t, const double* y, 
-    double* dydt, void* params) {
-    dydt[0] = y[1];
-    dydt[1] = -y[0];
-} ...];
-\end{verbatim}
-\end{block}
-\end{columns}
 \begin{block}{Results}
 RK3/DDRK3: 99.68\%, AM/DDAM: 99.32\%
 \end{block}
