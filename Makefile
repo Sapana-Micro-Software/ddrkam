@@ -53,6 +53,8 @@ test: $(LIBRARY) | $(BIN_DIR)
 	$(BIN_DIR)/test_comparison
 	$(CC) $(CFLAGS) -I$(INC_DIR) tests/test_benchmarks.c -L$(LIB_DIR) -lddrkam -lm -o $(BIN_DIR)/test_benchmarks
 	$(BIN_DIR)/test_benchmarks
+	$(CC) $(CFLAGS) -I$(INC_DIR) tests/test_pde.c -L$(LIB_DIR) -lddrkam -lm -o $(BIN_DIR)/test_pde
+	$(BIN_DIR)/test_pde
 
 benchmark: test
 	@echo "Running comprehensive benchmarks..."
