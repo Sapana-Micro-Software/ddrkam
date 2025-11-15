@@ -354,8 +354,8 @@ void dynamic_rk_adapt(DynamicRKSolver* solver, double error_estimate, double sta
 // Real-Time Adams Methods Implementation
 // ============================================================================
 
-int realtime_adams_init(RealtimeAdamsSolver* solver, size_t state_dim, double step_size,
-                        DataCallback callback, void* callback_data) {
+int realtime_adams_init_new(RealtimeAdamsSolver* solver, size_t state_dim, double step_size,
+                            DataCallback callback, void* callback_data) {
     if (!solver || state_dim == 0 || step_size <= 0) {
         return -1;
     }
@@ -390,7 +390,7 @@ int realtime_adams_init(RealtimeAdamsSolver* solver, size_t state_dim, double st
     return 0;
 }
 
-void realtime_adams_free(RealtimeAdamsSolver* solver) {
+void realtime_adams_free_new(RealtimeAdamsSolver* solver) {
     if (!solver) return;
     
     if (solver->current_state) free(solver->current_state);
@@ -413,8 +413,8 @@ void realtime_adams_free(RealtimeAdamsSolver* solver) {
     memset(solver, 0, sizeof(RealtimeAdamsSolver));
 }
 
-double realtime_adams_step(RealtimeAdamsSolver* solver, ODEFunction f, double t,
-                          double* y, double h, void* params) {
+double realtime_adams_step_new(RealtimeAdamsSolver* solver, ODEFunction f, double t,
+                               double* y, double h, void* params) {
     if (!solver || !f || !y) {
         return t;
     }

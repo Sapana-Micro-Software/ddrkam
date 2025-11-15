@@ -238,12 +238,12 @@ double dynamic_rk_step(DynamicRKSolver* solver, ODEFunction f, double t,
                       double* y, void* params);
 void dynamic_rk_adapt(DynamicRKSolver* solver, double error_estimate, double stability_estimate);
 
-// Real-Time Adams Functions
-int realtime_adams_init(RealtimeAdamsSolver* solver, size_t state_dim, double step_size,
-                        DataCallback callback, void* callback_data);
-void realtime_adams_free(RealtimeAdamsSolver* solver);
-double realtime_adams_step(RealtimeAdamsSolver* solver, ODEFunction f, double t,
-                          double* y, double h, void* params);
+// Real-Time Adams Functions (using new API)
+int realtime_adams_init_new(RealtimeAdamsSolver* solver, size_t state_dim, double step_size,
+                            DataCallback callback, void* callback_data);
+void realtime_adams_free_new(RealtimeAdamsSolver* solver);
+double realtime_adams_step_new(RealtimeAdamsSolver* solver, ODEFunction f, double t,
+                               double* y, double h, void* params);
 
 // Online Adams Functions
 int online_adams_init(OnlineAdamsSolver* solver, size_t state_dim, double initial_step_size,

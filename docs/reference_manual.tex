@@ -187,6 +187,75 @@ int concurrent_rk_execute(ParallelRKSolver* solvers[], size_t num_solvers,
                           void* params, double** results);
 \end{lstlisting}
 
+\section{Real-Time, Online, and Dynamic Methods}
+
+\subsection{Real-Time Methods}
+
+Real-time methods process streaming data with minimal latency.
+
+\subsubsection{realtime\_rk\_init}
+
+Initialize real-time RK3 solver.
+
+\begin{lstlisting}
+int realtime_rk_init(RealtimeRKSolver* solver, size_t state_dim, 
+                     double step_size, DataCallback callback, 
+                     void* callback_data);
+\end{lstlisting}
+
+\subsubsection{realtime\_rk\_step}
+
+Perform real-time RK3 step with streaming support.
+
+\begin{lstlisting}
+double realtime_rk_step(RealtimeRKSolver* solver, ODEFunction f,
+                        double t, double* y, double h, void* params);
+\end{lstlisting}
+
+\subsection{Online Methods}
+
+Online methods adapt to incoming data with incremental learning.
+
+\subsubsection{online\_rk\_init}
+
+Initialize online RK3 solver.
+
+\begin{lstlisting}
+int online_rk_init(OnlineRKSolver* solver, size_t state_dim,
+                   double initial_step_size, double learning_rate);
+\end{lstlisting}
+
+\subsubsection{online\_rk\_step}
+
+Perform online RK3 step with adaptive step size.
+
+\begin{lstlisting}
+double online_rk_step(OnlineRKSolver* solver, ODEFunction f,
+                     double t, double* y, void* params);
+\end{lstlisting}
+
+\subsection{Dynamic Methods}
+
+Dynamic methods provide fully adaptive execution.
+
+\subsubsection{dynamic\_rk\_init}
+
+Initialize dynamic RK3 solver.
+
+\begin{lstlisting}
+int dynamic_rk_init(DynamicRKSolver* solver, size_t state_dim,
+                    double initial_step_size, double adaptation_rate);
+\end{lstlisting}
+
+\subsubsection{dynamic\_rk\_step}
+
+Perform dynamic RK3 step with adaptive parameters.
+
+\begin{lstlisting}
+double dynamic_rk_step(DynamicRKSolver* solver, ODEFunction f,
+                       double t, double* y, void* params);
+\end{lstlisting}
+
 \section{Runge-Kutta 3rd Order Method}
 
 \subsection{Overview}
