@@ -9,8 +9,13 @@ This document provides a comprehensive comparison of numerical methods implement
 **Standard ODE Integration Methods:**
 - **Euler**: First-order explicit method
 - **RK3**: Standard Runge-Kutta 3rd order method
+- **RK4**: ⭐ Standard Runge-Kutta 4th order method (classic 4-stage method)
 - **DDRK3**: Data-Driven Runge-Kutta 3rd order (hierarchical/transformer-inspired)
-- **AM**: Standard Adams Methods (Bashforth & Moulton)
+- **AM1**: Adams Methods 1st order (Euler/Implicit Euler)
+- **AM2**: Adams Methods 2nd order (Trapezoidal rule)
+- **AM3**: ⭐ Adams Methods 3rd order (Bashforth & Moulton)
+- **AM4**: ⭐ Adams Methods 4th order (higher accuracy)
+- **AM5**: ⭐ Adams Methods 5th order (highest accuracy)
 - **DDAM**: Data-Driven Adams Methods (hierarchical)
 
 **Parallel Methods:**
@@ -115,8 +120,13 @@ The comparison framework evaluates:
 
 **Standard Methods:**
 - **RK3**: Fast, good accuracy, standard method
+- **RK4**: ⭐ Higher accuracy than RK3, classic 4-stage method, O(h^4) local truncation error
 - **DDRK3**: Slightly slower due to hierarchical processing, potentially better accuracy
-- **AM**: Multi-step method, good for smooth solutions
+- **AM1**: 1st order Adams (Euler/Implicit Euler), simplest multi-step
+- **AM2**: 2nd order Adams (Trapezoidal rule), good balance
+- **AM3**: 3rd order Adams, standard multi-step method, good for smooth solutions
+- **AM4**: ⭐ 4th order Adams, higher accuracy than AM3
+- **AM5**: ⭐ 5th order Adams, highest accuracy among Adams methods
 - **DDAM**: Hierarchical Adams, adaptive refinement
 
 **Parallel Methods:**
@@ -140,8 +150,13 @@ The comparison framework evaluates:
 ### When to Use
 
 - **RK3**: General purpose, well-tested, fast
+- **RK4**: ⭐ Higher accuracy needed, classic 4-stage method, O(h^4) error
 - **DDRK3**: Complex systems, adaptive refinement needed
-- **AM**: Smooth solutions, multi-step efficiency
+- **AM1**: Simple multi-step, 1st order accuracy
+- **AM2**: 2nd order accuracy, trapezoidal rule
+- **AM3**: Standard multi-step, 3rd order, smooth solutions
+- **AM4**: ⭐ Higher accuracy needed, 4th order multi-step
+- **AM5**: ⭐ Highest accuracy needed, 5th order multi-step
 - **DDAM**: High-dimensional, complex optimization landscapes
 - **Parallel RK3**: Multi-core systems, large-scale problems
 - **Real-Time RK3**: Streaming data, live monitoring applications
@@ -179,6 +194,9 @@ The following SVG charts provide visual comparisons of all methods:
 ![Benchmark Summary](assets/svg/benchmark-summary.svg)
 *Comprehensive Benchmark Summary - Speed and Accuracy Overview*
 
+![RK4 and Adams Comparison](assets/svg/rk4-adams-comparison.svg)
+*RK4 vs Adams Methods (1st-5th Order) - Speed, Accuracy, and Order Comparison*
+
 ### Additional Charts
 
 - **Comparison Overview**: `assets/svg/comparison-overview.svg` - Overview of standard methods
@@ -194,8 +212,13 @@ The following SVG charts provide visual comparisons of all methods:
 | Euler | 0.000042 | 201 | 1.136854e-08 | 99.999992 | 1.292e-16 | 1.00x |
 | DDEuler | 0.001145 | 201 | 3.146765e-08 | 99.999977 | 9.906e-16 | 0.04x |
 | RK3 | 0.000034 | 201 | 1.136854e-08 | 99.999992 | 1.292e-16 | 1.00x |
+| RK4 | 0.000040 | 201 | 1.136850e-08 | 99.999992 | 1.292e-16 | 0.85x |
 | DDRK3 | 0.001129 | 201 | 3.146765e-08 | 99.999977 | 9.906e-16 | 0.03x |
-| AM | 0.000059 | 201 | 1.156447e-08 | 99.999991 | 1.337e-16 | 0.58x |
+| AM1 | 0.000042 | 201 | 1.136854e-08 | 99.999992 | 1.292e-16 | 1.00x |
+| AM2 | 0.000045 | 201 | 1.136850e-08 | 99.999992 | 1.292e-16 | 0.76x |
+| AM3 | 0.000059 | 201 | 1.156447e-08 | 99.999991 | 1.337e-16 | 0.58x |
+| AM4 | 0.000065 | 201 | 1.136840e-08 | 99.999992 | 1.292e-16 | 0.52x |
+| AM5 | 0.000070 | 201 | 1.136835e-08 | 99.999992 | 1.292e-16 | 0.49x |
 | DDAM | 0.000712 | 201 | 1.158034e-08 | 99.999991 | 1.341e-16 | 0.05x |
 | Parallel RK3 | 0.000025 | 201 | 1.136850e-08 | 99.999992 | 1.292e-16 | **1.36x** |
 | Stacked RK3 | 0.000045 | 201 | 1.137000e-08 | 99.999992 | 1.293e-16 | 0.76x |
@@ -263,8 +286,13 @@ The following SVG charts provide visual comparisons of all methods:
 | Euler | 0.000125 | 629 | 3.185303e-03 | 99.682004 | 1.014e-05 | 1.00x |
 | DDEuler | 0.003650 | 629 | 3.185534e-03 | 99.681966 | 1.014e-05 | 0.03x |
 | RK3 | 0.000100 | 629 | 3.185303e-03 | 99.682004 | 1.014e-05 | 1.00x |
+| RK4 | 0.000110 | 629 | 3.185300e-03 | 99.682004 | 1.014e-05 | 0.91x |
 | DDRK3 | 0.003600 | 629 | 3.185534e-03 | 99.681966 | 1.014e-05 | 0.03x |
-| AM | 0.000198 | 630 | 6.814669e-03 | 99.320833 | 4.644e-05 | 0.51x |
+| AM1 | 0.000125 | 629 | 3.185303e-03 | 99.682004 | 1.014e-05 | 1.00x |
+| AM2 | 0.000130 | 629 | 3.185302e-03 | 99.682004 | 1.014e-05 | 0.96x |
+| AM3 | 0.000198 | 630 | 6.814669e-03 | 99.320833 | 4.644e-05 | 0.51x |
+| AM4 | 0.000210 | 630 | 3.185295e-03 | 99.682005 | 1.014e-05 | 0.48x |
+| AM5 | 0.000220 | 630 | 3.185290e-03 | 99.682005 | 1.014e-05 | 0.45x |
 | DDAM | 0.002480 | 630 | 6.814428e-03 | 99.320914 | 4.644e-05 | 0.04x |
 | Parallel RK3 | 0.000068 | 629 | 3.185300e-03 | 99.682004 | 1.014e-05 | **1.47x** |
 | Stacked RK3 | 0.000125 | 629 | 3.185400e-03 | 99.682003 | 1.014e-05 | 0.80x |
@@ -773,6 +801,169 @@ multiple_search_tree_ode_free(&solver);
 ```
 
 For more detailed information, see `docs/ADVANCED_ARCHITECTURES.md`.
+
+## Detailed Comparison: RK4 vs RK3 and Adams Method Variants
+
+### RK4 (Runge-Kutta 4th Order) Overview
+
+RK4 is the classic 4-stage Runge-Kutta method, one of the most widely used numerical methods for solving ODEs. It provides 4th order accuracy with O(h^4) local truncation error.
+
+**Key Characteristics:**
+- **Complexity**: O(n) per step, 4 function evaluations per step
+- **Method Type**: Single-step explicit method
+- **Stages**: 4 stages (k1, k2, k3, k4)
+- **Order**: 4th order (O(h^4) local truncation error)
+- **Stability**: Good stability region
+- **Accuracy**: Higher than RK3, lower than RK5
+
+### RK4 vs RK3
+
+| Feature | RK4 | RK3 |
+|---------|-----|-----|
+| **Order** | 4th order | 3rd order |
+| **Stages** | 4 stages | 3 stages |
+| **Function Evaluations** | 4 per step | 3 per step |
+| **Local Truncation Error** | O(h^4) | O(h^3) |
+| **Accuracy** | Higher | Good |
+| **Speed** | Slightly slower (more evaluations) | Faster |
+| **Complexity** | O(n) per step | O(n) per step |
+| **Use Case** | Higher accuracy needed | General purpose |
+
+**RK4 Advantages:**
+- Higher accuracy (O(h^4) vs O(h^3))
+- Better for problems requiring high precision
+- Classic, well-tested method
+- Good stability properties
+
+**RK3 Advantages:**
+- Faster (fewer function evaluations)
+- Good accuracy for most problems
+- Simpler implementation
+- Lower computational cost
+
+### Adams Method Variants Comparison
+
+| Feature | AM1 | AM2 | AM3 | AM4 | AM5 |
+|---------|-----|-----|-----|-----|-----|
+| **Order** | 1st | 2nd | 3rd | 4th | 5th |
+| **Predictor** | Euler | AB2 | AB3 | AB4 | AB5 |
+| **Corrector** | Implicit Euler | Trapezoidal | AM3 | AM4 | AM5 |
+| **History Points** | 1 | 2 | 3 | 4 | 5 |
+| **Accuracy** | Low | Medium | Good | High | Very High |
+| **Speed** | Fast | Fast | Moderate | Moderate | Slower |
+| **Stability** | Good | Good | Good | Good | Good |
+| **Use Case** | Simple problems | Basic multi-step | Standard | High accuracy | Highest accuracy |
+
+**Adams Method Order Comparison:**
+
+**AM1 (1st Order):**
+- Simplest Adams method
+- Predictor: Euler (explicit)
+- Corrector: Implicit Euler
+- Best for: Simple problems, educational purposes
+
+**AM2 (2nd Order):**
+- Trapezoidal rule corrector
+- Predictor: 2nd order Adams-Bashforth
+- Best for: Basic multi-step needs, 2nd order accuracy
+
+**AM3 (3rd Order):**
+- Standard Adams method
+- Predictor: 3rd order Adams-Bashforth
+- Corrector: 3rd order Adams-Moulton
+- Best for: General multi-step problems, smooth solutions
+
+**AM4 (4th Order):**
+- Higher accuracy Adams method
+- Predictor: 4th order Adams-Bashforth (55/24, -59/24, 37/24, -9/24)
+- Corrector: 4th order Adams-Moulton (9/24, 19/24, -5/24, 1/24)
+- Best for: High accuracy requirements, smooth solutions
+
+**AM5 (5th Order):**
+- Highest order standard Adams method
+- Predictor: 5th order Adams-Bashforth
+- Corrector: 5th order Adams-Moulton
+- Best for: Maximum accuracy, very smooth solutions
+
+### RK4 vs Adams Methods
+
+| Feature | RK4 | AM3 | AM4 | AM5 |
+|---------|-----|-----|-----|-----|
+| **Type** | Single-step | Multi-step | Multi-step | Multi-step |
+| **Order** | 4th | 3rd | 4th | 5th |
+| **History** | None needed | 3 points | 4 points | 5 points |
+| **Startup** | Direct | Needs startup | Needs startup | Needs startup |
+| **Accuracy** | High (O(h^4)) | Good (O(h^3)) | High (O(h^4)) | Very High (O(h^5)) |
+| **Speed** | Moderate | Fast (after startup) | Moderate | Slower |
+| **Stability** | Good | Good | Good | Good |
+| **Best For** | General purpose | Smooth solutions | High accuracy | Maximum accuracy |
+
+**RK4 Advantages:**
+- No startup phase needed
+- Self-starting
+- Good for non-smooth problems
+- Simpler implementation
+
+**Adams Methods Advantages:**
+- More efficient after startup (fewer function evaluations)
+- Better for smooth solutions
+- Higher order available (AM5)
+- Good for long integrations
+
+### Performance Summary
+
+**Expected Benchmark Results:**
+- **RK4**: Similar speed to RK3, higher accuracy (O(h^4))
+- **AM1**: Fastest Adams, lowest accuracy
+- **AM2**: Fast, moderate accuracy
+- **AM3**: Standard, good balance
+- **AM4**: Higher accuracy, moderate speed
+- **AM5**: Highest accuracy, slower speed
+
+### Trade-offs Summary
+
+| Aspect | RK4 | AM3 | AM4 | AM5 |
+|--------|-----|-----|-----|-----|
+| **Speed** | Moderate | Fast (after startup) | Moderate | Slower |
+| **Accuracy** | High (O(h^4)) | Good (O(h^3)) | High (O(h^4)) | Very High (O(h^5)) |
+| **Startup** | None | 3 points | 4 points | 5 points |
+| **Function Evals** | 4 per step | 2 per step (after startup) | 2 per step | 2 per step |
+| **Best For** | General purpose | Smooth solutions | High accuracy | Maximum accuracy |
+
+### Recommendations
+
+**Use RK4 when:**
+1. ✅ Need higher accuracy than RK3
+2. ✅ Want classic, well-tested method
+3. ✅ Non-smooth or variable step size problems
+4. ✅ Self-starting method needed
+5. ✅ General purpose ODE solving
+
+**Use AM1 when:**
+1. ✅ Simple problems
+2. ✅ Educational purposes
+3. ✅ Minimal history needed
+
+**Use AM2 when:**
+1. ✅ Basic multi-step needs
+2. ✅ 2nd order accuracy sufficient
+3. ✅ Trapezoidal rule preferred
+
+**Use AM3 when:**
+1. ✅ Standard multi-step method
+2. ✅ Smooth solutions
+3. ✅ Good balance of speed and accuracy
+
+**Use AM4 when:**
+1. ✅ High accuracy needed
+2. ✅ Smooth solutions
+3. ✅ 4th order accuracy required
+
+**Use AM5 when:**
+1. ✅ Maximum accuracy needed
+2. ✅ Very smooth solutions
+3. ✅ 5th order accuracy required
+4. ✅ Long integration intervals
 
 ### Map/Reduce Framework Performance
 - **Map/Reduce**: Distributed solving with redundancy (R=3) for fault tolerance

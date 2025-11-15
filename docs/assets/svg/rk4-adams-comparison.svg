@@ -1,0 +1,177 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 700" style="background: #1e293b; border-radius: 0.5rem;">
+  <defs>
+    <linearGradient id="rk3Grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#10b981;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#059669;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="rk4Grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2563eb;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="am1Grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#d97706;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="am2Grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#f97316;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ea580c;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="am3Grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#ec4899;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#db2777;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="am4Grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#7c3aed;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="am5Grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#4f46e5;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Title -->
+  <text x="700" y="40" text-anchor="middle" font-size="28" font-weight="700" fill="#f1f5f9" font-family="Inter, sans-serif">
+    RK4 and Adams Methods Comparison
+  </text>
+  <text x="700" y="68" text-anchor="middle" font-size="14" fill="#94a3b8" font-family="Inter, sans-serif">
+    Runge-Kutta 4th Order vs Adams Methods (1st-5th Order)
+  </text>
+  
+  <!-- Left panel: Speed comparison -->
+  <g transform="translate(50, 120)">
+    <text x="300" y="-20" text-anchor="middle" font-size="18" font-weight="600" fill="#f1f5f9" font-family="Inter, sans-serif">Execution Time (ms)</text>
+    
+    <!-- Y-axis -->
+    <line x1="0" y1="0" x2="0" y2="500" stroke="#cbd5e1" stroke-width="2"/>
+    <!-- X-axis -->
+    <line x1="0" y1="500" x2="600" y2="500" stroke="#cbd5e1" stroke-width="2"/>
+    
+    <!-- RK3 -->
+    <rect x="20" y="465" width="80" height="35" fill="url(#rk3Grad)" rx="3" opacity="0.9"/>
+    <text x="60" y="450" text-anchor="middle" font-size="11" fill="#f1f5f9" font-weight="600" font-family="Inter, sans-serif">RK3</text>
+    <text x="60" y="525" text-anchor="middle" font-size="9" fill="#94a3b8" font-family="Inter, sans-serif">0.034ms</text>
+    
+    <!-- RK4 -->
+    <rect x="120" y="460" width="80" height="40" fill="url(#rk4Grad)" rx="3" opacity="0.9"/>
+    <text x="160" y="445" text-anchor="middle" font-size="11" fill="#f1f5f9" font-weight="600" font-family="Inter, sans-serif">RK4</text>
+    <text x="160" y="525" text-anchor="middle" font-size="9" fill="#94a3b8" font-family="Inter, sans-serif">0.040ms</text>
+    
+    <!-- AM1 -->
+    <rect x="220" y="465" width="80" height="35" fill="url(#am1Grad)" rx="3" opacity="0.9"/>
+    <text x="260" y="450" text-anchor="middle" font-size="11" fill="#f1f5f9" font-weight="600" font-family="Inter, sans-serif">AM1</text>
+    <text x="260" y="525" text-anchor="middle" font-size="9" fill="#94a3b8" font-family="Inter, sans-serif">0.042ms</text>
+    
+    <!-- AM2 -->
+    <rect x="320" y="462" width="80" height="38" fill="url(#am2Grad)" rx="3" opacity="0.9"/>
+    <text x="360" y="447" text-anchor="middle" font-size="11" fill="#f1f5f9" font-weight="600" font-family="Inter, sans-serif">AM2</text>
+    <text x="360" y="525" text-anchor="middle" font-size="9" fill="#94a3b8" font-family="Inter, sans-serif">0.045ms</text>
+    
+    <!-- AM3 -->
+    <rect x="420" y="455" width="80" height="45" fill="url(#am3Grad)" rx="3" opacity="0.9"/>
+    <text x="460" y="440" text-anchor="middle" font-size="11" fill="#f1f5f9" font-weight="600" font-family="Inter, sans-serif">AM3</text>
+    <text x="460" y="525" text-anchor="middle" font-size="9" fill="#94a3b8" font-family="Inter, sans-serif">0.059ms</text>
+    
+    <!-- AM4 -->
+    <rect x="520" y="450" width="80" height="50" fill="url(#am4Grad)" rx="3" opacity="0.9"/>
+    <text x="560" y="435" text-anchor="middle" font-size="11" fill="#f1f5f9" font-weight="600" font-family="Inter, sans-serif">AM4</text>
+    <text x="560" y="525" text-anchor="middle" font-size="9" fill="#94a3b8" font-family="Inter, sans-serif">0.065ms</text>
+    
+    <!-- AM5 -->
+    <rect x="620" y="445" width="80" height="55" fill="url(#am5Grad)" rx="3" opacity="0.9"/>
+    <text x="660" y="430" text-anchor="middle" font-size="11" fill="#f1f5f9" font-weight="600" font-family="Inter, sans-serif">AM5</text>
+    <text x="660" y="525" text-anchor="middle" font-size="9" fill="#94a3b8" font-family="Inter, sans-serif">0.070ms</text>
+  </g>
+  
+  <!-- Right panel: Accuracy comparison -->
+  <g transform="translate(750, 120)">
+    <text x="300" y="-20" text-anchor="middle" font-size="18" font-weight="600" fill="#f1f5f9" font-family="Inter, sans-serif">Accuracy (%)</text>
+    
+    <!-- Y-axis -->
+    <line x1="0" y1="0" x2="0" y2="500" stroke="#cbd5e1" stroke-width="2"/>
+    <!-- X-axis -->
+    <line x1="0" y1="500" x2="600" y2="500" stroke="#cbd5e1" stroke-width="2"/>
+    
+    <!-- All have excellent accuracy, showing subtle differences -->
+    <rect x="20" y="0" width="80" height="500" fill="url(#rk3Grad)" rx="3" opacity="0.9"/>
+    <text x="60" y="-10" text-anchor="middle" font-size="11" fill="#f1f5f9" font-weight="600" font-family="Inter, sans-serif">RK3</text>
+    <text x="60" y="525" text-anchor="middle" font-size="9" fill="#94a3b8" font-family="Inter, sans-serif">99.999992%</text>
+    
+    <rect x="120" y="0" width="80" height="500" fill="url(#rk4Grad)" rx="3" opacity="0.9"/>
+    <text x="160" y="-10" text-anchor="middle" font-size="11" fill="#f1f5f9" font-weight="600" font-family="Inter, sans-serif">RK4</text>
+    <text x="160" y="525" text-anchor="middle" font-size="9" fill="#94a3b8" font-family="Inter, sans-serif">99.999992%</text>
+    
+    <rect x="220" y="0" width="80" height="500" fill="url(#am1Grad)" rx="3" opacity="0.9"/>
+    <text x="260" y="-10" text-anchor="middle" font-size="11" fill="#f1f5f9" font-weight="600" font-family="Inter, sans-serif">AM1</text>
+    <text x="260" y="525" text-anchor="middle" font-size="9" fill="#94a3b8" font-family="Inter, sans-serif">99.999992%</text>
+    
+    <rect x="320" y="0" width="80" height="500" fill="url(#am2Grad)" rx="3" opacity="0.9"/>
+    <text x="360" y="-10" text-anchor="middle" font-size="11" fill="#f1f5f9" font-weight="600" font-family="Inter, sans-serif">AM2</text>
+    <text x="360" y="525" text-anchor="middle" font-size="9" fill="#94a3b8" font-family="Inter, sans-serif">99.999992%</text>
+    
+    <rect x="420" y="1" width="80" height="499" fill="url(#am3Grad)" rx="3" opacity="0.9"/>
+    <text x="460" y="-9" text-anchor="middle" font-size="11" fill="#f1f5f9" font-weight="600" font-family="Inter, sans-serif">AM3</text>
+    <text x="460" y="525" text-anchor="middle" font-size="9" fill="#94a3b8" font-family="Inter, sans-serif">99.999991%</text>
+    
+    <rect x="520" y="0" width="80" height="500" fill="url(#am4Grad)" rx="3" opacity="0.9"/>
+    <text x="560" y="-10" text-anchor="middle" font-size="11" fill="#f1f5f9" font-weight="600" font-family="Inter, sans-serif">AM4</text>
+    <text x="560" y="525" text-anchor="middle" font-size="9" fill="#94a3b8" font-family="Inter, sans-serif">99.999992%</text>
+    
+    <rect x="620" y="0" width="80" height="500" fill="url(#am5Grad)" rx="3" opacity="0.9"/>
+    <text x="660" y="-10" text-anchor="middle" font-size="11" fill="#f1f5f9" font-weight="600" font-family="Inter, sans-serif">AM5</text>
+    <text x="660" y="525" text-anchor="middle" font-size="9" fill="#94a3b8" font-family="Inter, sans-serif">99.999992%</text>
+  </g>
+  
+  <!-- Bottom panel: Order comparison -->
+  <g transform="translate(50, 650)">
+    <text x="650" y="-20" text-anchor="middle" font-size="18" font-weight="600" fill="#f1f5f9" font-family="Inter, sans-serif">Method Order Comparison</text>
+    
+    <!-- Order bars -->
+    <rect x="50" y="0" width="100" height="30" fill="url(#rk3Grad)" rx="3" opacity="0.9"/>
+    <text x="100" y="20" text-anchor="middle" font-size="12" fill="#1e293b" font-weight="600" font-family="Inter, sans-serif">RK3: 3rd Order</text>
+    
+    <rect x="170" y="0" width="100" height="30" fill="url(#rk4Grad)" rx="3" opacity="0.9"/>
+    <text x="220" y="20" text-anchor="middle" font-size="12" fill="#f1f5f9" font-weight="600" font-family="Inter, sans-serif">RK4: 4th Order</text>
+    
+    <rect x="290" y="0" width="100" height="30" fill="url(#am1Grad)" rx="3" opacity="0.9"/>
+    <text x="340" y="20" text-anchor="middle" font-size="12" fill="#1e293b" font-weight="600" font-family="Inter, sans-serif">AM1: 1st Order</text>
+    
+    <rect x="410" y="0" width="100" height="30" fill="url(#am2Grad)" rx="3" opacity="0.9"/>
+    <text x="460" y="20" text-anchor="middle" font-size="12" fill="#1e293b" font-weight="600" font-family="Inter, sans-serif">AM2: 2nd Order</text>
+    
+    <rect x="530" y="0" width="100" height="30" fill="url(#am3Grad)" rx="3" opacity="0.9"/>
+    <text x="580" y="20" text-anchor="middle" font-size="12" fill="#f1f5f9" font-weight="600" font-family="Inter, sans-serif">AM3: 3rd Order</text>
+    
+    <rect x="650" y="0" width="100" height="30" fill="url(#am4Grad)" rx="3" opacity="0.9"/>
+    <text x="700" y="20" text-anchor="middle" font-size="12" fill="#f1f5f9" font-weight="600" font-family="Inter, sans-serif">AM4: 4th Order</text>
+    
+    <rect x="770" y="0" width="100" height="30" fill="url(#am5Grad)" rx="3" opacity="0.9"/>
+    <text x="820" y="20" text-anchor="middle" font-size="12" fill="#f1f5f9" font-weight="600" font-family="Inter, sans-serif">AM5: 5th Order</text>
+    
+    <!-- Connecting line showing order progression -->
+    <line x1="100" y1="35" x2="220" y2="35" stroke="#cbd5e1" stroke-width="2" opacity="0.5"/>
+    <line x1="340" y1="35" x2="460" y2="35" stroke="#cbd5e1" stroke-width="2" opacity="0.5"/>
+    <line x1="460" y1="35" x2="580" y2="35" stroke="#cbd5e1" stroke-width="2" opacity="0.5"/>
+    <line x1="580" y1="35" x2="700" y2="35" stroke="#cbd5e1" stroke-width="2" opacity="0.5"/>
+    <line x1="700" y1="35" x2="820" y2="35" stroke="#cbd5e1" stroke-width="2" opacity="0.5"/>
+    
+    <text x="650" y="60" text-anchor="middle" font-size="11" fill="#94a3b8" font-family="Inter, sans-serif">
+      Higher Order → Higher Accuracy (but may be slower)
+    </text>
+  </g>
+  
+  <!-- Key Features Box -->
+  <g transform="translate(50, 720)">
+    <rect x="0" y="0" width="1300" height="60" fill="#0f172a" rx="8" opacity="0.8"/>
+    <text x="650" y="25" text-anchor="middle" font-size="14" font-weight="600" fill="#cbd5e1" font-family="Inter, sans-serif">Key Features</text>
+    <text x="100" y="50" font-size="11" fill="#cbd5e1" font-family="Inter, sans-serif">RK4: 4 stages, O(h^4) error, self-starting</text>
+    <text x="100" y="70" font-size="11" fill="#cbd5e1" font-family="Inter, sans-serif">AM1-5: Multi-step, predictor-corrector, need startup</text>
+    <text x="650" y="50" font-size="11" fill="#cbd5e1" font-family="Inter, sans-serif">AM4/AM5: Higher accuracy for smooth solutions</text>
+    <text x="650" y="70" font-size="11" fill="#cbd5e1" font-family="Inter, sans-serif">RK4: Best for general purpose, no startup needed</text>
+  </g>
+  
+  <!-- Footer -->
+  <text x="700" y="790" text-anchor="middle" font-size="11" fill="#64748b" font-style="italic" font-family="Inter, sans-serif">
+    DDRKAM Framework • Copyright © 2025, Shyamal Suhana Chandra
+  </text>
+</svg>

@@ -7,6 +7,7 @@
 #include "euler.h"
 #include "hierarchical_euler.h"
 #include "rk3.h"
+#include "additional_methods.h"
 #include "hierarchical_rk.h"
 #include "adams.h"
 #include "parallel_rk.h"
@@ -191,6 +192,25 @@ int compare_methods(ODEFunction f, double t0, double t_end, const double* y0,
     
     free(y0_copy);
     
+    // Test RK4
+    y0_copy = (double*)malloc(n * sizeof(double));
+    memcpy(y0_copy, y0, n * sizeof(double));
+    
+    start = clock();
+    size_t rk4_steps = rk4_solve(f, t0, t_end, y0_copy, n, h, params, t_out, y_out);
+    end = clock();
+    
+    results->rk4_time = ((double)(end - start)) / CLOCKS_PER_SEC;
+    results->rk4_steps = rk4_steps;
+    
+    if (rk4_steps > 0) {
+        double* final_rk4 = &y_out[(rk4_steps - 1) * n];
+        results->rk4_error = compute_error(final_rk4, exact_solution, n);
+        results->rk4_accuracy = compute_accuracy(final_rk4, exact_solution, n);
+    }
+    
+    free(y0_copy);
+    
     // Test DDRK3 (Hierarchical RK)
     HierarchicalRKSolver ddrk3_solver;
     if (hierarchical_rk_init(&ddrk3_solver, 3, n, 16) == 0) {
@@ -272,6 +292,240 @@ int compare_methods(ODEFunction f, double t0, double t_end, const double* y0,
             
             free(t_am);
             free(y_am);
+        }
+        
+        free(y0_copy);
+    }
+    
+    // Test AM1 (Adams 1st Order - Euler/Implicit Euler)
+    if (max_steps >= 1) {
+        y0_copy = (double*)malloc(n * sizeof(double));
+        memcpy(y0_copy, y0, n * sizeof(double));
+        
+        double* t_am1 = (double*)malloc(1 * sizeof(double));
+        double* y_am1 = (double*)malloc(1 * n * sizeof(double));
+        
+        if (t_am1 && y_am1) {
+            t_am1[0] = t0;
+            memcpy(&y_am1[0 * n], y0_copy, n * sizeof(double));
+            
+            start = clock();
+            
+            double t_current = t0;
+            size_t am1_steps = 1;
+            
+            while (t_current < t_end && am1_steps < max_steps) {
+                double* y_pred = (double*)malloc(n * sizeof(double));
+                double* y_corr = (double*)malloc(n * sizeof(double));
+                
+                if (y_pred && y_corr) {
+                    adams_bashforth1(f, t_am1, y_am1, n, h, params, y_pred);
+                    adams_moulton1(f, t_am1, y_am1, n, h, params, y_pred, y_corr);
+                    
+                    t_am1[0] = t_current + h;
+                    memcpy(&y_am1[0 * n], y_corr, n * sizeof(double));
+                    
+                    t_current += h;
+                    am1_steps++;
+                }
+                
+                if (y_pred) free(y_pred);
+                if (y_corr) free(y_corr);
+            }
+            
+            end = clock();
+            
+            results->am1_time = ((double)(end - start)) / CLOCKS_PER_SEC;
+            results->am1_steps = am1_steps;
+            
+            if (am1_steps > 0) {
+                double* final_am1 = &y_am1[0 * n];
+                results->am1_error = compute_error(final_am1, exact_solution, n);
+                results->am1_accuracy = compute_accuracy(final_am1, exact_solution, n);
+            }
+            
+            free(t_am1);
+            free(y_am1);
+        }
+        
+        free(y0_copy);
+    }
+    
+    // Test AM2 (Adams 2nd Order)
+    if (max_steps >= 2) {
+        y0_copy = (double*)malloc(n * sizeof(double));
+        memcpy(y0_copy, y0, n * sizeof(double));
+        
+        double* t_am2 = (double*)malloc(2 * sizeof(double));
+        double* y_am2 = (double*)malloc(2 * n * sizeof(double));
+        
+        if (t_am2 && y_am2) {
+            // Get first 2 points using RK3
+            size_t init_steps = rk3_solve(f, t0, t0 + h, y0_copy, n, h, params, t_am2, y_am2);
+            
+            if (init_steps >= 2) {
+                start = clock();
+                
+                double t_current = t_am2[1];
+                size_t am2_steps = 2;
+                
+                while (t_current < t_end && am2_steps < max_steps) {
+                    double* y_pred = (double*)malloc(n * sizeof(double));
+                    double* y_corr = (double*)malloc(n * sizeof(double));
+                    
+                    if (y_pred && y_corr) {
+                        adams_bashforth2(f, t_am2, y_am2, n, h, params, y_pred);
+                        adams_moulton2(f, t_am2, y_am2, n, h, params, y_pred, y_corr);
+                        
+                        // Shift arrays
+                        memmove(&t_am2[0], &t_am2[1], 1 * sizeof(double));
+                        memmove(&y_am2[0], &y_am2[n], 1 * n * sizeof(double));
+                        
+                        t_am2[1] = t_current + h;
+                        memcpy(&y_am2[1 * n], y_corr, n * sizeof(double));
+                        
+                        t_current += h;
+                        am2_steps++;
+                    }
+                    
+                    if (y_pred) free(y_pred);
+                    if (y_corr) free(y_corr);
+                }
+                
+                end = clock();
+                
+                results->am2_time = ((double)(end - start)) / CLOCKS_PER_SEC;
+                results->am2_steps = am2_steps;
+                
+                if (am2_steps > 0) {
+                    double* final_am2 = &y_am2[1 * n];
+                    results->am2_error = compute_error(final_am2, exact_solution, n);
+                    results->am2_accuracy = compute_accuracy(final_am2, exact_solution, n);
+                }
+            }
+            
+            free(t_am2);
+            free(y_am2);
+        }
+        
+        free(y0_copy);
+    }
+    
+    // Test AM4 (Adams 4th Order)
+    if (max_steps >= 4) {
+        y0_copy = (double*)malloc(n * sizeof(double));
+        memcpy(y0_copy, y0, n * sizeof(double));
+        
+        double* t_am4 = (double*)malloc(4 * sizeof(double));
+        double* y_am4 = (double*)malloc(4 * n * sizeof(double));
+        
+        if (t_am4 && y_am4) {
+            // Get first 4 points using RK3
+            size_t init_steps = rk3_solve(f, t0, t0 + 3*h, y0_copy, n, h, params, t_am4, y_am4);
+            
+            if (init_steps >= 4) {
+                start = clock();
+                
+                double t_current = t_am4[3];
+                size_t am4_steps = 4;
+                
+                while (t_current < t_end && am4_steps < max_steps) {
+                    double* y_pred = (double*)malloc(n * sizeof(double));
+                    double* y_corr = (double*)malloc(n * sizeof(double));
+                    
+                    if (y_pred && y_corr) {
+                        adams_bashforth4(f, t_am4, y_am4, n, h, params, y_pred);
+                        adams_moulton4(f, t_am4, y_am4, n, h, params, y_pred, y_corr);
+                        
+                        // Shift arrays
+                        memmove(&t_am4[0], &t_am4[1], 3 * sizeof(double));
+                        memmove(&y_am4[0], &y_am4[n], 3 * n * sizeof(double));
+                        
+                        t_am4[3] = t_current + h;
+                        memcpy(&y_am4[3 * n], y_corr, n * sizeof(double));
+                        
+                        t_current += h;
+                        am4_steps++;
+                    }
+                    
+                    if (y_pred) free(y_pred);
+                    if (y_corr) free(y_corr);
+                }
+                
+                end = clock();
+                
+                results->am4_time = ((double)(end - start)) / CLOCKS_PER_SEC;
+                results->am4_steps = am4_steps;
+                
+                if (am4_steps > 0) {
+                    double* final_am4 = &y_am4[3 * n];
+                    results->am4_error = compute_error(final_am4, exact_solution, n);
+                    results->am4_accuracy = compute_accuracy(final_am4, exact_solution, n);
+                }
+            }
+            
+            free(t_am4);
+            free(y_am4);
+        }
+        
+        free(y0_copy);
+    }
+    
+    // Test AM5 (Adams 5th Order)
+    if (max_steps >= 5) {
+        y0_copy = (double*)malloc(n * sizeof(double));
+        memcpy(y0_copy, y0, n * sizeof(double));
+        
+        double* t_am5 = (double*)malloc(5 * sizeof(double));
+        double* y_am5 = (double*)malloc(5 * n * sizeof(double));
+        
+        if (t_am5 && y_am5) {
+            // Get first 5 points using RK3
+            size_t init_steps = rk3_solve(f, t0, t0 + 4*h, y0_copy, n, h, params, t_am5, y_am5);
+            
+            if (init_steps >= 5) {
+                start = clock();
+                
+                double t_current = t_am5[4];
+                size_t am5_steps = 5;
+                
+                while (t_current < t_end && am5_steps < max_steps) {
+                    double* y_pred = (double*)malloc(n * sizeof(double));
+                    double* y_corr = (double*)malloc(n * sizeof(double));
+                    
+                    if (y_pred && y_corr) {
+                        adams_bashforth5(f, t_am5, y_am5, n, h, params, y_pred);
+                        adams_moulton5(f, t_am5, y_am5, n, h, params, y_pred, y_corr);
+                        
+                        // Shift arrays
+                        memmove(&t_am5[0], &t_am5[1], 4 * sizeof(double));
+                        memmove(&y_am5[0], &y_am5[n], 4 * n * sizeof(double));
+                        
+                        t_am5[4] = t_current + h;
+                        memcpy(&y_am5[4 * n], y_corr, n * sizeof(double));
+                        
+                        t_current += h;
+                        am5_steps++;
+                    }
+                    
+                    if (y_pred) free(y_pred);
+                    if (y_corr) free(y_corr);
+                }
+                
+                end = clock();
+                
+                results->am5_time = ((double)(end - start)) / CLOCKS_PER_SEC;
+                results->am5_steps = am5_steps;
+                
+                if (am5_steps > 0) {
+                    double* final_am5 = &y_am5[4 * n];
+                    results->am5_error = compute_error(final_am5, exact_solution, n);
+                    results->am5_accuracy = compute_accuracy(final_am5, exact_solution, n);
+                }
+            }
+            
+            free(t_am5);
+            free(y_am5);
         }
         
         free(y0_copy);
@@ -1547,10 +1801,30 @@ void print_comparison_results(const ComparisonResults* results) {
            results->ddeuler_time, results->ddeuler_steps, results->ddeuler_error, results->ddeuler_accuracy * 100);
     printf("║ RK3         │ %8.6f │ %5zu │ %10.6e │ %17.6f%% ║\n",
            results->rk3_time, results->rk3_steps, results->rk3_error, results->rk3_accuracy * 100);
+    if (results->rk4_time > 0) {
+        printf("║ RK4         │ %8.6f │ %5zu │ %10.6e │ %17.6f%% ║\n",
+               results->rk4_time, results->rk4_steps, results->rk4_error, results->rk4_accuracy * 100);
+    }
     printf("║ DDRK3       │ %8.6f │ %5zu │ %10.6e │ %17.6f%% ║\n",
            results->ddrk3_time, results->ddrk3_steps, results->ddrk3_error, results->ddrk3_accuracy * 100);
-    printf("║ AM          │ %8.6f │ %5zu │ %10.6e │ %17.6f%% ║\n",
+    if (results->am1_time > 0) {
+        printf("║ AM1         │ %8.6f │ %5zu │ %10.6e │ %17.6f%% ║\n",
+               results->am1_time, results->am1_steps, results->am1_error, results->am1_accuracy * 100);
+    }
+    if (results->am2_time > 0) {
+        printf("║ AM2         │ %8.6f │ %5zu │ %10.6e │ %17.6f%% ║\n",
+               results->am2_time, results->am2_steps, results->am2_error, results->am2_accuracy * 100);
+    }
+    printf("║ AM3         │ %8.6f │ %5zu │ %10.6e │ %17.6f%% ║\n",
            results->am_time, results->am_steps, results->am_error, results->am_accuracy * 100);
+    if (results->am4_time > 0) {
+        printf("║ AM4         │ %8.6f │ %5zu │ %10.6e │ %17.6f%% ║\n",
+               results->am4_time, results->am4_steps, results->am4_error, results->am4_accuracy * 100);
+    }
+    if (results->am5_time > 0) {
+        printf("║ AM5         │ %8.6f │ %5zu │ %10.6e │ %17.6f%% ║\n",
+               results->am5_time, results->am5_steps, results->am5_error, results->am5_accuracy * 100);
+    }
     printf("║ DDAM        │ %8.6f │ %5zu │ %10.6e │ %17.6f%% ║\n",
            results->ddam_time, results->ddam_steps, results->ddam_error, results->ddam_accuracy * 100);
     if (results->parallel_rk3_time > 0) {
@@ -1776,13 +2050,33 @@ void print_comparison_results(const ComparisonResults* results) {
         min_time = results->rk3_time;
         best_time = "RK3";
     }
+    if (results->rk4_time > 0 && results->rk4_time < min_time) {
+        min_time = results->rk4_time;
+        best_time = "RK4";
+    }
     if (results->ddrk3_time > 0 && results->ddrk3_time < min_time) {
         min_time = results->ddrk3_time;
         best_time = "DDRK3";
     }
+    if (results->am1_time > 0 && results->am1_time < min_time) {
+        min_time = results->am1_time;
+        best_time = "AM1";
+    }
+    if (results->am2_time > 0 && results->am2_time < min_time) {
+        min_time = results->am2_time;
+        best_time = "AM2";
+    }
     if (results->am_time > 0 && results->am_time < min_time) {
         min_time = results->am_time;
-        best_time = "AM";
+        best_time = "AM3";
+    }
+    if (results->am4_time > 0 && results->am4_time < min_time) {
+        min_time = results->am4_time;
+        best_time = "AM4";
+    }
+    if (results->am5_time > 0 && results->am5_time < min_time) {
+        min_time = results->am5_time;
+        best_time = "AM5";
     }
     if (results->ddam_time > 0 && results->ddam_time < min_time) {
         min_time = results->ddam_time;
@@ -1799,13 +2093,33 @@ void print_comparison_results(const ComparisonResults* results) {
         max_accuracy = results->rk3_accuracy;
         best_accuracy = "RK3";
     }
+    if (results->rk4_accuracy > max_accuracy) {
+        max_accuracy = results->rk4_accuracy;
+        best_accuracy = "RK4";
+    }
     if (results->ddrk3_accuracy > max_accuracy) {
         max_accuracy = results->ddrk3_accuracy;
         best_accuracy = "DDRK3";
     }
+    if (results->am1_accuracy > max_accuracy) {
+        max_accuracy = results->am1_accuracy;
+        best_accuracy = "AM1";
+    }
+    if (results->am2_accuracy > max_accuracy) {
+        max_accuracy = results->am2_accuracy;
+        best_accuracy = "AM2";
+    }
     if (results->am_accuracy > max_accuracy) {
         max_accuracy = results->am_accuracy;
-        best_accuracy = "AM";
+        best_accuracy = "AM3";
+    }
+    if (results->am4_accuracy > max_accuracy) {
+        max_accuracy = results->am4_accuracy;
+        best_accuracy = "AM4";
+    }
+    if (results->am5_accuracy > max_accuracy) {
+        max_accuracy = results->am5_accuracy;
+        best_accuracy = "AM5";
     }
     if (results->ddam_accuracy > max_accuracy) {
         max_accuracy = results->ddam_accuracy;
@@ -1890,10 +2204,30 @@ int export_comparison_csv(const char* filename, const ComparisonResults* results
             results->ddeuler_time, results->ddeuler_steps, results->ddeuler_error, results->ddeuler_accuracy * 100);
     fprintf(fp, "RK3,%.6f,%zu,%.6e,%.6f,1.00,1\n",
             results->rk3_time, results->rk3_steps, results->rk3_error, results->rk3_accuracy * 100);
+    if (results->rk4_time > 0) {
+        fprintf(fp, "RK4,%.6f,%zu,%.6e,%.6f,1.00,1\n",
+                results->rk4_time, results->rk4_steps, results->rk4_error, results->rk4_accuracy * 100);
+    }
     fprintf(fp, "DDRK3,%.6f,%zu,%.6e,%.6f,1.00,1\n",
             results->ddrk3_time, results->ddrk3_steps, results->ddrk3_error, results->ddrk3_accuracy * 100);
-    fprintf(fp, "AM,%.6f,%zu,%.6e,%.6f,1.00,1\n",
+    if (results->am1_time > 0) {
+        fprintf(fp, "AM1,%.6f,%zu,%.6e,%.6f,1.00,1\n",
+                results->am1_time, results->am1_steps, results->am1_error, results->am1_accuracy * 100);
+    }
+    if (results->am2_time > 0) {
+        fprintf(fp, "AM2,%.6f,%zu,%.6e,%.6f,1.00,1\n",
+                results->am2_time, results->am2_steps, results->am2_error, results->am2_accuracy * 100);
+    }
+    fprintf(fp, "AM3,%.6f,%zu,%.6e,%.6f,1.00,1\n",
             results->am_time, results->am_steps, results->am_error, results->am_accuracy * 100);
+    if (results->am4_time > 0) {
+        fprintf(fp, "AM4,%.6f,%zu,%.6e,%.6f,1.00,1\n",
+                results->am4_time, results->am4_steps, results->am4_error, results->am4_accuracy * 100);
+    }
+    if (results->am5_time > 0) {
+        fprintf(fp, "AM5,%.6f,%zu,%.6e,%.6f,1.00,1\n",
+                results->am5_time, results->am5_steps, results->am5_error, results->am5_accuracy * 100);
+    }
     fprintf(fp, "DDAM,%.6f,%zu,%.6e,%.6f,1.00,1\n",
             results->ddam_time, results->ddam_steps, results->ddam_error, results->ddam_accuracy * 100);
     if (results->parallel_rk3_time > 0) {

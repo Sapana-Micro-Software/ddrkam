@@ -27,8 +27,13 @@ typedef struct {
     double euler_time;
     double ddeuler_time;
     double rk3_time;
+    double rk4_time;
     double ddrk3_time;
     double am_time;
+    double am1_time;
+    double am2_time;
+    double am4_time;
+    double am5_time;
     double ddam_time;
     
     // Parallel methods
@@ -43,8 +48,13 @@ typedef struct {
     double euler_error;
     double ddeuler_error;
     double rk3_error;
+    double rk4_error;
     double ddrk3_error;
     double am_error;
+    double am1_error;
+    double am2_error;
+    double am4_error;
+    double am5_error;
     double ddam_error;
     double parallel_rk3_error;
     double parallel_am_error;
@@ -57,8 +67,13 @@ typedef struct {
     double euler_accuracy;
     double ddeuler_accuracy;
     double rk3_accuracy;
+    double rk4_accuracy;
     double ddrk3_accuracy;
     double am_accuracy;
+    double am1_accuracy;
+    double am2_accuracy;
+    double am4_accuracy;
+    double am5_accuracy;
     double ddam_accuracy;
     double parallel_rk3_accuracy;
     double parallel_am_accuracy;
@@ -71,8 +86,13 @@ typedef struct {
     size_t euler_steps;
     size_t ddeuler_steps;
     size_t rk3_steps;
+    size_t rk4_steps;
     size_t ddrk3_steps;
     size_t am_steps;
+    size_t am1_steps;
+    size_t am2_steps;
+    size_t am4_steps;
+    size_t am5_steps;
     size_t ddam_steps;
     size_t parallel_rk3_steps;
     size_t parallel_am_steps;

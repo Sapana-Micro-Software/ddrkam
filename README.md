@@ -5,8 +5,8 @@ Copyright (C) 2025, Shyamal Suhana Chandra
 ## Overview
 
 DDRKAM is a comprehensive framework for solving differential equations (both **ODEs** and **PDEs**) using:
-- Runge-Kutta 3rd order method (ODEs)
-- Adams-Bashforth and Adams-Moulton methods (ODEs)
+- Runge-Kutta methods: RK3 (3rd order) and RK4 (4th order)
+- Adams Methods: Multiple orders (1st, 2nd, 3rd, 4th, 5th order) with Bashforth predictor and Moulton corrector
 - Hierarchical data-driven architecture (Transformer-inspired)
 - **PDE Solver**: Heat, Wave, Advection, Burgers, Laplace, Poisson equations
 - **Real-Time Solvers**: Streaming data processing for RK3 and Adams methods
