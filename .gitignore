@@ -13,14 +13,14 @@ bin/
 *.xcworkspace
 DerivedData/
 
-# Documentation
+# Documentation (keep PDFs, ignore build artifacts)
 docs/*.aux
 docs/*.log
 docs/*.out
 docs/*.nav
 docs/*.snm
 docs/*.toc
-docs/*.pdf
+# docs/*.pdf  # Keep PDFs for website
 
 # IDE
 .vscode/
