@@ -15,6 +15,8 @@ DDRKAM is a comprehensive framework for solving nonlinear differential equations
 - Objective-C framework for Apple platforms (macOS, iOS, visionOS)
 - Visualization capabilities
 - Hierarchical/Transformer-like ODE solver
+- **DDMCMC**: Data-Driven MCMC for multinomial optimization
+- Efficient search algorithms for learning optimization functions
 - Comprehensive documentation
 
 ## Building
@@ -72,6 +74,7 @@ initialState:@[@1.0, @1.0] stepSize:0.01 params:NULL];
 - Paper: `docs/paper.tex`
 - Presentation: `docs/presentation.tex`
 - Reference Manual: `docs/reference_manual.tex`
+- DDMCMC Guide: `docs/DDMCMC_README.md`
 
 ## License
 
