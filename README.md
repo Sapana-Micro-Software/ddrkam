@@ -95,6 +95,9 @@ See `docs/COMPARISON.md` for detailed comparison guide.
 
 Copyright (C) 2025, Shyamal Suhana Chandra. All rights reserved.
 
+For licensing information, please contact:
+**sapanamicrosoftware@duck.com**
+
 ## Repository
 
 https://github.com/Sapana-Micro-Software/ddrkam
