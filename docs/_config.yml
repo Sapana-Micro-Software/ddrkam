@@ -1,0 +1,27 @@
+title: DDRKAM - Data-Driven Runge-Kutta and Adams Methods
+description: Comprehensive framework for solving nonlinear differential equations
+theme: minima
+plugins:
+  - jekyll-feed
+
+# GitHub Pages settings
+github: [metadata]
+baseurl: ""
+url: "https://sapana-micro-software.github.io/ddrkam"
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+
+# Navigation
+navigation:
+  - title: Home
+    url: /
+  - title: Paper
+    url: /paper
+  - title: Presentation
+    url: /presentation
+  - title: Reference Manual
+    url: /reference
+  - title: Benchmarks
+    url: /benchmarks

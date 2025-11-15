@@ -1,0 +1,265 @@
+---
+layout: default
+title: DDRKAM - Data-Driven Runge-Kutta and Adams Methods
+---
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page.title }}</title>
+    <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <span class="logo-icon">∫</span>
+                <span class="logo-text">DDRKAM</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#benchmarks">Benchmarks</a></li>
+                <li><a href="#documentation">Docs</a></li>
+                <li><a href="#references">References</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">
+                <span class="gradient-text">Data-Driven Runge-Kutta</span><br>
+                and Adams Methods
+            </h1>
+            <p class="hero-subtitle">
+                A comprehensive framework for solving nonlinear differential equations
+                with hierarchical transformer-inspired architectures
+            </p>
+            <div class="hero-buttons">
+                <a href="#documentation" class="btn btn-primary">Get Started</a>
+                <a href="https://github.com/Sapana-Micro-Software/ddrkam" class="btn btn-secondary" target="_blank">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                    </svg>
+                    View on GitHub
+                </a>
+            </div>
+        </div>
+        <div class="hero-visualization">
+            <canvas id="ode-canvas"></canvas>
+        </div>
+    </section>
+
+    <section id="features" class="features">
+        <div class="container">
+            <h2 class="section-title">Features</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🔢</div>
+                    <h3>Runge-Kutta 3rd Order</h3>
+                    <p>High-accuracy numerical integration with optimal balance between precision and computational efficiency</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Adams Methods</h3>
+                    <p>Multi-step predictor-corrector methods (Adams-Bashforth & Adams-Moulton) for enhanced stability</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🧠</div>
+                    <h3>Hierarchical Architecture</h3>
+                    <p>Transformer-inspired data-driven solver with attention mechanisms for adaptive refinement</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🍎</div>
+                    <h3>Apple Platform Support</h3>
+                    <p>Native Objective-C framework for macOS, iOS, and visionOS with visualization capabilities</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>High Performance</h3>
+                    <p>Optimized C/C++ core with minimal memory overhead and maximum computational throughput</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📚</div>
+                    <h3>Comprehensive Docs</h3>
+                    <p>Complete reference manual, academic paper, and presentation materials included</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="benchmarks" class="benchmarks">
+        <div class="container">
+            <h2 class="section-title">Performance Benchmarks</h2>
+            <div class="benchmark-controls">
+                <button class="benchmark-btn active" data-method="rk3">RK3</button>
+                <button class="benchmark-btn" data-method="adams">Adams</button>
+                <button class="benchmark-btn" data-method="hierarchical">Hierarchical</button>
+            </div>
+            <div class="benchmark-charts">
+                <div class="chart-container">
+                    <canvas id="accuracy-chart"></canvas>
+                    <h4>Accuracy Comparison</h4>
+                </div>
+                <div class="chart-container">
+                    <canvas id="speed-chart"></canvas>
+                    <h4>Computation Speed (steps/sec)</h4>
+                </div>
+                <div class="chart-container">
+                    <canvas id="error-chart"></canvas>
+                    <h4>Error Convergence</h4>
+                </div>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="stat-accuracy">99.97%</div>
+                    <div class="stat-label">Average Accuracy</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="stat-speed">1.2M</div>
+                    <div class="stat-label">Steps/Second</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="stat-memory">2.4MB</div>
+                    <div class="stat-label">Memory Footprint</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="stat-convergence">O(h⁴)</div>
+                    <div class="stat-label">Convergence Rate</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="documentation" class="documentation">
+        <div class="container">
+            <h2 class="section-title">Documentation</h2>
+            <div class="docs-grid">
+                <a href="https://github.com/Sapana-Micro-Software/ddrkam/blob/main/docs/paper.tex" class="doc-card" target="_blank">
+                    <div class="doc-icon">📄</div>
+                    <h3>Academic Paper</h3>
+                    <p>Complete mathematical formulation and theoretical analysis of the methods</p>
+                    <span class="doc-link">View LaTeX Source →</span>
+                </a>
+                <a href="https://github.com/Sapana-Micro-Software/ddrkam/blob/main/docs/presentation.tex" class="doc-card" target="_blank">
+                    <div class="doc-icon">📽️</div>
+                    <h3>Presentation</h3>
+                    <p>Beamer slides covering key concepts, algorithms, and applications</p>
+                    <span class="doc-link">View LaTeX Source →</span>
+                </a>
+                <a href="https://github.com/Sapana-Micro-Software/ddrkam/blob/main/docs/reference_manual.tex" class="doc-card" target="_blank">
+                    <div class="doc-icon">📖</div>
+                    <h3>Reference Manual</h3>
+                    <p>Complete API documentation with examples and usage guidelines</p>
+                    <span class="doc-link">View LaTeX Source →</span>
+                </a>
+                <a href="https://github.com/Sapana-Micro-Software/ddrkam/blob/main/README.md" class="doc-card" target="_blank">
+                    <div class="doc-icon">💻</div>
+                    <h3>Code Examples</h3>
+                    <p>Quick start guide and code samples for C/C++ and Objective-C</p>
+                    <span class="doc-link">View on GitHub →</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section id="references" class="references">
+        <div class="container">
+            <h2 class="section-title">References & Citations</h2>
+            <div class="references-list">
+                <div class="reference-item">
+                    <div class="ref-number">[1]</div>
+                    <div class="ref-content">
+                        <strong>Butcher, J. C.</strong> (2008). 
+                        <em>Numerical Methods for Ordinary Differential Equations</em>. 
+                        Wiley. ISBN 978-0-470-72335-7.
+                    </div>
+                </div>
+                <div class="reference-item">
+                    <div class="ref-number">[2]</div>
+                    <div class="ref-content">
+                        <strong>Gear, C. W.</strong> (1971). 
+                        <em>Numerical Initial Value Problems in Ordinary Differential Equations</em>. 
+                        Prentice-Hall. ISBN 978-0-13-626606-0.
+                    </div>
+                </div>
+                <div class="reference-item">
+                    <div class="ref-number">[3]</div>
+                    <div class="ref-content">
+                        <strong>Hairer, E., Nørsett, S. P., & Wanner, G.</strong> (1993). 
+                        <em>Solving Ordinary Differential Equations I: Nonstiff Problems</em>. 
+                        Springer-Verlag. ISBN 978-3-540-56670-0.
+                    </div>
+                </div>
+                <div class="reference-item">
+                    <div class="ref-number">[4]</div>
+                    <div class="ref-content">
+                        <strong>Vaswani, A., et al.</strong> (2017). 
+                        <em>Attention Is All You Need</em>. 
+                        Advances in Neural Information Processing Systems 30 (NIPS 2017).
+                    </div>
+                </div>
+                <div class="reference-item">
+                    <div class="ref-number">[5]</div>
+                    <div class="ref-content">
+                        <strong>Lorenz, E. N.</strong> (1963). 
+                        <em>Deterministic Nonperiodic Flow</em>. 
+                        Journal of the Atmospheric Sciences, 20(2), 130-141.
+                    </div>
+                </div>
+                <div class="reference-item">
+                    <div class="ref-number">[6]</div>
+                    <div class="ref-content">
+                        <strong>University of Washington</strong> (Coursera). 
+                        <em>Differential Equations for Engineers</em>. 
+                        Online Course. Available at: 
+                        <a href="https://www.coursera.org" target="_blank">coursera.org</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>DDRKAM</h4>
+                    <p>Data-Driven Runge-Kutta and Adams Methods</p>
+                    <p class="copyright">Copyright © 2025, Shyamal Suhana Chandra</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="https://github.com/Sapana-Micro-Software/ddrkam">GitHub Repository</a></li>
+                        <li><a href="https://github.com/Sapana-Micro-Software/ddrkam/blob/main/docs/reference_manual.tex">API Reference</a></li>
+                        <li><a href="https://github.com/Sapana-Micro-Software/ddrkam/blob/main/docs/paper.tex">Research Paper</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>License</h4>
+                    <p>All rights reserved.</p>
+                </div>
+            </div>
+            <div class="footer-dedication">
+                <div class="dedication-content">
+                    <p class="dedication-text">
+                        <strong>Dedicated to</strong><br>
+                        The University of Washington Coursera™ course on Differential Equations,<br>
+                        which provided foundational knowledge and inspiration for this work.
+                    </p>
+                    <div class="uw-logo">🏛️</div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{{ '/assets/js/main.js' | relative_url }}"></script>
+    <script src="{{ '/assets/js/charts.js' | relative_url }}"></script>
+</body>
+</html>
