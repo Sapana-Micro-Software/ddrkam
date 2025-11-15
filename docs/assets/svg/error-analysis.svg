@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600" style="background: #1e293b; border-radius: 0.5rem;">
+  <defs>
+    <linearGradient id="errGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" />
+      <stop offset="33%" style="stop-color:#8b5cf6;stop-opacity:1" />
+      <stop offset="66%" style="stop-color:#ec4899;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f59e0b;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Title -->
+  <text x="450" y="40" text-anchor="middle" font-size="24" font-weight="600" fill="#f1f5f9" font-family="Inter, sans-serif">
+    Error Analysis: Exponential Decay Test
+  </text>
+  <text x="450" y="65" text-anchor="middle" font-size="14" fill="#94a3b8" font-family="Inter, sans-serif">
+    L2 Norm Error Comparison (Lower is Better)
+  </text>
+  
+  <!-- Chart area -->
+  <g transform="translate(100, 100)">
+    <!-- Y-axis (log scale visualization) -->
+    <line x1="0" y1="0" x2="0" y2="400" stroke="#cbd5e1" stroke-width="2"/>
+    <!-- X-axis -->
+    <line x1="0" y1="400" x2="700" y2="400" stroke="#cbd5e1" stroke-width="2"/>
+    
+    <!-- Y-axis label -->
+    <text x="-200" y="15" text-anchor="middle" font-size="14" fill="#cbd5e1" transform="rotate(-90)" font-family="Inter, sans-serif">
+      Error (L2 Norm) × 10⁻⁸
+    </text>
+    
+    <!-- Error bars (scaled for visibility) -->
+    <g id="errorBars">
+      <!-- RK3 -->
+      <rect x="50" y="390" width="120" height="10" fill="#6366f1" rx="2" opacity="0.9">
+        <title>RK3: 1.136854e-08</title>
+      </rect>
+      <circle cx="110" cy="395" r="5" fill="#6366f1"/>
+      <text x="110" y="385" text-anchor="middle" font-size="10" fill="#6366f1" font-weight="600" font-family="Inter, sans-serif">1.137</text>
+      <text x="110" y="420" text-anchor="middle" font-size="14" fill="#6366f1" font-weight="600" font-family="Inter, sans-serif">RK3</text>
+      
+      <!-- DDRK3 -->
+      <rect x="200" y="389" width="120" height="11" fill="#8b5cf6" rx="2" opacity="0.9">
+        <title>DDRK3: 1.138231e-08</title>
+      </rect>
+      <circle cx="260" cy="394.5" r="5" fill="#8b5cf6"/>
+      <text x="260" y="384" text-anchor="middle" font-size="10" fill="#8b5cf6" font-weight="600" font-family="Inter, sans-serif">1.138</text>
+      <text x="260" y="420" text-anchor="middle" font-size="14" fill="#8b5cf6" font-weight="600" font-family="Inter, sans-serif">DDRK3</text>
+      
+      <!-- AM -->
+      <rect x="350" y="387" width="120" height="13" fill="#ec4899" rx="2" opacity="0.9">
+        <title>AM: 1.156447e-08</title>
+      </rect>
+      <circle cx="410" cy="393.5" r="5" fill="#ec4899"/>
+      <text x="410" y="382" text-anchor="middle" font-size="10" fill="#ec4899" font-weight="600" font-family="Inter, sans-serif">1.156</text>
+      <text x="410" y="420" text-anchor="middle" font-size="14" fill="#ec4899" font-weight="600" font-family="Inter, sans-serif">AM</text>
+      
+      <!-- DDAM -->
+      <rect x="500" y="386" width="120" height="14" fill="#f59e0b" rx="2" opacity="0.9">
+        <title>DDAM: 1.158034e-08</title>
+      </rect>
+      <circle cx="560" cy="393" r="5" fill="#f59e0b"/>
+      <text x="560" y="381" text-anchor="middle" font-size="10" fill="#f59e0b" font-weight="600" font-family="Inter, sans-serif">1.158</text>
+      <text x="560" y="420" text-anchor="middle" font-size="14" fill="#f59e0b" font-weight="600" font-family="Inter, sans-serif">DDAM</text>
+    </g>
+    
+    <!-- Reference line (all errors are very small) -->
+    <line x1="0" y1="395" x2="700" y2="395" stroke="#10b981" stroke-width="2" stroke-dasharray="5,5" opacity="0.6"/>
+    <text x="710" y="400" font-size="11" fill="#10b981" font-family="Inter, sans-serif">Target: &lt; 1.2e-08</text>
+    
+    <!-- Y-axis labels -->
+    <text x="-10" y="405" text-anchor="end" font-size="11" fill="#cbd5e1" font-family="Inter, sans-serif">1.15</text>
+    <text x="-10" y="395" text-anchor="end" font-size="11" fill="#cbd5e1" font-family="Inter, sans-serif">1.16</text>
+    <text x="-10" y="385" text-anchor="end" font-size="11" fill="#cbd5e1" font-family="Inter, sans-serif">1.17</text>
+    
+    <!-- Note -->
+    <text x="350" y="480" text-anchor="middle" font-size="12" fill="#10b981" font-weight="600" font-family="Inter, sans-serif">
+      ✓ All methods achieve excellent error rates (&lt; 1.2×10⁻⁸)
+    </text>
+  </g>
+  
+  <!-- Footer -->
+  <text x="450" y="580" text-anchor="middle" font-size="11" fill="#64748b" font-style="italic" font-family="Inter, sans-serif">
+    Validated Benchmarks • Copyright © 2025, Shyamal Suhana Chandra
+  </text>
+</svg>

@@ -135,10 +135,41 @@
                     <p style="color: var(--text-secondary); font-size: 0.9rem;">Data-Driven Adams<br>Hierarchical, optimized</p>
                 </div>
             </div>
-            <div style="margin: 3rem 0; text-align: center;">
-                <h4 style="color: var(--text-primary); margin-bottom: 2rem; font-size: 1.5rem;">Visual Comparison Charts</h4>
-                <div style="background: var(--bg-light); padding: 2rem; border-radius: 1rem; margin-bottom: 2rem;">
+            <div style="margin: 3rem 0;">
+                <h4 style="color: var(--text-primary); margin-bottom: 2rem; font-size: 1.5rem; text-align: center;">Visual Comparison Charts & Diagrams</h4>
+                
+                <!-- Overview Chart -->
+                <div style="background: var(--bg-light); padding: 2rem; border-radius: 1rem; margin-bottom: 2rem; text-align: center;">
                     <img src="assets/svg/comparison-overview.svg" alt="Method Comparison Overview" style="width: 100%; max-width: 800px; height: auto; border-radius: 0.5rem;">
+                </div>
+                
+                <!-- Performance Charts Grid -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
+                    <div style="background: var(--bg-light); padding: 1.5rem; border-radius: 1rem; border: 1px solid rgba(148, 163, 184, 0.1);">
+                        <h5 style="color: var(--text-primary); margin-bottom: 1rem; text-align: center;">Performance (Time)</h5>
+                        <img src="assets/svg/performance-comparison.svg" alt="Performance Comparison" style="width: 100%; height: auto; border-radius: 0.5rem;">
+                    </div>
+                    
+                    <div style="background: var(--bg-light); padding: 1.5rem; border-radius: 1rem; border: 1px solid rgba(148, 163, 184, 0.1);">
+                        <h5 style="color: var(--text-primary); margin-bottom: 1rem; text-align: center;">Accuracy</h5>
+                        <img src="assets/svg/accuracy-comparison.svg" alt="Accuracy Comparison" style="width: 100%; height: auto; border-radius: 0.5rem;">
+                    </div>
+                    
+                    <div style="background: var(--bg-light); padding: 1.5rem; border-radius: 1rem; border: 1px solid rgba(148, 163, 184, 0.1);">
+                        <h5 style="color: var(--text-primary); margin-bottom: 1rem; text-align: center;">Error Analysis</h5>
+                        <img src="assets/svg/error-analysis.svg" alt="Error Analysis" style="width: 100%; height: auto; border-radius: 0.5rem;">
+                    </div>
+                    
+                    <div style="background: var(--bg-light); padding: 1.5rem; border-radius: 1rem; border: 1px solid rgba(148, 163, 184, 0.1);">
+                        <h5 style="color: var(--text-primary); margin-bottom: 1rem; text-align: center;">Computation Speed</h5>
+                        <img src="assets/svg/speed-comparison.svg" alt="Speed Comparison" style="width: 100%; height: auto; border-radius: 0.5rem;">
+                    </div>
+                </div>
+                
+                <!-- Method Selection Flowchart -->
+                <div style="background: var(--bg-light); padding: 2rem; border-radius: 1rem; margin-bottom: 2rem; text-align: center;">
+                    <h5 style="color: var(--text-primary); margin-bottom: 1rem;">Method Selection Guide</h5>
+                    <img src="assets/svg/method-flowchart.svg" alt="Method Selection Flowchart" style="width: 100%; max-width: 1000px; height: auto; border-radius: 0.5rem;">
                 </div>
             </div>
             <div id="comparison-charts-container" style="margin: 3rem 0;">
@@ -166,14 +197,32 @@
                 <div class="chart-container">
                     <canvas id="accuracy-chart"></canvas>
                     <h4>Accuracy Comparison</h4>
+                    <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem;">Interactive Chart</p>
                 </div>
                 <div class="chart-container">
                     <canvas id="speed-chart"></canvas>
                     <h4>Computation Speed (steps/sec)</h4>
+                    <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem;">Interactive Chart</p>
                 </div>
                 <div class="chart-container">
                     <canvas id="error-chart"></canvas>
                     <h4>Error Convergence</h4>
+                    <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem;">Interactive Chart</p>
+                </div>
+            </div>
+            
+            <!-- Additional SVG Charts -->
+            <div style="margin-top: 3rem;">
+                <h4 style="text-align: center; color: var(--text-primary); margin-bottom: 2rem; font-size: 1.5rem;">Detailed Benchmark Visualizations</h4>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 2rem;">
+                    <div style="background: var(--bg-light); padding: 1.5rem; border-radius: 1rem; border: 1px solid rgba(148, 163, 184, 0.1);">
+                        <h5 style="color: var(--text-primary); margin-bottom: 1rem; text-align: center;">Performance Timeline</h5>
+                        <img src="assets/svg/performance-comparison.svg" alt="Performance" style="width: 100%; height: auto; border-radius: 0.5rem;">
+                    </div>
+                    <div style="background: var(--bg-light); padding: 1.5rem; border-radius: 1rem; border: 1px solid rgba(148, 163, 184, 0.1);">
+                        <h5 style="color: var(--text-primary); margin-bottom: 1rem; text-align: center;">Accuracy Metrics</h5>
+                        <img src="assets/svg/accuracy-comparison.svg" alt="Accuracy" style="width: 100%; height: auto; border-radius: 0.5rem;">
+                    </div>
                 </div>
             </div>
             <div class="stats-grid">
