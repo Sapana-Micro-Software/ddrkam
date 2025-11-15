@@ -830,7 +830,6 @@
         canvas.height = height;
         
         const ctx = canvas.getContext('2d');
-        const height = canvas.height = 400;
         
         ctx.clearRect(0, 0, width, height);
         
