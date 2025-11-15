@@ -73,8 +73,11 @@
             const yExact = y0 * Math.exp(-t);
             
             // Add method-specific numerical error (simulated based on validated results)
+            // Use deterministic error based on time and method, not random
             const error = errorParams.maxError * (1 + errorParams.errorGrowth * t * 1000);
-            const y = yExact + (Math.random() - 0.5) * error;
+            // Use a deterministic pseudo-random based on index for consistency
+            const pseudoRandom = Math.sin(i * 0.1) * 0.5;
+            const y = yExact + pseudoRandom * error;
             
             data.t.push(t);
             data.y.push(y);
@@ -92,19 +95,23 @@
     function drawOscillatorTimeSeries() {
         const canvas = document.getElementById('oscillator-time-series');
         if (!canvas) {
-            console.warn('Canvas not found: oscillator-time-series');
+            console.warn('[TestViz] Canvas not found: oscillator-time-series');
             return;
         }
         
         // Ensure canvas has dimensions
         const container = canvas.parentElement;
-        if (!container) return;
+        if (!container) {
+            console.warn('[TestViz] Container not found for oscillator-time-series');
+            return;
+        }
         
         const width = container.offsetWidth || 600;
         const height = 400;
         
         if (width === 0) {
-            console.warn('Canvas has zero width: oscillator-time-series');
+            console.warn('[TestViz] Canvas has zero width: oscillator-time-series, retrying...');
+            setTimeout(() => drawOscillatorTimeSeries(), 100);
             return;
         }
         
@@ -112,6 +119,10 @@
         canvas.height = height;
         
         const ctx = canvas.getContext('2d');
+        if (!ctx) {
+            console.error('[TestViz] Could not get 2D context for oscillator-time-series');
+            return;
+        }
         
         ctx.clearRect(0, 0, width, height);
         
@@ -120,12 +131,14 @@
         const chartHeight = height - padding.top - padding.bottom;
         
         // Generate data for all methods
+        console.log('[TestViz] Generating oscillator data...');
         const methods = [
             { name: 'RK3', color: '#6366f1', data: generateOscillatorData('rk3', 0, 2 * Math.PI, 0.01) },
             { name: 'DDRK3', color: '#ec4899', data: generateOscillatorData('ddrk3', 0, 2 * Math.PI, 0.01) },
             { name: 'AM', color: '#8b5cf6', data: generateOscillatorData('am', 0, 2 * Math.PI, 0.01) },
             { name: 'DDAM', color: '#10b981', data: generateOscillatorData('ddam', 0, 2 * Math.PI, 0.01) }
         ];
+        console.log('[TestViz] Generated data for', methods.length, 'methods, sample size:', methods[0].data.t.length);
         
         // Find data range
         let minX = -1.2, maxX = 1.2;
@@ -502,17 +515,34 @@
     
     function drawExponentialTimeSeries() {
         const canvas = document.getElementById('exponential-time-series');
-        if (!canvas) return;
+        if (!canvas) {
+            console.warn('[TestViz] Canvas not found: exponential-time-series');
+            return;
+        }
         
         const container = canvas.parentElement;
-        if (!container) return;
+        if (!container) {
+            console.warn('[TestViz] Container not found for exponential-time-series');
+            return;
+        }
+        
         const width = container.offsetWidth || 600;
         const height = 400;
-        if (width === 0) return;
+        
+        if (width === 0) {
+            console.warn('[TestViz] Canvas has zero width: exponential-time-series, retrying...');
+            setTimeout(() => drawExponentialTimeSeries(), 100);
+            return;
+        }
+        
         canvas.width = width;
         canvas.height = height;
         
         const ctx = canvas.getContext('2d');
+        if (!ctx) {
+            console.error('[TestViz] Could not get 2D context for exponential-time-series');
+            return;
+        }
         
         ctx.clearRect(0, 0, width, height);
         
