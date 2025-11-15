@@ -1,0 +1,8 @@
+framework module DDRKAM {
+    umbrella header "DDRKAM.h"
+    
+    export *
+    module * { export * }
+    
+    link "ddrkam"
+}

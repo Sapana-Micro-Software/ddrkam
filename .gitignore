@@ -1,0 +1,34 @@
+# Build artifacts
+obj/
+lib/
+bin/
+*.o
+*.a
+*.dylib
+*.so
+
+# Xcode
+*.xcodeproj/*
+!*.xcodeproj/project.pbxproj
+*.xcworkspace
+DerivedData/
+
+# Documentation
+docs/*.aux
+docs/*.log
+docs/*.out
+docs/*.nav
+docs/*.snm
+docs/*.toc
+docs/*.pdf
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db

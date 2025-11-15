@@ -1,0 +1,126 @@
+\documentclass[aspectratio=169]{beamer}
+\usetheme{Madrid}
+\usecolortheme{default}
+
+\title{Data-Driven Hierarchical Runge-Kutta Methods}
+\subtitle{For Nonlinear Dynamical Systems}
+\author{Shyamal Suhana Chandra}
+\institute{Sapana Micro Software}
+\date{2025}
+
+\begin{document}
+
+\frame{\titlepage}
+
+\begin{frame}
+\frametitle{Overview}
+\begin{itemize}
+\item Runge-Kutta 3rd order method implementation
+\item Adams-Bashforth and Adams-Moulton methods
+\item Hierarchical data-driven architecture
+\item Transformer-inspired ODE solver
+\item Objective-C framework for Apple platforms
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Runge-Kutta 3rd Order}
+\begin{block}{Algorithm}
+\begin{align*}
+k_1 &= f(t_n, y_n) \\
+k_2 &= f(t_n + h/2, y_n + hk_1/2) \\
+k_3 &= f(t_n + h, y_n - hk_1 + 2hk_2) \\
+y_{n+1} &= y_n + \frac{h}{6}(k_1 + 4k_2 + k_3)
+\end{align*}
+\end{block}
+\begin{itemize}
+\item Good balance of accuracy and efficiency
+\item Suitable for nonlinear systems
+\item Local truncation error: $O(h^4)$
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Adams Methods}
+\begin{columns}
+\column{0.5\textwidth}
+\begin{block}{Adams-Bashforth (Predictor)}
+$$y_{n+1} = y_n + \frac{h}{12}(23f_n - 16f_{n-1} + 5f_{n-2})$$
+\end{block}
+
+\column{0.5\textwidth}
+\begin{block}{Adams-Moulton (Corrector)}
+$$y_{n+1} = y_n + \frac{h}{12}(5f_{n+1} + 8f_n - f_{n-1})$$
+\end{block}
+\end{columns}
+\begin{itemize}
+\item Multi-step methods
+\item Predictor-corrector scheme
+\item Higher order accuracy
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Hierarchical Architecture}
+\begin{itemize}
+\item Transformer-inspired design
+\item Multiple processing layers
+\item Attention mechanisms
+\item Adaptive refinement
+\item Data-driven learning
+\end{itemize}
+\begin{block}{Key Features}
+\begin{itemize}
+\item Hierarchical state transformations
+\item Learnable weights and biases
+\item Self-attention for ODE solutions
+\item Adaptive step size control
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Implementation}
+\begin{columns}
+\column{0.5\textwidth}
+\begin{block}{Core}
+\begin{itemize}
+\item C/C++ implementation
+\item High performance
+\item Memory efficient
+\end{itemize}
+\end{block}
+
+\column{0.5\textwidth}
+\begin{block}{Framework}
+\begin{itemize}
+\item Objective-C wrappers
+\item Visualization support
+\item macOS \& VisionOS
+\end{itemize}
+\end{block}
+\end{columns}
+\end{frame}
+
+\begin{frame}
+\frametitle{Applications}
+\begin{itemize}
+\item Nonlinear dynamical systems
+\item Chaotic systems (Lorenz, etc.)
+\item Engineering simulations
+\item Scientific computing
+\item Real-time visualization
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Thank You}
+\begin{center}
+\Large Questions?
+\end{center}
+\begin{center}
+\texttt{github.com/Sapana-Micro-Software/ddrkam}
+\end{center}
+\end{frame}
+
+\end{document}

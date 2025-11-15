@@ -1,0 +1,225 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{hyperref}
+
+\title{DDRKAM Reference Manual\\Data-Driven Runge-Kutta and Adams Methods}
+\author{Shyamal Suhana Chandra}
+\date{2025}
+
+\lstset{
+    language=C,
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue},
+    commentstyle=\color{green},
+    stringstyle=\color{red},
+    numbers=left,
+    numberstyle=\tiny,
+    breaklines=true
+}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+\newpage
+
+\section{Introduction}
+
+This manual provides comprehensive documentation for the DDRKAM (Data-Driven Runge-Kutta and Adams Methods) framework. The framework implements numerical methods for solving ordinary differential equations (ODEs) with support for traditional and hierarchical data-driven approaches.
+
+\section{Runge-Kutta 3rd Order Method}
+
+\subsection{Overview}
+
+The Runge-Kutta 3rd order method provides a good balance between accuracy and computational efficiency for solving ODEs.
+
+\subsection{API Reference}
+
+\subsubsection{rk3\_step}
+
+Performs a single integration step using RK3.
+
+\begin{lstlisting}
+double rk3_step(ODEFunction f, double t0, double* y0, 
+                size_t n, double h, void* params);
+\end{lstlisting}
+
+\textbf{Parameters:}
+\begin{itemize}
+\item \texttt{f}: Function pointer to the ODE system
+\item \texttt{t0}: Current time
+\item \texttt{y0}: Current state vector (modified in-place)
+\item \texttt{n}: Dimension of the system
+\item \texttt{h}: Step size
+\item \texttt{params}: User-defined parameters
+\end{itemize}
+
+\textbf{Returns:} New time value (t0 + h)
+
+\subsubsection{rk3\_solve}
+
+Solves an ODE system over a time interval.
+
+\begin{lstlisting}
+size_t rk3_solve(ODEFunction f, double t0, double t_end, 
+                 const double* y0, size_t n, double h, 
+                 void* params, double* t_out, double* y_out);
+\end{lstlisting}
+
+\textbf{Parameters:}
+\begin{itemize}
+\item \texttt{f}: Function pointer to the ODE system
+\item \texttt{t0}: Initial time
+\item \texttt{t\_end}: Final time
+\item \texttt{y0}: Initial state vector
+\item \texttt{n}: Dimension of the system
+\item \texttt{h}: Step size
+\item \texttt{params}: User-defined parameters
+\item \texttt{t\_out}: Output time array (allocated by caller)
+\item \texttt{y\_out}: Output state array (n $\times$ num\_steps, allocated by caller)
+\end{itemize}
+
+\textbf{Returns:} Number of steps taken
+
+\subsection{Example}
+
+\begin{lstlisting}
+void lorenz(double t, const double* y, double* dydt, void* params) {
+    double* p = (double*)params;
+    double sigma = p[0], rho = p[1], beta = p[2];
+    dydt[0] = sigma * (y[1] - y[0]);
+    dydt[1] = y[0] * (rho - y[2]) - y[1];
+    dydt[2] = y[0] * y[1] - beta * y[2];
+}
+
+double params[3] = {10.0, 28.0, 8.0/3.0};
+double y0[3] = {1.0, 1.0, 1.0};
+double t_out[100];
+double y_out[300];
+size_t steps = rk3_solve(lorenz, 0.0, 1.0, y0, 3, 0.01, 
+                         params, t_out, y_out);
+\end{lstlisting}
+
+\section{Adams Methods}
+
+\subsection{Adams-Bashforth 3rd Order}
+
+Predictor step for multi-step integration.
+
+\begin{lstlisting}
+void adams_bashforth3(ODEFunction f, const double* t, 
+                      const double* y, size_t n, double h, 
+                      void* params, double* y_pred);
+\end{lstlisting}
+
+\subsection{Adams-Moulton 3rd Order}
+
+Corrector step for multi-step integration.
+
+\begin{lstlisting}
+void adams_moulton3(ODEFunction f, const double* t, 
+                    const double* y, size_t n, double h, 
+                    void* params, const double* y_pred, 
+                    double* y_corr);
+\end{lstlisting}
+
+\section{Hierarchical Runge-Kutta Method}
+
+\subsection{Overview}
+
+The hierarchical RK method uses a transformer-like architecture with multiple processing layers and attention mechanisms.
+
+\subsection{API Reference}
+
+\subsubsection{hierarchical\_rk\_init}
+
+Initializes a hierarchical RK solver.
+
+\begin{lstlisting}
+int hierarchical_rk_init(HierarchicalRKSolver* solver, 
+                         size_t num_layers, size_t state_dim, 
+                         size_t hidden_dim);
+\end{lstlisting}
+
+\textbf{Returns:} 0 on success, -1 on failure
+
+\subsubsection{hierarchical\_rk\_free}
+
+Frees resources allocated by the solver.
+
+\begin{lstlisting}
+void hierarchical_rk_free(HierarchicalRKSolver* solver);
+\end{lstlisting}
+
+\subsubsection{hierarchical\_rk\_solve}
+
+Solves an ODE using the hierarchical method.
+
+\begin{lstlisting}
+size_t hierarchical_rk_solve(HierarchicalRKSolver* solver,
+                             ODEFunction f, double t0, double t_end,
+                             const double* y0, double h, void* params,
+                             double* t_out, double* y_out);
+\end{lstlisting}
+
+\section{Objective-C Framework}
+
+\subsection{DDRKAMSolver}
+
+Main solver class for Objective-C applications.
+
+\begin{lstlisting}
+DDRKAMSolver* solver = [[DDRKAMSolver alloc] 
+                         initWithDimension:3];
+NSDictionary* result = [solver solveWithFunction:^(double t, 
+                                                    const double* y, 
+                                                    double* dydt, 
+                                                    void* params) {
+    // ODE definition
+} startTime:0.0 endTime:1.0 
+initialState:@[@1.0, @1.0, @1.0] 
+stepSize:0.01 params:NULL];
+\end{lstlisting}
+
+\subsection{DDRKAMVisualizer}
+
+Visualization component for plotting solutions.
+
+\begin{lstlisting}
+DDRKAMVisualizer* viz = [[DDRKAMVisualizer alloc] init];
+NSView* view = [viz createVisualizationViewWithTime:timeArray
+                                              state:stateArray
+                                          dimension:3];
+[viz exportToCSV:@"/path/to/output.csv" 
+            time:timeArray 
+           state:stateArray];
+\end{lstlisting}
+
+\subsection{DDRKAMHierarchicalSolver}
+
+Hierarchical solver for Objective-C.
+
+\begin{lstlisting}
+DDRKAMHierarchicalSolver* solver = 
+    [[DDRKAMHierarchicalSolver alloc] 
+     initWithDimension:3 numLayers:4 hiddenDim:32];
+\end{lstlisting}
+
+\section{Platform Support}
+
+\begin{itemize}
+\item macOS 10.13+
+\item iOS 11.0+
+\item visionOS 1.0+
+\end{itemize}
+
+\section{Copyright}
+
+Copyright (C) 2025, Shyamal Suhana Chandra
+
+All rights reserved.
+
+\end{document}
