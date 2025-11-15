@@ -39,12 +39,34 @@ body {
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    text-align: center;
 }
 
 .container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 2rem;
+    text-align: center;
+}
+
+/* Center-align all text elements */
+p, h1, h2, h3, h4, h5, h6, li, ul, ol, span, div {
+    text-align: center;
+}
+
+/* Exceptions for specific elements that need left alignment */
+.nav-menu,
+.nav-logo {
+    text-align: left;
+}
+
+.method-formula {
+    text-align: center;
+}
+
+.method-formula code {
+    display: block;
+    text-align: center;
 }
 
 /* ============================================================================
@@ -184,6 +206,8 @@ body {
     flex: 1;
     max-width: 600px;
     z-index: 1;
+    text-align: center;
+    margin: 0 auto;
 }
 
 .hero-title {
@@ -221,6 +245,7 @@ body {
     gap: 1rem;
     flex-wrap: wrap;
     margin-bottom: 2rem;
+    justify-content: center;
 }
 
 .btn {
@@ -265,6 +290,7 @@ body {
     gap: 1rem;
     flex-wrap: wrap;
     margin-top: 2rem;
+    justify-content: center;
 }
 
 .quick-link {
@@ -954,6 +980,8 @@ section {
     display: flex;
     gap: 1.5rem;
     margin-bottom: 2rem;
+    justify-content: center;
+    text-align: center;
     padding: 1.5rem;
     background: var(--bg-light);
     border-radius: 0.5rem;
