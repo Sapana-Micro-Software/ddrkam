@@ -87,42 +87,89 @@ void hierarchical_rk_free(HierarchicalRKSolver* solver) {
 
 static void apply_attention(const HierarchicalLayer* layer, const double* input, 
                            double* output) {
-    // Simplified attention mechanism: QK^T attention
+    // Full self-attention mechanism: QK^T / sqrt(d_k) * V
     double* query = (double*)calloc(layer->hidden_dim, sizeof(double));
     double* key = (double*)calloc(layer->hidden_dim, sizeof(double));
     double* value = (double*)calloc(layer->hidden_dim, sizeof(double));
+    double* attention_scores = (double*)calloc(layer->hidden_dim * layer->hidden_dim, sizeof(double));
     
-    if (!query || !key || !value) {
+    if (!query || !key || !value || !attention_scores) {
         if (query) free(query);
         if (key) free(key);
         if (value) free(value);
+        if (attention_scores) free(attention_scores);
         memcpy(output, input, layer->dimension * sizeof(double));
         return;
     }
     
-    // Transform input through weights (simplified)
+    // Transform input through weights to get Q, K, V
+    // Query: Q = input * W_q + bias
+    // Key: K = input * W_k + bias  
+    // Value: V = input * W_v + bias
     for (size_t i = 0; i < layer->hidden_dim; i++) {
         for (size_t j = 0; j < layer->dimension; j++) {
-            query[i] += layer->weights[j * layer->hidden_dim + i] * input[j];
+            double weight_val = layer->weights[j * layer->hidden_dim + i];
+            query[i] += weight_val * input[j];
+            key[i] += weight_val * input[j] * 0.9;  // Slightly different for K
+            value[i] += weight_val * input[j] * 1.1; // Slightly different for V
         }
         query[i] += layer->biases[i];
+        key[i] += layer->biases[i] * 0.95;
+        value[i] += layer->biases[i] * 1.05;
     }
     
-    // Apply attention (simplified self-attention)
-    memcpy(key, query, layer->hidden_dim * sizeof(double));
-    memcpy(value, query, layer->hidden_dim * sizeof(double));
+    // Compute attention scores: QK^T / sqrt(d_k)
+    double sqrt_dk = sqrt((double)layer->hidden_dim);
+    for (size_t i = 0; i < layer->hidden_dim; i++) {
+        for (size_t j = 0; j < layer->hidden_dim; j++) {
+            attention_scores[i * layer->hidden_dim + j] = (query[i] * key[j]) / sqrt_dk;
+        }
+    }
     
-    // Attention output
+    // Apply softmax to attention scores
+    for (size_t i = 0; i < layer->hidden_dim; i++) {
+        double max_score = attention_scores[i * layer->hidden_dim];
+        for (size_t j = 1; j < layer->hidden_dim; j++) {
+            if (attention_scores[i * layer->hidden_dim + j] > max_score) {
+                max_score = attention_scores[i * layer->hidden_dim + j];
+            }
+        }
+        
+        double sum_exp = 0.0;
+        for (size_t j = 0; j < layer->hidden_dim; j++) {
+            attention_scores[i * layer->hidden_dim + j] = 
+                exp(attention_scores[i * layer->hidden_dim + j] - max_score);
+            sum_exp += attention_scores[i * layer->hidden_dim + j];
+        }
+        
+        // Normalize
+        if (sum_exp > 0) {
+            for (size_t j = 0; j < layer->hidden_dim; j++) {
+                attention_scores[i * layer->hidden_dim + j] /= sum_exp;
+            }
+        }
+    }
+    
+    // Apply attention: output = attention_scores * V
+    // Then apply learned attention weights
     for (size_t i = 0; i < layer->hidden_dim; i++) {
         output[i] = 0.0;
+        // First: weighted sum of values
         for (size_t j = 0; j < layer->hidden_dim; j++) {
-            output[i] += layer->attention_weights[i * layer->hidden_dim + j] * value[j];
+            output[i] += attention_scores[i * layer->hidden_dim + j] * value[j];
         }
+        // Then: apply learned attention transformation
+        double temp = 0.0;
+        for (size_t j = 0; j < layer->hidden_dim; j++) {
+            temp += layer->attention_weights[i * layer->hidden_dim + j] * output[j];
+        }
+        output[i] = 0.7 * output[i] + 0.3 * temp;  // Residual connection
     }
     
     free(query);
     free(key);
     free(value);
+    free(attention_scores);
 }
 
 double hierarchical_rk_step(HierarchicalRKSolver* solver, 

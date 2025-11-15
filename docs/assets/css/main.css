@@ -294,6 +294,11 @@ section {
     height: 400px;
 }
 
+/* Bar chart containers */
+.chart-container canvas {
+    background: transparent;
+}
+
 .chart-container h4 {
     text-align: center;
     margin-top: 1rem;

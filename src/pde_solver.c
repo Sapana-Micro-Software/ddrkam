@@ -195,14 +195,26 @@ int pde_solve_heat_2d(const PDEProblem* problem, double t_end, PDESolution* solu
             }
         }
         
-        // Boundary conditions (zero for simplicity)
-        for (size_t i = 0; i < nx; i++) {
-            solution->u[i] = 0.0;  // Bottom
-            solution->u[(ny-1) * nx + i] = 0.0;  // Top
-        }
-        for (size_t j = 0; j < ny; j++) {
-            solution->u[j * nx] = 0.0;  // Left
-            solution->u[j * nx + nx - 1] = 0.0;  // Right
+        // Apply boundary conditions (use provided boundary conditions if available)
+        if (problem->boundary_condition) {
+            for (size_t i = 0; i < nx; i++) {
+                solution->u[i] = problem->boundary_condition[i];  // Bottom
+                solution->u[(ny-1) * nx + i] = problem->boundary_condition[(ny-1) * nx + i];  // Top
+            }
+            for (size_t j = 0; j < ny; j++) {
+                solution->u[j * nx] = problem->boundary_condition[j * nx];  // Left
+                solution->u[j * nx + nx - 1] = problem->boundary_condition[j * nx + nx - 1];  // Right
+            }
+        } else {
+            // Default: Dirichlet boundary conditions (zero)
+            for (size_t i = 0; i < nx; i++) {
+                solution->u[i] = 0.0;  // Bottom
+                solution->u[(ny-1) * nx + i] = 0.0;  // Top
+            }
+            for (size_t j = 0; j < ny; j++) {
+                solution->u[j * nx] = 0.0;  // Left
+                solution->u[j * nx + nx - 1] = 0.0;  // Right
+            }
         }
         
         solution->current_time = n * dt;

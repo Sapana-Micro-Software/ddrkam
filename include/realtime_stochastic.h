@@ -20,13 +20,16 @@ extern "C" {
 typedef struct {
     double* y_current;      // Current state
     double* y_buffer;       // Buffer for streaming data
-    double* derivatives;   // Derivative buffer
-    size_t n;              // System dimension
-    double t_current;      // Current time
-    double h;              // Step size
-    size_t buffer_size;    // Buffer size for streaming
-    size_t buffer_idx;     // Current buffer index
-    uint64_t step_count;   // Total steps processed
+    double* derivatives;    // Derivative buffer (for Adams: stores f_n, f_n-1, f_n-2)
+    double* y_history;      // State history for multi-step methods (Adams: y_n, y_n-1, y_n-2)
+    double* t_history;       // Time history for multi-step methods
+    size_t n;               // System dimension
+    double t_current;       // Current time
+    double h;               // Step size
+    size_t buffer_size;     // Buffer size for streaming
+    size_t buffer_idx;      // Current buffer index
+    size_t history_count;   // Number of history points stored (for Adams: 0-3)
+    uint64_t step_count;    // Total steps processed
 } RealtimeSolverState;
 
 /**

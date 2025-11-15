@@ -105,22 +105,30 @@ int realtime_adams_init(RealtimeSolverState* state, size_t n, double h, size_t b
     state->buffer_idx = 0;
     state->step_count = 0;
     state->t_current = 0.0;
+    state->history_count = 0;
     
     state->y_current = (double*)calloc(n, sizeof(double));
-    state->derivatives = (double*)calloc(n * 3, sizeof(double)); // Need history for Adams
+    // Adams 3rd order needs: f_n, f_n-1, f_n-2 (3 derivatives)
+    state->derivatives = (double*)calloc(n * 3, sizeof(double));
+    // Adams 3rd order needs: y_n, y_n-1, y_n-2 (3 states)
+    state->y_history = (double*)calloc(n * 3, sizeof(double));
+    // Time history: t_n, t_n-1, t_n-2
+    state->t_history = (double*)calloc(3, sizeof(double));
     
     if (buffer_size > 0) {
         state->y_buffer = (double*)calloc(n * buffer_size, sizeof(double));
         if (!state->y_buffer) {
             free(state->y_current);
             free(state->derivatives);
+            free(state->y_history);
+            free(state->t_history);
             return -1;
         }
     } else {
         state->y_buffer = NULL;
     }
     
-    if (!state->y_current || !state->derivatives) {
+    if (!state->y_current || !state->derivatives || !state->y_history || !state->t_history) {
         realtime_solver_free(state);
         return -1;
     }
@@ -141,18 +149,66 @@ int realtime_adams_step(RealtimeSolverState* state,
     // Update current state
     memcpy(state->y_current, y_new, state->n * sizeof(double));
     
-    // Compute derivative
-    double* dydt = &state->derivatives[0];
-    f(state->t_current, state->y_current, dydt, params);
+    // Shift history: move y_n-1 -> y_n-2, y_n -> y_n-1, new -> y_n
+    if (state->history_count >= 2) {
+        // Shift states: y_n-2 = y_n-1, y_n-1 = y_n
+        memcpy(&state->y_history[0 * state->n], &state->y_history[1 * state->n], state->n * sizeof(double));
+        memcpy(&state->y_history[1 * state->n], &state->y_history[2 * state->n], state->n * sizeof(double));
+        // Shift derivatives: f_n-2 = f_n-1, f_n-1 = f_n
+        memcpy(&state->derivatives[0 * state->n], &state->derivatives[1 * state->n], state->n * sizeof(double));
+        memcpy(&state->derivatives[1 * state->n], &state->derivatives[2 * state->n], state->n * sizeof(double));
+        // Shift times: t_n-2 = t_n-1, t_n-1 = t_n
+        state->t_history[0] = state->t_history[1];
+        state->t_history[1] = state->t_history[2];
+    }
     
-    // Simple Adams-Bashforth 3rd order (simplified for real-time)
-    // In full implementation, would use history buffer
-    double* y_prev = state->y_current;
-    double* f_prev = dydt;
+    // Store current state and time in history
+    memcpy(&state->y_history[2 * state->n], state->y_current, state->n * sizeof(double));
+    state->t_history[2] = state->t_current;
     
-    // Predictor step
-    for (size_t i = 0; i < state->n; i++) {
-        state->y_current[i] = y_prev[i] + state->h * f_prev[i];
+    // Compute current derivative f_n = f(t_n, y_n)
+    double* f_n = &state->derivatives[2 * state->n];
+    f(state->t_current, state->y_current, f_n, params);
+    
+    // Increment history count (capped at 3 for 3rd order Adams)
+    if (state->history_count < 3) {
+        state->history_count++;
+    }
+    
+    // Apply Adams-Bashforth 3rd order predictor
+    if (state->history_count >= 3) {
+        // Full Adams-Bashforth 3rd order: y_n+1 = y_n + h*(23*f_n - 16*f_n-1 + 5*f_n-2)/12
+        double* f_n_1 = &state->derivatives[1 * state->n];  // f_n-1
+        double* f_n_2 = &state->derivatives[0 * state->n];  // f_n-2
+        double* y_n = &state->y_history[2 * state->n];      // y_n
+        
+        for (size_t i = 0; i < state->n; i++) {
+            state->y_current[i] = y_n[i] + state->h * (23.0 * f_n[i] - 16.0 * f_n_1[i] + 5.0 * f_n_2[i]) / 12.0;
+        }
+        
+        // Optional: Apply Adams-Moulton corrector
+        double t_next = state->t_current + state->h;
+        double* f_pred = (double*)malloc(state->n * sizeof(double));
+        if (f_pred) {
+            f(t_next, state->y_current, f_pred, params);
+            // Adams-Moulton 3rd order: y_n+1 = y_n + h*(5*f_n+1 + 8*f_n - f_n-1)/12
+            for (size_t i = 0; i < state->n; i++) {
+                state->y_current[i] = y_n[i] + state->h * (5.0 * f_pred[i] + 8.0 * f_n[i] - f_n_1[i]) / 12.0;
+            }
+            free(f_pred);
+        }
+    } else if (state->history_count == 2) {
+        // Use 2nd order Adams-Bashforth: y_n+1 = y_n + h*(3*f_n - f_n-1)/2
+        double* f_n_1 = &state->derivatives[1 * state->n];
+        double* y_n = &state->y_history[2 * state->n];
+        for (size_t i = 0; i < state->n; i++) {
+            state->y_current[i] = y_n[i] + state->h * (3.0 * f_n[i] - f_n_1[i]) / 2.0;
+        }
+    } else {
+        // Use Euler for first step: y_n+1 = y_n + h*f_n
+        for (size_t i = 0; i < state->n; i++) {
+            state->y_current[i] = state->y_current[i] + state->h * f_n[i];
+        }
     }
     
     // Update buffer
@@ -187,6 +243,14 @@ void realtime_solver_free(RealtimeSolverState* state) {
     if (state->derivatives) {
         free(state->derivatives);
         state->derivatives = NULL;
+    }
+    if (state->y_history) {
+        free(state->y_history);
+        state->y_history = NULL;
+    }
+    if (state->t_history) {
+        free(state->t_history);
+        state->t_history = NULL;
     }
 }
 
