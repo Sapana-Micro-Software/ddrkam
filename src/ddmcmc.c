@@ -419,3 +419,640 @@ int ddmcmc_hierarchical_optimize(OptimizationFunction func, const double* initia
     free(current_params);
     return 0;
 }
+
+// ============================================================================
+// Multi-Bit-Flipping MCMC Implementation
+// ============================================================================
+
+int multibit_flip_mcmc_init(MultiBitFlipMCMC* sampler, MultinomialDist* target_dist,
+                            double temperature, double learning_rate,
+                            size_t max_flips, double flip_probability) {
+    if (!sampler || !target_dist || max_flips == 0) {
+        return -1;
+    }
+    
+    memset(sampler, 0, sizeof(MultiBitFlipMCMC));
+    sampler->target_dist = target_dist;
+    sampler->temperature = temperature > 0.0 ? temperature : 1.0;
+    sampler->learning_rate = learning_rate > 0.0 ? learning_rate : 0.01;
+    sampler->max_flips = max_flips;
+    sampler->flip_probability = flip_probability > 0.0 ? flip_probability : 0.1;
+    sampler->n_bits = target_dist->n_categories;
+    
+    // Initialize proposal distribution as uniform
+    sampler->proposal_dist = (MultinomialDist*)malloc(sizeof(MultinomialDist));
+    if (!sampler->proposal_dist) {
+        return -1;
+    }
+    
+    double* uniform_probs = (double*)malloc(target_dist->n_categories * sizeof(double));
+    if (!uniform_probs) {
+        free(sampler->proposal_dist);
+        return -1;
+    }
+    
+    double uniform = 1.0 / target_dist->n_categories;
+    for (size_t i = 0; i < target_dist->n_categories; i++) {
+        uniform_probs[i] = uniform;
+    }
+    
+    if (multinomial_init(sampler->proposal_dist, target_dist->n_categories, uniform_probs) != 0) {
+        free(uniform_probs);
+        free(sampler->proposal_dist);
+        return -1;
+    }
+    
+    free(uniform_probs);
+    
+    // Allocate state arrays
+    sampler->current_state = (size_t*)malloc(target_dist->n_categories * sizeof(size_t));
+    sampler->proposed_state = (size_t*)malloc(target_dist->n_categories * sizeof(size_t));
+    
+    if (!sampler->current_state || !sampler->proposed_state) {
+        multibit_flip_mcmc_free(sampler);
+        return -1;
+    }
+    
+    // Initialize current state
+    for (size_t i = 0; i < target_dist->n_categories; i++) {
+        sampler->current_state[i] = 0;
+    }
+    
+    return 0;
+}
+
+void multibit_flip_mcmc_free(MultiBitFlipMCMC* sampler) {
+    if (!sampler) return;
+    
+    if (sampler->proposal_dist) {
+        multinomial_free(sampler->proposal_dist);
+        free(sampler->proposal_dist);
+        sampler->proposal_dist = NULL;
+    }
+    
+    if (sampler->samples) {
+        free(sampler->samples);
+        sampler->samples = NULL;
+    }
+    
+    if (sampler->log_likelihoods) {
+        free(sampler->log_likelihoods);
+        sampler->log_likelihoods = NULL;
+    }
+    
+    if (sampler->current_state) {
+        free(sampler->current_state);
+        sampler->current_state = NULL;
+    }
+    
+    if (sampler->proposed_state) {
+        free(sampler->proposed_state);
+        sampler->proposed_state = NULL;
+    }
+}
+
+// Propose new state by flipping multiple bits
+static void propose_multibit_flip(MultiBitFlipMCMC* sampler, uint32_t* rng_state) {
+    // Copy current state
+    memcpy(sampler->proposed_state, sampler->current_state,
+           sampler->n_bits * sizeof(size_t));
+    
+    // Determine how many bits to flip (1 to max_flips)
+    size_t n_flips = 1 + (size_t)(uniform_random(rng_state) * sampler->max_flips);
+    if (n_flips > sampler->max_flips) {
+        n_flips = sampler->max_flips;
+    }
+    
+    // Select which bits to flip
+    size_t* flip_indices = (size_t*)malloc(n_flips * sizeof(size_t));
+    if (!flip_indices) {
+        return;
+    }
+    
+    // Randomly select distinct indices to flip
+    for (size_t i = 0; i < n_flips; i++) {
+        size_t idx;
+        int is_unique;
+        do {
+            idx = (size_t)(uniform_random(rng_state) * sampler->n_bits);
+            is_unique = 1;
+            for (size_t j = 0; j < i; j++) {
+                if (flip_indices[j] == idx) {
+                    is_unique = 0;
+                    break;
+                }
+            }
+        } while (!is_unique);
+        flip_indices[i] = idx;
+    }
+    
+    // Flip selected bits
+    for (size_t i = 0; i < n_flips; i++) {
+        size_t idx = flip_indices[i];
+        // Flip to a new category from proposal distribution
+        sampler->proposed_state[idx] = multinomial_sample(sampler->proposal_dist, rng_state);
+    }
+    
+    free(flip_indices);
+}
+
+// Compute acceptance probability for multi-bit flip
+static double compute_multibit_acceptance(MultiBitFlipMCMC* sampler, uint32_t* rng_state) {
+    (void)rng_state;
+    // Compute log probability of current state
+    double log_target_current = 0.0;
+    for (size_t i = 0; i < sampler->n_bits; i++) {
+        size_t cat = sampler->current_state[i];
+        if (cat < sampler->target_dist->n_categories) {
+            log_target_current += sampler->target_dist->log_probabilities[cat];
+        }
+    }
+    
+    // Compute log probability of proposed state
+    double log_target_proposed = 0.0;
+    for (size_t i = 0; i < sampler->n_bits; i++) {
+        size_t cat = sampler->proposed_state[i];
+        if (cat < sampler->target_dist->n_categories) {
+            log_target_proposed += sampler->target_dist->log_probabilities[cat];
+        }
+    }
+    
+    // Metropolis-Hastings acceptance (symmetric proposal for simplicity)
+    double log_alpha = (log_target_proposed - log_target_current) / sampler->temperature;
+    
+    return log_alpha > 0.0 ? 1.0 : exp(log_alpha);
+}
+
+size_t multibit_flip_mcmc_sample(MultiBitFlipMCMC* sampler, size_t n_iterations, size_t burn_in) {
+    if (!sampler || n_iterations == 0) {
+        return 0;
+    }
+    
+    size_t n_samples = n_iterations - burn_in;
+    if (n_samples == 0) {
+        return 0;
+    }
+    
+    sampler->samples = (double*)realloc(sampler->samples, n_samples * sizeof(double));
+    sampler->log_likelihoods = (double*)realloc(sampler->log_likelihoods, n_samples * sizeof(double));
+    
+    if (!sampler->samples || !sampler->log_likelihoods) {
+        return 0;
+    }
+    
+    uint32_t rng_state = 12345;
+    size_t sample_idx = 0;
+    
+    // Initialize current state randomly
+    for (size_t i = 0; i < sampler->n_bits; i++) {
+        sampler->current_state[i] = multinomial_sample(sampler->target_dist, &rng_state);
+    }
+    
+    for (size_t iter = 0; iter < n_iterations; iter++) {
+        // Propose new state with multi-bit flip
+        propose_multibit_flip(sampler, &rng_state);
+        
+        // Compute acceptance probability
+        double alpha = compute_multibit_acceptance(sampler, &rng_state);
+        
+        // Accept or reject
+        if (uniform_random(&rng_state) < alpha) {
+            // Swap current and proposed
+            size_t* temp = sampler->current_state;
+            sampler->current_state = sampler->proposed_state;
+            sampler->proposed_state = temp;
+            sampler->n_accepted++;
+        }
+        
+        // Store sample after burn-in
+        if (iter >= burn_in) {
+            // Store sum of category indices as sample (simplified)
+            double sum = 0.0;
+            double log_likelihood = 0.0;
+            for (size_t i = 0; i < sampler->n_bits; i++) {
+                sum += (double)sampler->current_state[i];
+                if (sampler->current_state[i] < sampler->target_dist->n_categories) {
+                    log_likelihood += sampler->target_dist->log_probabilities[sampler->current_state[i]];
+                }
+            }
+            sampler->samples[sample_idx] = sum;
+            sampler->log_likelihoods[sample_idx] = log_likelihood;
+            sample_idx++;
+        }
+        
+        // Temperature annealing
+        sampler->temperature *= 0.9999;
+        if (sampler->temperature < 0.1) {
+            sampler->temperature = 0.1;
+        }
+    }
+    
+    sampler->n_samples = n_samples;
+    return n_samples;
+}
+
+// ============================================================================
+// Multinomial Multi-Bit-Flipping MCMC Implementation
+// ============================================================================
+
+int multinomial_multibit_mcmc_init(MultinomialMultiBitMCMC* sampler,
+                                   size_t n_dimensions, size_t n_categories_per_dim,
+                                   double temperature, double learning_rate,
+                                   size_t max_flips, double flip_probability) {
+    if (!sampler || n_dimensions == 0 || n_categories_per_dim == 0 || max_flips == 0) {
+        return -1;
+    }
+    
+    memset(sampler, 0, sizeof(MultinomialMultiBitMCMC));
+    sampler->n_dimensions = n_dimensions;
+    sampler->n_categories_per_dim = n_categories_per_dim;
+    sampler->temperature = temperature > 0.0 ? temperature : 1.0;
+    sampler->learning_rate = learning_rate > 0.0 ? learning_rate : 0.01;
+    sampler->max_flips = max_flips;
+    sampler->flip_probability = flip_probability > 0.0 ? flip_probability : 0.1;
+    
+    // Allocate proposal distributions (one per dimension)
+    sampler->proposal_dists = (MultinomialDist**)malloc(n_dimensions * sizeof(MultinomialDist*));
+    if (!sampler->proposal_dists) {
+        return -1;
+    }
+    
+    double* uniform_probs = (double*)malloc(n_categories_per_dim * sizeof(double));
+    if (!uniform_probs) {
+        free(sampler->proposal_dists);
+        return -1;
+    }
+    
+    double uniform = 1.0 / n_categories_per_dim;
+    for (size_t i = 0; i < n_categories_per_dim; i++) {
+        uniform_probs[i] = uniform;
+    }
+    
+    for (size_t d = 0; d < n_dimensions; d++) {
+        sampler->proposal_dists[d] = (MultinomialDist*)malloc(sizeof(MultinomialDist));
+        if (!sampler->proposal_dists[d]) {
+            for (size_t j = 0; j < d; j++) {
+                multinomial_free(sampler->proposal_dists[j]);
+                free(sampler->proposal_dists[j]);
+            }
+            free(sampler->proposal_dists);
+            free(uniform_probs);
+            return -1;
+        }
+        
+        if (multinomial_init(sampler->proposal_dists[d], n_categories_per_dim, uniform_probs) != 0) {
+            for (size_t j = 0; j <= d; j++) {
+                multinomial_free(sampler->proposal_dists[j]);
+                free(sampler->proposal_dists[j]);
+            }
+            free(sampler->proposal_dists);
+            free(uniform_probs);
+            return -1;
+        }
+    }
+    
+    free(uniform_probs);
+    
+    // Allocate state arrays
+    sampler->current_state = (size_t*)malloc(n_dimensions * sizeof(size_t));
+    sampler->proposed_state = (size_t*)malloc(n_dimensions * sizeof(size_t));
+    
+    if (!sampler->current_state || !sampler->proposed_state) {
+        multinomial_multibit_mcmc_free(sampler);
+        return -1;
+    }
+    
+    // Initialize states to zero
+    for (size_t d = 0; d < n_dimensions; d++) {
+        sampler->current_state[d] = 0;
+        sampler->proposed_state[d] = 0;
+    }
+    
+    return 0;
+}
+
+void multinomial_multibit_mcmc_free(MultinomialMultiBitMCMC* sampler) {
+    if (!sampler) return;
+    
+    if (sampler->target_dist) {
+        multinomial_free(sampler->target_dist);
+        free(sampler->target_dist);
+        sampler->target_dist = NULL;
+    }
+    
+    if (sampler->proposal_dists) {
+        for (size_t d = 0; d < sampler->n_dimensions; d++) {
+            if (sampler->proposal_dists[d]) {
+                multinomial_free(sampler->proposal_dists[d]);
+                free(sampler->proposal_dists[d]);
+            }
+        }
+        free(sampler->proposal_dists);
+        sampler->proposal_dists = NULL;
+    }
+    
+    if (sampler->samples) {
+        for (size_t i = 0; i < sampler->n_samples; i++) {
+            if (sampler->samples[i]) {
+                free(sampler->samples[i]);
+            }
+        }
+        free(sampler->samples);
+        sampler->samples = NULL;
+    }
+    
+    if (sampler->log_likelihoods) {
+        free(sampler->log_likelihoods);
+        sampler->log_likelihoods = NULL;
+    }
+    
+    if (sampler->current_state) {
+        free(sampler->current_state);
+        sampler->current_state = NULL;
+    }
+    
+    if (sampler->proposed_state) {
+        free(sampler->proposed_state);
+        sampler->proposed_state = NULL;
+    }
+}
+
+int multinomial_multibit_mcmc_set_target(MultinomialMultiBitMCMC* sampler,
+                                         const MultinomialDist* target_dist) {
+    if (!sampler || !target_dist) {
+        return -1;
+    }
+    
+    // Allocate target distribution
+    sampler->target_dist = (MultinomialDist*)malloc(sizeof(MultinomialDist));
+    if (!sampler->target_dist) {
+        return -1;
+    }
+    
+    // Copy target distribution
+    if (multinomial_init(sampler->target_dist, target_dist->n_categories,
+                        target_dist->probabilities) != 0) {
+        free(sampler->target_dist);
+        sampler->target_dist = NULL;
+        return -1;
+    }
+    
+    return 0;
+}
+
+// Propose new state by flipping multiple dimensions
+static void propose_multinomial_multibit(MultinomialMultiBitMCMC* sampler, uint32_t* rng_state) {
+    // Copy current state
+    memcpy(sampler->proposed_state, sampler->current_state,
+           sampler->n_dimensions * sizeof(size_t));
+    
+    // Determine how many dimensions to flip (1 to max_flips)
+    size_t n_flips = 1 + (size_t)(uniform_random(rng_state) * sampler->max_flips);
+    if (n_flips > sampler->max_flips) {
+        n_flips = sampler->max_flips;
+    }
+    
+    // Select which dimensions to flip
+    size_t* flip_dims = (size_t*)malloc(n_flips * sizeof(size_t));
+    if (!flip_dims) {
+        return;
+    }
+    
+    // Randomly select distinct dimensions to flip
+    for (size_t i = 0; i < n_flips; i++) {
+        size_t dim;
+        int is_unique;
+        do {
+            dim = (size_t)(uniform_random(rng_state) * sampler->n_dimensions);
+            is_unique = 1;
+            for (size_t j = 0; j < i; j++) {
+                if (flip_dims[j] == dim) {
+                    is_unique = 0;
+                    break;
+                }
+            }
+        } while (!is_unique);
+        flip_dims[i] = dim;
+    }
+    
+    // Flip selected dimensions
+    for (size_t i = 0; i < n_flips; i++) {
+        size_t dim = flip_dims[i];
+        // Sample new category from proposal distribution for this dimension
+        sampler->proposed_state[dim] = multinomial_sample(sampler->proposal_dists[dim], rng_state);
+    }
+    
+    free(flip_dims);
+}
+
+// Compute acceptance probability for multinomial multi-bit
+static double compute_multinomial_multibit_acceptance(MultinomialMultiBitMCMC* sampler,
+                                                      uint32_t* rng_state) {
+    (void)rng_state;
+    
+    // Compute log probability of current state
+    double log_target_current = 0.0;
+    for (size_t d = 0; d < sampler->n_dimensions; d++) {
+        size_t cat = sampler->current_state[d];
+        if (cat < sampler->n_categories_per_dim && sampler->target_dist) {
+            if (cat < sampler->target_dist->n_categories) {
+                log_target_current += sampler->target_dist->log_probabilities[cat];
+            }
+        }
+    }
+    
+    // Compute log probability of proposed state
+    double log_target_proposed = 0.0;
+    for (size_t d = 0; d < sampler->n_dimensions; d++) {
+        size_t cat = sampler->proposed_state[d];
+        if (cat < sampler->n_categories_per_dim && sampler->target_dist) {
+            if (cat < sampler->target_dist->n_categories) {
+                log_target_proposed += sampler->target_dist->log_probabilities[cat];
+            }
+        }
+    }
+    
+    // Metropolis-Hastings acceptance
+    double log_alpha = (log_target_proposed - log_target_current) / sampler->temperature;
+    
+    return log_alpha > 0.0 ? 1.0 : exp(log_alpha);
+}
+
+size_t multinomial_multibit_mcmc_sample(MultinomialMultiBitMCMC* sampler,
+                                       size_t n_iterations, size_t burn_in) {
+    if (!sampler || n_iterations == 0) {
+        return 0;
+    }
+    
+    size_t n_samples = n_iterations - burn_in;
+    if (n_samples == 0) {
+        return 0;
+    }
+    
+    // Allocate sample storage
+    sampler->samples = (double**)malloc(n_samples * sizeof(double*));
+    sampler->log_likelihoods = (double*)malloc(n_samples * sizeof(double));
+    
+    if (!sampler->samples || !sampler->log_likelihoods) {
+        return 0;
+    }
+    
+    for (size_t i = 0; i < n_samples; i++) {
+        sampler->samples[i] = (double*)malloc(sampler->n_dimensions * sizeof(double));
+        if (!sampler->samples[i]) {
+            for (size_t j = 0; j < i; j++) {
+                free(sampler->samples[j]);
+            }
+            free(sampler->samples);
+            free(sampler->log_likelihoods);
+            return 0;
+        }
+    }
+    
+    uint32_t rng_state = 12345;
+    size_t sample_idx = 0;
+    
+    // Initialize current state randomly
+    for (size_t d = 0; d < sampler->n_dimensions; d++) {
+        sampler->current_state[d] = multinomial_sample(sampler->proposal_dists[d], &rng_state);
+    }
+    
+    for (size_t iter = 0; iter < n_iterations; iter++) {
+        // Propose new state with multi-bit flip
+        propose_multinomial_multibit(sampler, &rng_state);
+        
+        // Compute acceptance probability
+        double alpha = compute_multinomial_multibit_acceptance(sampler, &rng_state);
+        
+        // Accept or reject
+        if (uniform_random(&rng_state) < alpha) {
+            // Swap current and proposed
+            size_t* temp = sampler->current_state;
+            sampler->current_state = sampler->proposed_state;
+            sampler->proposed_state = temp;
+            sampler->n_accepted++;
+        }
+        
+        // Store sample after burn-in
+        if (iter >= burn_in) {
+            double log_likelihood = 0.0;
+            for (size_t d = 0; d < sampler->n_dimensions; d++) {
+                sampler->samples[sample_idx][d] = (double)sampler->current_state[d];
+                if (sampler->target_dist && sampler->current_state[d] < sampler->target_dist->n_categories) {
+                    log_likelihood += sampler->target_dist->log_probabilities[sampler->current_state[d]];
+                }
+            }
+            sampler->log_likelihoods[sample_idx] = log_likelihood;
+            sample_idx++;
+        }
+        
+        // Temperature annealing
+        sampler->temperature *= 0.9999;
+        if (sampler->temperature < 0.1) {
+            sampler->temperature = 0.1;
+        }
+    }
+    
+    sampler->n_samples = n_samples;
+    return n_samples;
+}
+
+int multinomial_multibit_mcmc_optimize(OptimizationFunction func,
+                                      const double* initial_params,
+                                      size_t n_params, size_t n_categories,
+                                      size_t n_iterations, size_t max_flips,
+                                      void* context,
+                                      double* optimal_params, double* optimal_value) {
+    if (!func || !initial_params || !optimal_params || !optimal_value ||
+        n_params == 0 || n_categories == 0 || n_iterations == 0) {
+        return -1;
+    }
+    
+    // Initialize multinomial multi-bit MCMC
+    MultinomialMultiBitMCMC sampler;
+    if (multinomial_multibit_mcmc_init(&sampler, n_params, n_categories,
+                                      1.0, 0.01, max_flips, 0.1) != 0) {
+        return -1;
+    }
+    
+    // Create target distribution from optimization function
+    MultinomialDist target_dist;
+    size_t total_categories = 1;
+    for (size_t i = 0; i < n_params; i++) {
+        total_categories *= n_categories;
+    }
+    
+    double* uniform_probs = (double*)malloc(total_categories * sizeof(double));
+    if (!uniform_probs) {
+        multinomial_multibit_mcmc_free(&sampler);
+        return -1;
+    }
+    
+    // Evaluate function at all category combinations
+    double min_value = DBL_MAX;
+    for (size_t idx = 0; idx < total_categories; idx++) {
+        double* params = (double*)malloc(n_params * sizeof(double));
+        if (!params) {
+            free(uniform_probs);
+            multinomial_multibit_mcmc_free(&sampler);
+            return -1;
+        }
+        
+        size_t temp_idx = idx;
+        for (size_t i = 0; i < n_params; i++) {
+            size_t cat = temp_idx % n_categories;
+            temp_idx /= n_categories;
+            params[i] = (double)cat / (n_categories - 1);
+        }
+        
+        double value = func(params, n_params, context);
+        uniform_probs[idx] = exp(-value); // Convert to probability
+        
+        if (value < min_value) {
+            min_value = value;
+        }
+        
+        free(params);
+    }
+    
+    if (multinomial_init(&target_dist, total_categories, uniform_probs) != 0) {
+        free(uniform_probs);
+        multinomial_multibit_mcmc_free(&sampler);
+        return -1;
+    }
+    
+    if (multinomial_multibit_mcmc_set_target(&sampler, &target_dist) != 0) {
+        multinomial_free(&target_dist);
+        free(uniform_probs);
+        multinomial_multibit_mcmc_free(&sampler);
+        return -1;
+    }
+    
+    // Run MCMC
+    size_t burn_in = n_iterations / 10;
+    multinomial_multibit_mcmc_sample(&sampler, n_iterations, burn_in);
+    
+    // Find optimal from samples
+    double best_value = DBL_MAX;
+    size_t best_idx = 0;
+    
+    for (size_t i = 0; i < sampler.n_samples; i++) {
+        double* params = sampler.samples[i];
+        double value = func(params, n_params, context);
+        if (value < best_value) {
+            best_value = value;
+            best_idx = i;
+        }
+    }
+    
+    // Copy optimal parameters
+    memcpy(optimal_params, sampler.samples[best_idx], n_params * sizeof(double));
+    *optimal_value = best_value;
+    
+    // Cleanup
+    multinomial_free(&target_dist);
+    free(uniform_probs);
+    multinomial_multibit_mcmc_free(&sampler);
+    
+    return 0;
+}

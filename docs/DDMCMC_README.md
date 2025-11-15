@@ -11,6 +11,8 @@ DDMCMC (Data-Driven Markov Chain Monte Carlo) is an extension to DDRKAM that pro
 - **Temperature Annealing**: Automatic temperature scheduling for better convergence
 - **Hierarchical Optimization**: Multi-layer refinement for complex optimization landscapes
 - **Efficient Search**: Optimized for learning optimization functions
+- **Multi-Bit-Flipping MCMC**: Simultaneous flipping of multiple bits/categories for faster exploration
+- **Multinomial Multi-Bit-Flipping**: Multi-dimensional sampling with simultaneous dimension flips
 
 ## API Usage
 
@@ -57,6 +59,24 @@ ddmcmc_hierarchical_optimize(my_function, initial, n_params,
 2. **Target Distribution**: Optimization function values mapped to probabilities
 3. **MCMC Sampling**: Metropolis-Hastings algorithm with adaptive proposals
 4. **Refinement**: Hierarchical layers progressively refine the search space
+
+## Multi-Bit-Flipping MCMC
+
+The framework now includes advanced multi-bit-flipping MCMC methods:
+
+### Multi-Bit-Flipping MCMC
+- Flips multiple bits/categories simultaneously (1 to max_flips)
+- Faster state space exploration
+- Better mixing properties
+- Configurable flip probability
+
+### Multinomial Multi-Bit-Flipping MCMC
+- Multi-dimensional multinomial sampling
+- Independent proposal distributions per dimension
+- Simultaneous flips across multiple dimensions
+- Efficient for high-dimensional optimization
+
+See `MULTINOMIAL_MULTIBIT_MCMC.md` for detailed documentation.
 
 ## Performance
 

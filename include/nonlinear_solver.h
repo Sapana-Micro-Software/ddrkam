@@ -47,6 +47,20 @@ typedef enum {
 } NLPSolverType;
 
 /**
+ * Interior Point Method Parameters
+ */
+typedef struct {
+    double barrier_parameter;      // Initial barrier parameter (mu)
+    double barrier_reduction;       // Barrier reduction factor (tau)
+    double centering_parameter;     // Centering parameter (sigma)
+    double feasibility_tolerance;   // Feasibility tolerance
+    double optimality_tolerance;    // Optimality tolerance
+    size_t max_barrier_iterations;  // Max iterations per barrier step
+    int handle_nonconvex;           // Flag for non-convex handling
+    double perturbation_radius;     // Perturbation for non-convex escape
+} InteriorPointParams;
+
+/**
  * Nonlinear ODE Solver
  * Uses nonlinear programming to solve ODEs as optimization problems
  */
@@ -72,6 +86,14 @@ typedef struct {
     double* gradient_history;
     double* step_history;
     size_t history_size;
+    
+    // Interior Point Method specific
+    InteriorPointParams ip_params;
+    double* slack_variables;        // Slack variables for inequality constraints
+    double* dual_variables;         // Dual (Lagrange multiplier) variables
+    double* barrier_gradient;       // Gradient with barrier term
+    double** barrier_hessian;      // Hessian with barrier term
+    size_t num_constraints;         // Number of constraints
 } NonlinearODESolver;
 
 /**
@@ -158,6 +180,13 @@ void nonlinear_ode_free(NonlinearODESolver* solver);
 int nonlinear_ode_solve(NonlinearODESolver* solver, ODEFunction f,
                        double t0, double t_end, const double* y0,
                        double* y_out);
+
+// Interior Point Method Configuration
+int nonlinear_ode_set_constraints(NonlinearODESolver* solver, size_t num_constraints);
+int nonlinear_ode_set_interior_point_params(NonlinearODESolver* solver,
+                                           const InteriorPointParams* params);
+int nonlinear_ode_enable_nonconvex(NonlinearODESolver* solver, int enable,
+                                   double perturbation_radius);
 
 // Nonlinear PDE Solver Functions
 int nonlinear_pde_init(NonlinearPDESolver* solver, size_t spatial_dim,
