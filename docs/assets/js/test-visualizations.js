@@ -15,12 +15,13 @@
         const data = { t: [], x: [], v: [], xExact: [], vExact: [], error: [] };
         const numSteps = Math.ceil((tEnd - t0) / h);
         
-        // Method-specific error characteristics (based on validated benchmarks)
+        // Method-specific error characteristics (based on validated benchmarks from BENCHMARKS.md)
+        // Harmonic Oscillator: RK3 99.682004%, DDRK3 99.682003%, AM 99.320833%, DDAM 99.320914%
         const methodErrors = {
-            'rk3': { amplitude: 0.003, phase: 0.0001 },
-            'ddrk3': { amplitude: 0.003, phase: 0.0001 },
-            'am': { amplitude: 0.006, phase: 0.0002 },
-            'ddam': { amplitude: 0.006, phase: 0.0002 }
+            'rk3': { amplitude: 0.00318, phase: 0.0001 },      // 100 - 99.682004 = 0.317996% error
+            'ddrk3': { amplitude: 0.00318, phase: 0.0001 },    // 100 - 99.682003 = 0.317997% error
+            'am': { amplitude: 0.00679, phase: 0.0002 },       // 100 - 99.320833 = 0.679167% error
+            'ddam': { amplitude: 0.00679, phase: 0.0002 }     // 100 - 99.320914 = 0.679086% error
         };
         
         const errorParams = methodErrors[method] || methodErrors['rk3'];
@@ -56,12 +57,13 @@
         const data = { t: [], y: [], yExact: [], error: [] };
         const numSteps = Math.ceil((tEnd - t0) / h);
         
-        // Method-specific error characteristics (based on validated benchmarks)
+        // Method-specific error characteristics (based on validated benchmarks from BENCHMARKS.md)
+        // Exponential Decay: RK3 99.999992%, DDRK3 99.999992%, AM 99.999991%, DDAM 99.999991%
         const methodErrors = {
-            'rk3': { maxError: 1.136854e-08, errorGrowth: 1e-9 },
-            'ddrk3': { maxError: 1.138231e-08, errorGrowth: 1e-9 },
-            'am': { maxError: 1.156447e-08, errorGrowth: 1.2e-9 },
-            'ddam': { maxError: 1.156447e-08, errorGrowth: 1.2e-9 }
+            'rk3': { maxError: 1.136854e-08, errorGrowth: 1e-9 },      // Validated: 99.999992% accuracy
+            'ddrk3': { maxError: 1.138231e-08, errorGrowth: 1e-9 },    // Validated: 99.999992% accuracy
+            'am': { maxError: 1.156447e-08, errorGrowth: 1.2e-9 },     // Validated: 99.999991% accuracy
+            'ddam': { maxError: 1.156447e-08, errorGrowth: 1.2e-9 }    // Validated: 99.999991% accuracy
         };
         
         const errorParams = methodErrors[method] || methodErrors['rk3'];
@@ -402,12 +404,13 @@
         const chartWidth = width - padding.left - padding.right;
         const chartHeight = height - padding.top - padding.bottom;
         
-        // Validated benchmark data
+        // Validated benchmark data from BENCHMARKS.md - Harmonic Oscillator Test
+        // RK3: 99.682004%, DDRK3: 99.682003%, AM: 99.320833%, DDAM: 99.320914%
         const methods = [
-            { name: 'RK3', accuracy: 99.682004, error: 0.00318, color: '#6366f1' },
-            { name: 'DDRK3', accuracy: 99.682003, error: 0.00318, color: '#ec4899' },
-            { name: 'AM', accuracy: 99.320833, error: 0.00679, color: '#8b5cf6' },
-            { name: 'DDAM', accuracy: 99.320914, error: 0.00679, color: '#10b981' }
+            { name: 'RK3', accuracy: 99.682004, error: 0.317996, color: '#6366f1' },
+            { name: 'DDRK3', accuracy: 99.682003, error: 0.317997, color: '#ec4899' },
+            { name: 'AM', accuracy: 99.320833, error: 0.679167, color: '#8b5cf6' },
+            { name: 'DDAM', accuracy: 99.320914, error: 0.679086, color: '#10b981' }
         ];
         
         const barWidth = chartWidth / (methods.length + 1);
@@ -776,7 +779,8 @@
         const chartWidth = width - padding.left - padding.right;
         const chartHeight = height - padding.top - padding.bottom;
         
-        // Validated benchmark data
+        // Validated benchmark data from BENCHMARKS.md - Exponential Decay Test
+        // RK3: 99.999992%, DDRK3: 99.999992%, AM: 99.999991%, DDAM: 99.999991%
         const methods = [
             { name: 'RK3', accuracy: 99.999992, error: 1.136854e-08, color: '#6366f1' },
             { name: 'DDRK3', accuracy: 99.999992, error: 1.138231e-08, color: '#ec4899' },
