@@ -1,14 +1,14 @@
 {
   "exponential": {
     "rk3": {"time": 0.000036, "error": 1.136854e-08, "accuracy": 1.000000, "steps": 201},
-    "ddrk3": {"time": 0.001102, "error": 3.146765e-08, "accuracy": 1.000000, "steps": 201}
+    "ddrk3": {"time": 0.001170, "error": 3.146765e-08, "accuracy": 1.000000, "steps": 201}
   },
   "oscillator": {
-    "rk3": {"time": 0.000098, "error": 3.185303e-03, "accuracy": 0.996820, "steps": 629},
-    "ddrk3": {"time": 0.003590, "error": 3.185534e-03, "accuracy": 0.996820, "steps": 629}
+    "rk3": {"time": 0.000103, "error": 3.185303e-03, "accuracy": 0.996820, "steps": 629},
+    "ddrk3": {"time": 0.003602, "error": 3.185534e-03, "accuracy": 0.996820, "steps": 629}
   },
   "lorenz": {
-    "rk3": {"time": 0.000018, "steps": 101},
-    "ddrk3": {"time": 0.000659, "steps": 101}
+    "rk3": {"time": 0.000024, "steps": 101},
+    "ddrk3": {"time": 0.000674, "steps": 101}
   }
 }

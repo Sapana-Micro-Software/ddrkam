@@ -63,17 +63,20 @@ int test_stochastic_rk3() {
         .seed = 42
     };
     
+    printf("  Initializing solver...\n");
     void* solver = stochastic_rk3_init(1, 0.01, &params);
     if (!solver) {
         printf("  FAIL: Initialization failed\n");
         return 1;
     }
+    printf("  Solver initialized successfully\n");
     
     double y[1] = {1.0};
     double t = 0.0;
     
     printf("  Running stochastic simulation...\n");
     for (int i = 0; i < 10; i++) {
+        printf("    Step %d: t=%.3f, y=%.6f\n", i, t, y[0]);
         t = stochastic_rk3_step(solver, exp_decay_ode, t, y, NULL);
         if (i % 2 == 0) {
             printf("    t=%.3f, y=%.6f\n", t, y[0]);

@@ -300,11 +300,20 @@ void* stochastic_rk3_init(size_t n, double h, const StochasticParams* params) {
     // Allocate noise buffer
     size_t buffer_size = (params->use_brownian) ? 1000 : 100;
     state->noise_buffer = (double*)calloc(buffer_size, sizeof(double));
-    state->brownian_path = (params->use_brownian) ? (double*)calloc(n, sizeof(double)) : NULL;
-    
-    if (!state->noise_buffer || (params->use_brownian && !state->brownian_path)) {
-        stochastic_solver_free(state);
+    if (!state->noise_buffer) {
+        free(state);
         return NULL;
+    }
+    
+    if (params->use_brownian) {
+        state->brownian_path = (double*)calloc(n, sizeof(double));
+        if (!state->brownian_path) {
+            free(state->noise_buffer);
+            free(state);
+            return NULL;
+        }
+    } else {
+        state->brownian_path = NULL;
     }
     
     return state;
@@ -330,6 +339,10 @@ double stochastic_rk3_step(void* solver,
     
     if (state->params.use_brownian) {
         // Brownian motion: dW = sqrt(dt) * N(0,1)
+        if (!state->brownian_path) {
+            free(noise);
+            return t0;
+        }
         for (size_t i = 0; i < state->n; i++) {
             double dW = random_gaussian() * sqrt(state->h);
             state->brownian_path[i] += dW;
