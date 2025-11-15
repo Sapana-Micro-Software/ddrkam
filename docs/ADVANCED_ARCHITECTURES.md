@@ -396,6 +396,7 @@ Gradient-based repair mechanism:
 
 - **Chord**: Stoica, I., Morris, R., Karger, D., Kaashoek, M. F., & Balakrishnan, H. (2001). "Chord: A Scalable Peer-to-peer Lookup Service for Internet Applications." <em>ACM SIGCOMM Computer Communication Review</em>, 31(4), 149-160. DOI: 10.1145/964723.383071. Available at: https://en.wikipedia.org/wiki/Chord_(peer-to-peer)
 - **Directed Diffusion**: Estrin, D., Govindan, R., Heidemann, J., & Kumar, S. (1999). "Next Century Challenges: Scalable Coordination in Sensor Networks." <em>Proceedings of the 5th Annual ACM/IEEE International Conference on Mobile Computing and Networking (MobiCom)</em>, 263-270. DOI: 10.1145/313451.313556
+- **IEEE Xplore Document 7229264**: Available at [IEEE Xplore](https://ieeexplore.ieee.org/abstract/document/7229264)
 - Robert Morris: Morris, R. (1978). "Counting Large Numbers of Events in Small Registers"
 - Korf, R. E. (1999). "Frontier Search"
 - TrueNorth: Merolla et al. (2014). "A million spiking-neuron integrated circuit"

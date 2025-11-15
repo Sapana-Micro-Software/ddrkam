@@ -1227,6 +1227,7 @@ KernelizedSPSBSConfig config = {
 - STARR: https://github.com/shyamalschandra/STARR
 - Merolla et al. (2014). "A million spiking-neuron integrated circuit"
 - Davies et al. (2018). "Loihi: A Neuromorphic Manycore Processor"
+- IEEE Xplore Document 7229264: [Available at IEEE Xplore](https://ieeexplore.ieee.org/abstract/document/7229264)
 - Parkin et al. (2008). "Magnetic Domain-Wall Racetrack Memory"
 - Burr et al. (2010). "Phase change memory technology"
 - MIT CSAIL Probabilistic Computing (Lyric)

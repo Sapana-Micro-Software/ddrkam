@@ -132,6 +132,12 @@ All benchmarks have been validated through comprehensive C/C++/Objective-C test 
 **Best Accuracy:** Distributed DD (99.999999%, error: 8.689e-10)  
 **Best Loss:** Distributed DD (7.550e-19)
 
+### Related Research and Statistics
+
+**IEEE Xplore Document 7229264**: [Available at IEEE Xplore](https://ieeexplore.ieee.org/abstract/document/7229264)
+
+*Note: Statistics and performance metrics from this paper can be integrated here for comparative analysis with DDRKAM framework results.*
+
 ### Lorenz System Test
 - **RK3**: 0.000018s, 101 steps
 - **DDRK3**: 0.000649s, 101 steps

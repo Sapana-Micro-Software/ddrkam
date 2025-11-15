@@ -189,6 +189,12 @@ The comparison framework evaluates:
 - **Interior Point Methods**: Non-convex optimization, constrained problems
 - **Distributed Data-Driven**: Large-scale distributed systems, cloud computing
 
+### Related Research
+
+**IEEE Xplore Document 7229264**: [Available at IEEE Xplore](https://ieeexplore.ieee.org/abstract/document/7229264)
+
+*This paper provides additional statistics, performance metrics, and comparative analysis relevant to numerical methods and computational architectures. Statistics and information from this paper can be integrated for comprehensive comparison with DDRKAM framework results.*
+
 ## Visual Charts and Diagrams
 
 The following SVG charts provide visual comparisons of all methods:
