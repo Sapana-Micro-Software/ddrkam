@@ -55,6 +55,8 @@ test: $(LIBRARY) | $(BIN_DIR)
 	$(BIN_DIR)/test_benchmarks
 	$(CC) $(CFLAGS) -I$(INC_DIR) tests/test_pde.c -L$(LIB_DIR) -lddrkam -lm -o $(BIN_DIR)/test_pde
 	$(BIN_DIR)/test_pde
+	$(CC) $(CFLAGS) -I$(INC_DIR) tests/test_realtime_stochastic.c -L$(LIB_DIR) -lddrkam -lm -o $(BIN_DIR)/test_realtime_stochastic
+	$(BIN_DIR)/test_realtime_stochastic
 
 benchmark: test
 	@echo "Running comprehensive benchmarks..."

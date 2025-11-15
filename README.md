@@ -9,6 +9,9 @@ DDRKAM is a comprehensive framework for solving differential equations (both **O
 - Adams-Bashforth and Adams-Moulton methods (ODEs)
 - Hierarchical data-driven architecture (Transformer-inspired)
 - **PDE Solver**: Heat, Wave, Advection, Burgers, Laplace, Poisson equations
+- **Real-Time Solvers**: Streaming data processing for RK3 and Adams methods
+- **Stochastic Solvers**: Noise injection and Brownian motion support
+- **Data-Driven Control**: Adaptive step size and method selection
 
 ## Features
 
@@ -110,6 +113,7 @@ See `docs/PDE_GUIDE.md` for complete PDE documentation.
 - DDMCMC Guide: `docs/DDMCMC_README.md`
 - Comparison Guide: `docs/COMPARISON.md`
 - PDE Guide: `docs/PDE_GUIDE.md`
+- Real-Time & Stochastic Guide: `docs/REALTIME_STOCHASTIC.md`
 
 ## License
 
