@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://sapana-micro-software.github.io/ddrkam/sitemap.xml
