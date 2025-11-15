@@ -175,6 +175,17 @@ The comparison framework evaluates:
 - **Karmarkar's Algorithm**: Linear programming problems, constrained optimization with linear constraints
 - **Directed Diffusion**: Static state distribution problems, flood fill with Manhattan distance routing
 - **Multiple-Search Representation Tree**: Optimal pathfinding, complex state space exploration, multiple solution paths
+- **Massively-Threaded (Korf)**: Parallel state space exploration, frontier search, work-stealing queues
+- **STARR (Chandra)**: Semantic memory tasks, associative search, context-aware computation
+- **TrueNorth (IBM)**: Neuromorphic workloads, spike-based computation, ultra-low power
+- **Loihi (Intel)**: Adaptive learning, structural plasticity, on-chip learning
+- **BrainChips**: Event-driven computation, sparse representation, low power
+- **Racetrack (Parkin)**: Memory-intensive problems, 3D domain wall memory
+- **Phase Change Memory**: Non-volatile storage, amorphous/crystalline transitions
+- **Lyric (MIT)**: Probabilistic inference, Bayesian networks, MCMC support
+- **HW Bayesian (Chandra)**: Hardware-accelerated inference, parallel Bayesian networks
+- **Semantic Lexo BS (Chandra & Chandra)**: Massively-threaded search with tail recursion, lexographic ordering
+- **Kernelized SPS BS (Chandra, Shyamal)**: Multi-kernel search (Semantic, Pragmatic, Syntactic)
 - **Interior Point Methods**: Non-convex optimization, constrained problems
 - **Distributed Data-Driven**: Large-scale distributed systems, cloud computing
 
