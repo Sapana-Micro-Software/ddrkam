@@ -290,6 +290,10 @@ section {
     height: 250px;
 }
 
+.chart-container[style*="grid-column"] canvas {
+    height: 400px;
+}
+
 .chart-container h4 {
     text-align: center;
     margin-top: 1rem;
