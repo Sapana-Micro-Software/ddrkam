@@ -117,6 +117,20 @@ The comparison framework evaluates:
 - **Nonlinear ODE**: Constrained optimization problems, nonlinear programming
 - **Distributed Data-Driven**: Large-scale distributed systems, cloud computing
 
+## Latest Benchmark Results
+
+### Exponential Decay Test
+- **RK3**: 0.000036s, error: 1.136854e-08, 100.000000% accuracy, 201 steps
+- **DDRK3**: 0.001129s, error: 3.146765e-08, 100.000000% accuracy, 201 steps
+
+### Harmonic Oscillator Test
+- **RK3**: 0.000099s, error: 3.185303e-03, 99.682004% accuracy, 629 steps
+- **DDRK3**: 0.003575s, error: 3.185534e-03, 99.681966% accuracy, 629 steps
+
+### Lorenz System Test
+- **RK3**: 0.000018s, 101 steps
+- **DDRK3**: 0.000655s, 101 steps
+
 ## Running Comparisons
 
 ```bash
@@ -127,6 +141,7 @@ make test
 Output files:
 - `exponential_comparison.csv`
 - `oscillator_comparison.csv`
+- `benchmark_results.json`
 
 ## Copyright
 

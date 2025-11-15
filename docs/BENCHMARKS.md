@@ -19,20 +19,16 @@ All benchmarks have been validated through comprehensive C/C++/Objective-C test 
 ## Validated Results
 
 ### Exponential Decay Test
-- **RK3**: 0.000037s, 99.999992% accuracy, 201 steps
-- **DDRK3**: 0.000172s, 99.999992% accuracy, 201 steps
-- **AM**: 0.000059s, 99.999991% accuracy, 201 steps
-- **DDAM**: 0.000712s, 99.999991% accuracy, 201 steps
+- **RK3**: 0.000036s, error: 1.136854e-08, 100.000000% accuracy, 201 steps
+- **DDRK3**: 0.001129s, error: 3.146765e-08, 100.000000% accuracy, 201 steps
 
 ### Harmonic Oscillator Test
-- **RK3**: 0.000102s, 99.682004% accuracy, 629 steps
-- **DDRK3**: 0.000553s, 99.682003% accuracy, 629 steps
-- **AM**: 0.000198s, 99.320833% accuracy, 630 steps
-- **DDAM**: 0.002480s, 99.320914% accuracy, 630 steps
+- **RK3**: 0.000099s, error: 3.185303e-03, 99.682004% accuracy, 629 steps
+- **DDRK3**: 0.003575s, error: 3.185534e-03, 99.681966% accuracy, 629 steps
 
 ### Lorenz System Test
 - **RK3**: 0.000018s, 101 steps
-- **DDRK3**: 0.000091s, 101 steps
+- **DDRK3**: 0.000655s, 101 steps
 
 ## Running Benchmarks
 
