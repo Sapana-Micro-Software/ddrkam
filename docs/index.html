@@ -7,8 +7,8 @@
     
     <!-- Primary Meta Tags -->
     <meta name="title" content="DDRKAM - Data-Driven Runge-Kutta and Adams Methods">
-    <meta name="description" content="Comprehensive framework for solving differential equations (ODEs & PDEs) using Runge-Kutta 3rd order (RK3), Data-Driven RK3 (DDRK3), Adams methods (AM), Data-Driven Adams (DDAM), hierarchical transformer-inspired architectures with full self-attention, DDMCMC optimization, PDE solvers (Heat, Wave, Advection, Burgers, Laplace, Poisson), real-time streaming solvers, stochastic solvers with Brownian motion, and data-driven adaptive control. Complete, unabridged, lossless implementations. Invented by Shyamal Suhana Chandra.">
-    <meta name="keywords" content="Runge-Kutta, RK3, DDRK3, Adams methods, AM, DDAM, differential equations, ODE, PDE, partial differential equations, heat equation, wave equation, advection equation, Burgers equation, Laplace equation, Poisson equation, numerical methods, ODE solver, PDE solver, nonlinear dynamics, transformer architecture, self-attention, QK^T attention, DDMCMC, multinomial optimization, real-time solver, stochastic solver, Brownian motion, data-driven methods, adaptive control, method comparison, Shyamal Suhana Chandra, numerical integration, finite difference methods">
+    <meta name="description" content="Comprehensive framework for solving differential equations (ODEs & PDEs) using Runge-Kutta 3rd order (RK3), Data-Driven RK3 (DDRK3), Adams methods (AM), Data-Driven Adams (DDAM), hierarchical transformer-inspired architectures with full self-attention, DDMCMC optimization, PDE solvers (Heat, Wave, Advection, Burgers, Laplace, Poisson), real-time streaming solvers, stochastic solvers with Brownian motion, and data-driven adaptive control. Supports 60+ computing architectures including MPI, OpenMP, Pthreads, GPGPU, Vector Processors, ASIC, FPGA, FPGA AWS F1, DSP, QPU Azure, QPU Intel Horse Ridge, TilePU Mellanox, TilePU Sunway, DPU, MFPU, NPU, LPU, AsAP, Xeon Phi, Massively-Threaded (Korf), STARR (Chandra), TrueNorth, Loihi, BrainChips, Racetrack, PCM, Lyric, HW Bayesian, Semantic Lexographic BS, Kernelized SPS BS, and more. Complete, unabridged, lossless implementations. Invented by Shyamal Suhana Chandra.">
+    <meta name="keywords" content="Runge-Kutta, RK3, DDRK3, Adams methods, AM, DDAM, differential equations, ODE, PDE, partial differential equations, heat equation, wave equation, advection equation, Burgers equation, Laplace equation, Poisson equation, numerical methods, ODE solver, PDE solver, nonlinear dynamics, transformer architecture, self-attention, QK^T attention, DDMCMC, multinomial optimization, real-time solver, stochastic solver, Brownian motion, data-driven methods, adaptive control, method comparison, Shyamal Suhana Chandra, numerical integration, finite difference methods, MPI, OpenMP, Pthreads, GPGPU, Vector Processor, ASIC, FPGA, FPGA AWS F1, DSP, QPU Azure, QPU Intel Horse Ridge, TilePU Mellanox, TilePU Sunway, DPU, MFPU, NPU, LPU, AsAP, Xeon Phi, Massively-Threaded, STARR, TrueNorth, Loihi, BrainChips, Racetrack, Phase Change Memory, Lyric, HW Bayesian, Semantic Lexographic Binary Search, Kernelized SPS Binary Search">
     <meta name="author" content="Shyamal Suhana Chandra">
     <meta name="robots" content="index, follow">
     <meta name="language" content="English">
@@ -313,6 +313,448 @@
                 
                 <div class="method-card">
                     <div class="method-header">
+                        <h3>Karmarkar</h3>
+                        <span class="method-badge">Optimization</span>
+                    </div>
+                    <p class="method-description">Karmarkar's polynomial-time interior point method for solving ODEs as linear programming problems. Complexity O(n^3.5 L).</p>
+                    <div class="method-formula">
+                        <code>min c^T x, s.t. Ax = b, x ≥ 0</code>
+                    </div>
+                    <ul class="method-features">
+                        <li>✓ Polynomial-time guarantee</li>
+                        <li>✓ Interior point method</li>
+                        <li>✓ Projective scaling</li>
+                        <li>✓ Constrained optimization</li>
+                    </ul>
+                </div>
+                
+                <div class="method-card">
+                    <div class="method-header">
+                        <h3>Map/Reduce</h3>
+                        <span class="method-badge">Distributed</span>
+                    </div>
+                    <p class="method-description">Map/Reduce framework for distributed ODE solving on commodity hardware. Fault tolerance via redundancy (R=3).</p>
+                    <div class="method-formula">
+                        <code>T(n) = O(√n log n)</code>
+                    </div>
+                    <ul class="method-features">
+                        <li>✓ Mapper/reducer nodes</li>
+                        <li>✓ Redundancy for fault tolerance</li>
+                        <li>✓ Commodity hardware optimized</li>
+                        <li>✓ Cost estimation</li>
+                    </ul>
+                </div>
+                
+                <div class="method-card">
+                    <div class="method-header">
+                        <h3>Apache Spark</h3>
+                        <span class="method-badge">Distributed</span>
+                    </div>
+                    <p class="method-description">Apache Spark framework with RDD-based fault tolerance. Superior performance for iterative algorithms through caching.</p>
+                    <div class="method-formula">
+                        <code>RDD[y].map(f).cache()</code>
+                    </div>
+                    <ul class="method-features">
+                        <li>✓ Resilient Distributed Datasets</li>
+                        <li>✓ Lineage-based recovery</li>
+                        <li>✓ RDD caching</li>
+                        <li>✓ Checkpointing</li>
+                    </ul>
+                </div>
+                
+                <div class="method-card">
+                    <div class="method-header">
+                        <h3>Micro-Gas Jet Circuit</h3>
+                        <span class="method-badge">Non-Orthodox</span>
+                    </div>
+                    <p class="method-description">Micro-gas jet circuits use fluid dynamics to encode computational states as flow rates through microfluidic channels.</p>
+                    <div class="method-formula">
+                        <code>Q = Q_base · (1 + |y|)</code>
+                    </div>
+                    <ul class="method-features">
+                        <li>✓ Ultra-low power (mechanical)</li>
+                        <li>✓ Continuous analog computation</li>
+                        <li>✓ Natural parallelism</li>
+                        <li>✓ Fault tolerance</li>
+                    </ul>
+                </div>
+                
+                <div class="method-card">
+                    <div class="method-header">
+                        <h3>Dataflow (Arvind)</h3>
+                        <span class="method-badge">Non-Orthodox</span>
+                    </div>
+                    <p class="method-description">Tagged token dataflow computing executes instructions when all input tokens are available, enabling natural parallelism.</p>
+                    <div class="method-formula">
+                        <code>Execute when: ∀tokens available</code>
+                    </div>
+                    <ul class="method-features">
+                        <li>✓ Fine-grained parallelism</li>
+                        <li>✓ Dynamic scheduling</li>
+                        <li>✓ Token matching</li>
+                        <li>✓ No explicit synchronization</li>
+                    </ul>
+                </div>
+                
+                <div class="method-card">
+                    <div class="method-header">
+                        <h3>ACE (Turing)</h3>
+                        <span class="method-badge">Non-Orthodox</span>
+                    </div>
+                    <p class="method-description">Alan Turing's 1945 stored-program computer design with unified memory for instructions and data.</p>
+                    <div class="method-formula">
+                        <code>Memory[PC] → Instruction → Execute</code>
+                    </div>
+                    <ul class="method-features">
+                        <li>✓ Historical significance</li>
+                        <li>✓ Stored-program model</li>
+                        <li>✓ Deterministic execution</li>
+                        <li>✓ Foundation of modern computing</li>
+                    </ul>
+                </div>
+                
+                <div class="method-card">
+                    <div class="method-header">
+                        <h3>Systolic Array</h3>
+                        <span class="method-badge">Non-Orthodox</span>
+                    </div>
+                    <p class="method-description">Regular array of processing elements with local communication enabling pipelined computation.</p>
+                    <div class="method-formula">
+                        <code>PE_{i,j}^{t+1} = f(PE_{i,j}^t, neighbors)</code>
+                    </div>
+                    <ul class="method-features">
+                        <li>✓ Pipelined computation</li>
+                        <li>✓ Local communication</li>
+                        <li>✓ High throughput</li>
+                        <li>✓ Scalable arrays</li>
+                    </ul>
+                </div>
+                
+                <div class="method-card">
+                    <div class="method-header">
+                        <h3>TPU (Patterson)</h3>
+                        <span class="method-badge">Non-Orthodox</span>
+                    </div>
+                    <p class="method-description">Google's TPU architecture specializing in matrix multiplication with 128×128 matrix unit and 24 MB unified buffer.</p>
+                    <div class="method-formula">
+                        <code>C = A × B in O(1) for 128×128</code>
+                    </div>
+                    <ul class="method-features">
+                        <li>✓ 92 TOPS throughput</li>
+                        <li>✓ 900 GB/s memory bandwidth</li>
+                        <li>✓ Matrix acceleration</li>
+                        <li>✓ Quantization support</li>
+                    </ul>
+                </div>
+                
+                <div class="method-card">
+                    <div class="method-header">
+                        <h3>GPU (CUDA)</h3>
+                        <span class="method-badge">GPU</span>
+                    </div>
+                    <p class="method-description">NVIDIA CUDA architecture with 2560 cores, 900 GB/s bandwidth, and tensor cores for mixed precision.</p>
+                    <div class="method-formula">
+                        <code>Parallel execution: O(n/t) threads</code>
+                    </div>
+                    <ul class="method-features">
+                        <li>✓ 2560 CUDA cores</li>
+                        <li>✓ Tensor cores</li>
+                        <li>✓ 900 GB/s bandwidth</li>
+                        <li>✓ Warp-based execution</li>
+                    </ul>
+                </div>
+                
+                <div class="method-card">
+                    <div class="method-header">
+                        <h3>GPU (Metal)</h3>
+                        <span class="method-badge">GPU</span>
+                    </div>
+                    <p class="method-description">Apple Metal optimized for Apple Silicon with unified memory architecture and 400 GB/s bandwidth.</p>
+                    <div class="method-formula">
+                        <code>Metal Performance Shaders</code>
+                    </div>
+                    <ul class="method-features">
+                        <li>✓ Apple Silicon optimized</li>
+                        <li>✓ Unified memory</li>
+                        <li>✓ 400 GB/s bandwidth</li>
+                        <li>✓ Native Metal API</li>
+                    </ul>
+                </div>
+                
+                <div class="method-card">
+                    <div class="method-header">
+                        <h3>GPU (Vulkan)</h3>
+                        <span class="method-badge">GPU</span>
+                    </div>
+                    <p class="method-description">Cross-platform Vulkan API with low-overhead explicit control supporting NVIDIA, AMD, and Intel GPUs.</p>
+                    <div class="method-formula">
+                        <code>Explicit API, 600 GB/s</code>
+                    </div>
+                    <ul class="method-features">
+                        <li>✓ Cross-platform</li>
+                        <li>✓ Low overhead</li>
+                        <li>✓ Multi-vendor support</li>
+                        <li>✓ 600 GB/s bandwidth</li>
+                    </ul>
+                </div>
+                
+                <div class="method-card">
+                    <div class="method-header">
+                        <h3>GPU (AMD)</h3>
+                        <span class="method-badge">GPU</span>
+                    </div>
+                    <p class="method-description">AMD/ATI GPU architecture with wide SIMD (64 lanes), HBM memory, and 1 TB/s bandwidth.</p>
+                    <div class="method-formula">
+                        <code>Wavefront: 64 threads</code>
+                    </div>
+                    <ul class="method-features">
+                        <li>✓ Wide SIMD (64 lanes)</li>
+                        <li>✓ HBM memory</li>
+                        <li>✓ 1 TB/s bandwidth</li>
+                        <li>✓ Wavefront execution</li>
+                    </ul>
+                </div>
+                
+                <div class="method-card">
+                    <div class="method-header">
+                        <h3>Spiralizer Chord</h3>
+                        <span class="method-badge">Non-Orthodox</span>
+                    </div>
+                    <p class="method-description">Chord distributed hash tables with Robert Morris collision hashing (MIT) and spiral traversal patterns.</p>
+                    <div class="method-formula">
+                        <code>Hash(k) = (k + i²) mod m</code>
+                    </div>
+                    <ul class="method-features">
+                        <li>✓ O(log n) Chord lookup</li>
+                        <li>✓ Robert Morris hashing</li>
+                        <li>✓ Spiral traversal</li>
+                        <li>✓ Collision handling</li>
+                    </ul>
+                </div>
+                
+                <div class="method-card">
+                    <div class="method-header">
+                        <h3>Lattice Waterfront</h3>
+                        <span class="method-badge">Non-Orthodox</span>
+                    </div>
+                    <p class="method-description">Variation of Turing's Waterfront architecture (Chandra, Shyamal). Multi-dimensional lattice with Waterfront buffering.</p>
+                    <div class="method-formula">
+                        <code>Buffer[i] = Buffer[i]·0.5 + Input[i]·0.5</code>
+                    </div>
+                    <ul class="method-features">
+                        <li>✓ Multi-dimensional lattice</li>
+                        <li>✓ Waterfront buffering</li>
+                        <li>✓ O(d) routing</li>
+                        <li>✓ Presented at MIT Strata</li>
+                    </ul>
+                </div>
+                
+                <div class="method-card">
+                    <div class="method-header">
+                        <h3>Multiple-Search Tree</h3>
+                        <span class="method-badge">Search</span>
+                    </div>
+                    <p class="method-description">Multiple search strategies (BFS, DFS, A*, Best-First) with tree and graph state representations for solving ODEs.</p>
+                    <div class="method-formula">
+                        <code>f(n) = g(n) + h(n)</code>
+                    </div>
+                    <ul class="method-features">
+                        <li>✓ BFS, DFS, A*, Best-First</li>
+                        <li>✓ Tree representation</li>
+                        <li>✓ Graph representation</li>
+                        <li>✓ Parallel search strategies</li>
+                    </ul>
+                </div>
+                
+                <div class="method-card">
+                    <div class="method-header">
+                        <h3>Massively-Threaded (Korf)</h3>
+                        <span class="method-badge">Non-Orthodox</span>
+                    </div>
+                    <p class="method-description">Richard Korf's frontier search with massive threading (1024+ threads), work-stealing queues, and tail recursion.</p>
+                    <div class="method-formula">
+                        <code>O(n/p) with p threads</code>
+                    </div>
+                    <ul class="method-features">
+                        <li>✓ 1024+ threads</li>
+                        <li>✓ Work-stealing</li>
+                        <li>✓ Tail recursion</li>
+                        <li>✓ Frontier search</li>
+                    </ul>
+                </div>
+                
+                <div class="method-card">
+                    <div class="method-header">
+                        <h3>STARR (Chandra et al.)</h3>
+                        <span class="method-badge">Non-Orthodox</span>
+                    </div>
+                    <p class="method-description">Semantic and associative memory architecture. Based on https://github.com/shyamalschandra/STARR</p>
+                    <div class="method-formula">
+                        <code>Semantic + Associative Memory</code>
+                    </div>
+                    <ul class="method-features">
+                        <li>✓ Semantic memory (1 MB+)</li>
+                        <li>✓ Associative search</li>
+                        <li>✓ Semantic caching</li>
+                        <li>✓ Pattern matching</li>
+                    </ul>
+                </div>
+                
+                <div class="method-card">
+                    <div class="method-header">
+                        <h3>TrueNorth (IBM)</h3>
+                        <span class="method-badge">Neuromorphic</span>
+                    </div>
+                    <p class="method-description">IBM's neuromorphic chip with 1 million neurons (4096 cores × 256 neurons), 26 pJ per spike.</p>
+                    <div class="method-formula">
+                        <code>Integrate-and-Fire Model</code>
+                    </div>
+                    <ul class="method-features">
+                        <li>✓ 1 million neurons</li>
+                        <li>✓ 26 pJ per spike</li>
+                        <li>✓ Spike-timing plasticity</li>
+                        <li>✓ On-chip learning</li>
+                    </ul>
+                </div>
+                
+                <div class="method-card">
+                    <div class="method-header">
+                        <h3>Loihi (Intel)</h3>
+                        <span class="method-badge">Neuromorphic</span>
+                    </div>
+                    <p class="method-description">Intel's neuromorphic research chip with adaptive thresholds, structural plasticity, and on-chip learning.</p>
+                    <div class="method-formula">
+                        <code>Adaptive Threshold Learning</code>
+                    </div>
+                    <ul class="method-features">
+                        <li>✓ Adaptive thresholds</li>
+                        <li>✓ Structural plasticity</li>
+                        <li>✓ On-chip learning</li>
+                        <li>✓ Configurable learning rate</li>
+                    </ul>
+                </div>
+                
+                <div class="method-card">
+                    <div class="method-header">
+                        <h3>BrainChips</h3>
+                        <span class="method-badge">Neuromorphic</span>
+                    </div>
+                    <p class="method-description">Commercial neuromorphic chip with event-driven computation, sparse representation, and 100K neurons.</p>
+                    <div class="method-formula">
+                        <code>Event-Driven: O(events)</code>
+                    </div>
+                    <ul class="method-features">
+                        <li>✓ Event-driven</li>
+                        <li>✓ Sparse representation</li>
+                        <li>✓ 100K neurons</li>
+                        <li>✓ 1 pJ per event</li>
+                    </ul>
+                </div>
+                
+                <div class="method-card">
+                    <div class="method-header">
+                        <h3>Racetrack Memory</h3>
+                        <span class="method-badge">Memory</span>
+                    </div>
+                    <p class="method-description">Magnetic domain wall memory (Parkin et al.) with 3D stacking and low power non-volatile storage.</p>
+                    <div class="method-formula">
+                        <code>Domain Wall Movement</code>
+                    </div>
+                    <ul class="method-features">
+                        <li>✓ Magnetic domain walls</li>
+                        <li>✓ 3D stacking</li>
+                        <li>✓ Non-volatile</li>
+                        <li>✓ Low power</li>
+                    </ul>
+                </div>
+                
+                <div class="method-card">
+                    <div class="method-header">
+                        <h3>Phase Change Memory</h3>
+                        <span class="method-badge">Memory</span>
+                    </div>
+                    <p class="method-description">IBM Research non-volatile memory with phase transitions (amorphous/crystalline) and multi-level cells.</p>
+                    <div class="method-formula">
+                        <code>SET (1 kOhm) ↔ RESET (1 MOhm)</code>
+                    </div>
+                    <ul class="method-features">
+                        <li>✓ Phase transitions</li>
+                        <li>✓ Multi-level cells</li>
+                        <li>✓ 100 ns programming</li>
+                        <li>✓ Non-volatile</li>
+                    </ul>
+                </div>
+                
+                <div class="method-card">
+                    <div class="method-header">
+                        <h3>Lyric (MIT)</h3>
+                        <span class="method-badge">Probabilistic</span>
+                    </div>
+                    <p class="method-description">MIT's probabilistic computing architecture with 256 probabilistic units, Bayesian inference, and MCMC.</p>
+                    <div class="method-formula">
+                        <code>P(x) = Σ P(x|y)·P(y)</code>
+                    </div>
+                    <ul class="method-features">
+                        <li>✓ 256 probabilistic units</li>
+                        <li>✓ Bayesian inference</li>
+                        <li>✓ MCMC support</li>
+                        <li>✓ 64 RNGs</li>
+                    </ul>
+                </div>
+                
+                <div class="method-card">
+                    <div class="method-header">
+                        <h3>HW Bayesian Networks</h3>
+                        <span class="method-badge">Probabilistic</span>
+                    </div>
+                    <p class="method-description">Hardware-accelerated Bayesian networks (Chandra) with parallel inference on 256 nodes.</p>
+                    <div class="method-formula">
+                        <code>P(A|B) = P(B|A)·P(A) / P(B)</code>
+                    </div>
+                    <ul class="method-features">
+                        <li>✓ Hardware acceleration</li>
+                        <li>✓ Parallel inference</li>
+                        <li>✓ 256 nodes</li>
+                        <li>✓ Approximate inference</li>
+                    </ul>
+                </div>
+                
+                <div class="method-card">
+                    <div class="method-header">
+                        <h3>Semantic Lexographic BS</h3>
+                        <span class="method-badge">Search</span>
+                    </div>
+                    <p class="method-description">Massively-threaded binary search with tail recursion (Chandra & Chandra). Semantic caching and lexographic ordering.</p>
+                    <div class="method-formula">
+                        <code>O(log n) with semantic caching</code>
+                    </div>
+                    <ul class="method-features">
+                        <li>✓ 512 threads</li>
+                        <li>✓ Tail recursion</li>
+                        <li>✓ Semantic caching</li>
+                        <li>✓ Lexographic order</li>
+                    </ul>
+                </div>
+                
+                <div class="method-card">
+                    <div class="method-header">
+                        <h3>Kernelized SPS BS</h3>
+                        <span class="method-badge">Search</span>
+                    </div>
+                    <p class="method-description">Kernelized Semantic, Pragmatic, and Syntactic Binary Search (Chandra, Shyamal). Three kernel functions with caching.</p>
+                    <div class="method-formula">
+                        <code>K = K_sem · K_prag · K_syn</code>
+                    </div>
+                    <ul class="method-features">
+                        <li>✓ Three kernels</li>
+                        <li>✓ Kernel caching</li>
+                        <li>✓ 128×128×128 space</li>
+                        <li>✓ Multi-dimensional</li>
+                    </ul>
+                </div>
+                
+                <div class="method-card">
+                    <div class="method-header">
                         <h3>Cellular Automata</h3>
                         <span class="method-badge">CA Solver</span>
                     </div>
@@ -416,6 +858,110 @@
                     <p>Nonlinear Programming<br>PDE optimization</p>
                 </div>
                 <div class="comparison-card">
+                    <h3>Karmarkar</h3>
+                    <p>Polynomial-Time LP<br>Interior point method</p>
+                </div>
+                <div class="comparison-card">
+                    <h3>Map/Reduce</h3>
+                    <p>Distributed Framework<br>Commodity hardware</p>
+                </div>
+                <div class="comparison-card">
+                    <h3>Spark</h3>
+                    <p>RDD-Based Framework<br>Fault-tolerant caching</p>
+                </div>
+                <div class="comparison-card">
+                    <h3>Micro-Gas Jet</h3>
+                    <p>Fluid Dynamics<br>Low-power analog</p>
+                </div>
+                <div class="comparison-card">
+                    <h3>Dataflow</h3>
+                    <p>Arvind Architecture<br>Tagged token model</p>
+                </div>
+                <div class="comparison-card">
+                    <h3>ACE</h3>
+                    <p>Turing Architecture<br>Stored-program</p>
+                </div>
+                <div class="comparison-card">
+                    <h3>Systolic Array</h3>
+                    <p>Pipelined Computation<br>Regular array</p>
+                </div>
+                <div class="comparison-card">
+                    <h3>TPU</h3>
+                    <p>Patterson Architecture<br>Matrix acceleration</p>
+                </div>
+                <div class="comparison-card">
+                    <h3>GPU CUDA</h3>
+                    <p>NVIDIA GPU<br>Massively parallel</p>
+                </div>
+                <div class="comparison-card">
+                    <h3>GPU Metal</h3>
+                    <p>Apple GPU<br>Unified memory</p>
+                </div>
+                <div class="comparison-card">
+                    <h3>GPU Vulkan</h3>
+                    <p>Cross-platform GPU<br>Low overhead</p>
+                </div>
+                <div class="comparison-card">
+                    <h3>GPU AMD</h3>
+                    <p>AMD/ATI GPU<br>Wide SIMD</p>
+                </div>
+                <div class="comparison-card">
+                    <h3>Spiralizer Chord</h3>
+                    <p>Chord + Morris Hashing<br>Spiral traversal</p>
+                </div>
+                <div class="comparison-card">
+                    <h3>Lattice Waterfront</h3>
+                    <p>Turing Variation<br>Multi-dimensional</p>
+                </div>
+                <div class="comparison-card">
+                    <h3>Multiple-Search Tree</h3>
+                    <p>BFS, DFS, A*<br>Tree representation</p>
+                </div>
+                <div class="comparison-card">
+                    <h3>Massively-Threaded</h3>
+                    <p>Korf Frontier Search<br>Work-stealing</p>
+                </div>
+                <div class="comparison-card">
+                    <h3>STARR</h3>
+                    <p>Chandra et al.<br>Semantic memory</p>
+                </div>
+                <div class="comparison-card">
+                    <h3>TrueNorth</h3>
+                    <p>IBM Neuromorphic<br>1M neurons</p>
+                </div>
+                <div class="comparison-card">
+                    <h3>Loihi</h3>
+                    <p>Intel Neuromorphic<br>Adaptive learning</p>
+                </div>
+                <div class="comparison-card">
+                    <h3>BrainChips</h3>
+                    <p>Neuromorphic<br>Event-driven</p>
+                </div>
+                <div class="comparison-card">
+                    <h3>Racetrack</h3>
+                    <p>Parkin Memory<br>Domain walls</p>
+                </div>
+                <div class="comparison-card">
+                    <h3>Phase Change</h3>
+                    <p>IBM PCM<br>Non-volatile</p>
+                </div>
+                <div class="comparison-card">
+                    <h3>Lyric</h3>
+                    <p>MIT Probabilistic<br>Bayesian inference</p>
+                </div>
+                <div class="comparison-card">
+                    <h3>HW Bayesian</h3>
+                    <p>Chandra<br>Hardware inference</p>
+                </div>
+                <div class="comparison-card">
+                    <h3>Semantic Lexo BS</h3>
+                    <p>Chandra & Chandra<br>Massively-threaded</p>
+                </div>
+                <div class="comparison-card">
+                    <h3>Kernelized SPS BS</h3>
+                    <p>Chandra, Shyamal<br>Multi-kernel</p>
+                </div>
+                <div class="comparison-card">
                     <h3>Dist+DD Solver</h3>
                     <p>Distributed Data-Driven<br>Combined approach</p>
                 </div>
@@ -438,6 +984,74 @@
                 <div class="comparison-card">
                     <h3>Petri Net PDE</h3>
                     <p>Petri Net<br>PDE solver</p>
+                </div>
+                <div class="comparison-card">
+                    <h3>MPI</h3>
+                    <p>Message Passing<br>Distributed memory</p>
+                </div>
+                <div class="comparison-card">
+                    <h3>OpenMP</h3>
+                    <p>Open Multi-Processing<br>Shared memory</p>
+                </div>
+                <div class="comparison-card">
+                    <h3>Pthreads</h3>
+                    <p>POSIX Threads<br>Fine-grained control</p>
+                </div>
+                <div class="comparison-card">
+                    <h3>GPGPU</h3>
+                    <p>General-Purpose GPU<br>Platform-agnostic</p>
+                </div>
+                <div class="comparison-card">
+                    <h3>Vector Processor</h3>
+                    <p>SIMD Vector<br>Data-parallel</p>
+                </div>
+                <div class="comparison-card">
+                    <h3>ASIC</h3>
+                    <p>Application-Specific<br>Custom hardware</p>
+                </div>
+                <div class="comparison-card">
+                    <h3>FPGA AWS F1</h3>
+                    <p>Xilinx UltraScale+<br>Cloud FPGA</p>
+                </div>
+                <div class="comparison-card">
+                    <h3>DSP</h3>
+                    <p>Digital Signal Processor<br>Signal processing</p>
+                </div>
+                <div class="comparison-card">
+                    <h3>QPU Azure</h3>
+                    <p>Microsoft Quantum<br>Cloud quantum</p>
+                </div>
+                <div class="comparison-card">
+                    <h3>QPU Intel</h3>
+                    <p>Horse Ridge<br>Cryogenic control</p>
+                </div>
+                <div class="comparison-card">
+                    <h3>TilePU Sunway</h3>
+                    <p>SW26010<br>256 cores</p>
+                </div>
+                <div class="comparison-card">
+                    <h3>DPU</h3>
+                    <p>Microsoft DPU<br>Biological computation</p>
+                </div>
+                <div class="comparison-card">
+                    <h3>MFPU</h3>
+                    <p>Microfluidic<br>Flow-based</p>
+                </div>
+                <div class="comparison-card">
+                    <h3>NPU</h3>
+                    <p>Neuromorphic<br>General NPU</p>
+                </div>
+                <div class="comparison-card">
+                    <h3>LPU</h3>
+                    <p>Lightmatter<br>Photonic computing</p>
+                </div>
+                <div class="comparison-card">
+                    <h3>AsAP</h3>
+                    <p>Asynchronous Array<br>UC Davis</p>
+                </div>
+                <div class="comparison-card">
+                    <h3>Xeon Phi</h3>
+                    <p>Intel Coprocessor<br>Many-core offload</p>
                 </div>
             </div>
             
@@ -496,6 +1110,32 @@
                 <button class="benchmark-btn" data-method="online_rk3" aria-label="Show Online RK3 benchmarks">Online RK3</button>
                 <button class="benchmark-btn" data-method="realtime_rk3" aria-label="Show Real-Time RK3 benchmarks">Real-Time RK3</button>
                 <button class="benchmark-btn" data-method="nonlinear_ode" aria-label="Show Nonlinear ODE benchmarks">Nonlinear ODE</button>
+                <button class="benchmark-btn" data-method="karmarkar" aria-label="Show Karmarkar benchmarks">Karmarkar</button>
+                <button class="benchmark-btn" data-method="mapreduce" aria-label="Show MapReduce benchmarks">Map/Reduce</button>
+                <button class="benchmark-btn" data-method="spark" aria-label="Show Spark benchmarks">Spark</button>
+                <button class="benchmark-btn" data-method="microgasjet" aria-label="Show Micro-Gas Jet benchmarks">Micro-Gas Jet</button>
+                <button class="benchmark-btn" data-method="dataflow" aria-label="Show Dataflow benchmarks">Dataflow</button>
+                <button class="benchmark-btn" data-method="ace" aria-label="Show ACE benchmarks">ACE</button>
+                <button class="benchmark-btn" data-method="systolic" aria-label="Show Systolic Array benchmarks">Systolic</button>
+                <button class="benchmark-btn" data-method="tpu" aria-label="Show TPU benchmarks">TPU</button>
+                <button class="benchmark-btn" data-method="gpu_cuda" aria-label="Show GPU CUDA benchmarks">GPU CUDA</button>
+                <button class="benchmark-btn" data-method="gpu_metal" aria-label="Show GPU Metal benchmarks">GPU Metal</button>
+                <button class="benchmark-btn" data-method="gpu_vulkan" aria-label="Show GPU Vulkan benchmarks">GPU Vulkan</button>
+                <button class="benchmark-btn" data-method="gpu_amd" aria-label="Show GPU AMD benchmarks">GPU AMD</button>
+                <button class="benchmark-btn" data-method="spiralizer_chord" aria-label="Show Spiralizer Chord benchmarks">Spiralizer Chord</button>
+                <button class="benchmark-btn" data-method="lattice_waterfront" aria-label="Show Lattice Waterfront benchmarks">Lattice Waterfront</button>
+                <button class="benchmark-btn" data-method="multiple_search_tree" aria-label="Show Multiple-Search Tree benchmarks">Multiple-Search Tree</button>
+                <button class="benchmark-btn" data-method="massively_threaded" aria-label="Show Massively-Threaded benchmarks">Massively-Threaded</button>
+                <button class="benchmark-btn" data-method="starr" aria-label="Show STARR benchmarks">STARR</button>
+                <button class="benchmark-btn" data-method="truenorth" aria-label="Show TrueNorth benchmarks">TrueNorth</button>
+                <button class="benchmark-btn" data-method="loihi" aria-label="Show Loihi benchmarks">Loihi</button>
+                <button class="benchmark-btn" data-method="brainchips" aria-label="Show BrainChips benchmarks">BrainChips</button>
+                <button class="benchmark-btn" data-method="racetrack" aria-label="Show Racetrack benchmarks">Racetrack</button>
+                <button class="benchmark-btn" data-method="pcm" aria-label="Show PCM benchmarks">PCM</button>
+                <button class="benchmark-btn" data-method="lyric" aria-label="Show Lyric benchmarks">Lyric</button>
+                <button class="benchmark-btn" data-method="hw_bayesian" aria-label="Show HW Bayesian benchmarks">HW Bayesian</button>
+                <button class="benchmark-btn" data-method="semantic_lexo_bs" aria-label="Show Semantic Lexo BS benchmarks">Semantic Lexo BS</button>
+                <button class="benchmark-btn" data-method="kernelized_sps_bs" aria-label="Show Kernelized SPS BS benchmarks">Kernelized SPS BS</button>
                 <button class="benchmark-btn" data-method="distributed_dd" aria-label="Show Distributed DD benchmarks">Distributed DD</button>
                 <button class="benchmark-btn" data-method="quantum_slam" aria-label="Show Quantum SLAM benchmarks">Quantum SLAM</button>
                 <button class="benchmark-btn" data-method="parallel_quantum_slam" aria-label="Show Parallel Quantum SLAM benchmarks">Parallel Quantum SLAM</button>

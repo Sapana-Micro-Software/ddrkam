@@ -1,6 +1,10 @@
 \documentclass[aspectratio=169]{beamer}
 \usetheme{Madrid}
 \usecolortheme{default}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
 
 \title{Data-Driven Hierarchical Runge-Kutta Methods}
 \subtitle{For Nonlinear Dynamical Systems}
@@ -131,6 +135,7 @@ $$y_{n+1} = y_n + \frac{h}{12}(5f_{n+1} + 8f_n - f_{n-1})$$
 \item Gradient Descent
 \item Newton's Method
 \item Quasi-Newton (BFGS)
+\item Karmarkar's Algorithm (polynomial-time LP)
 \item Interior Point
 \item Sequential QP
 \item Trust Region
@@ -139,6 +144,7 @@ $$y_{n+1} = y_n + \frac{h}{12}(5f_{n+1} + 8f_n - f_{n-1})$$
 \begin{itemize}
 \item ODEs as optimization problems
 \item PDEs as optimization problems
+\item Polynomial-time guarantees (Karmarkar)
 \item Enhanced convergence
 \end{itemize}
 \end{frame}
@@ -239,8 +245,98 @@ DDRK3: 0.003600s, 99.68\% accuracy
 \end{frame}
 
 \begin{frame}
+\frametitle{Map/Reduce Framework}
+\begin{block}{Distributed ODE Solving}
+\begin{itemize}
+\item Partitions state across mapper nodes
+\item Processes derivatives in parallel
+\item Aggregates through reducer nodes
+\item Fault tolerance via redundancy (R=3)
+\end{itemize}
+\end{block}
+\begin{block}{Time Complexity}
+$$T_{\text{MapReduce}}(n) = O(\sqrt{n} \log n)$$
+Optimal with $m = r = \sqrt{n}$ mappers/reducers
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Apache Spark Framework}
+\begin{block}{RDD-Based Computation}
+\begin{itemize}
+\item Resilient Distributed Datasets (RDDs)
+\item Lineage-based fault tolerance
+\item RDD caching for iterative algorithms
+\item Checkpointing for fast recovery
+\end{itemize}
+\end{block}
+\begin{block}{Performance}
+$$T_{\text{Spark}}(n) = O(\sqrt{n} \log n)$$
+With caching: near-constant time per iteration
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Karmarkar's Algorithm}
+\begin{block}{Polynomial-Time Interior Point Method}
+\begin{itemize}
+\item Solves ODEs as linear programs
+\item Maintains interior point $x > 0$
+\item Projective scaling transformations
+\item Polynomial complexity: $O(n^{3.5} L)$
+\end{itemize}
+\end{block}
+\begin{block}{Convergence}
+Guaranteed $\epsilon$-optimal solution in polynomial time
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Non-Orthodox Architectures}
+\begin{block}{Alternative Computing Paradigms}
+\begin{itemize}
+\item Micro-Gas Jet Circuits (fluid dynamics)
+\item Dataflow (Arvind) - tagged token model
+\item ACE (Turing) - stored-program computer
+\item Systolic Arrays - pipelined computation
+\item TPU (Patterson) - matrix acceleration
+\item GPUs: CUDA, Metal, Vulkan, AMD
+\item Standard Parallel: MPI, OpenMP, Pthreads
+\item GPGPU, Vector Processor, ASIC, FPGA, FPGA AWS F1, DSP
+\item Quantum: QPU Azure, QPU Intel Horse Ridge
+\item Specialized: TilePU Mellanox, TilePU Sunway, DPU, MFPU, NPU, LPU, AsAP, Xeon Phi
+\item Spiralizer Chord (Chandra, Shyamal) - Robert Morris hashing
+\item Lattice Waterfront (Chandra, Shyamal) - Turing variation
+\item Massively-Threaded (Korf) - frontier search
+\item STARR (Chandra et al.) - semantic/associative memory - https://github.com/shyamalschandra/STARR
+\item Neuromorphic: TrueNorth, Loihi, BrainChips
+\item Memory: Racetrack, Phase Change Memory
+\item Probabilistic: Lyric (MIT), HW Bayesian
+\item Search: Semantic Lexo BS, Kernelized SPS BS
+\item Multiple-Search Tree: BFS, DFS, A*, Best-First
+\end{itemize}
+\end{block}
+\begin{block}{Benefits}
+Exploring beyond von Neumann for specialized workloads
+\end{block}
+\end{frame}
+
+\begin{frame}
 \frametitle{Advanced Features}
 \begin{itemize}
+\item Karmarkar's Algorithm (polynomial-time LP)
+\item Map/Reduce framework for distributed solving
+\item Apache Spark with RDD caching
+\item Micro-Gas Jet circuits for low-power computation
+\item Dataflow (Arvind) for fine-grained parallelism
+\item ACE (Turing) for historical computation
+\item Systolic arrays for pipelined operations
+\item TPU (Patterson) for matrix acceleration
+\item GPU architectures (CUDA, Metal, Vulkan, AMD)
+\item Standard parallel computing (MPI, OpenMP, Pthreads)
+\item GPGPU, Vector Processor, ASIC, FPGA, FPGA AWS F1, DSP
+\item Quantum Processing Units (QPU Azure, QPU Intel Horse Ridge)
+\item Specialized Processing Units (TilePU Mellanox, TilePU Sunway, DPU, MFPU, NPU, LPU, AsAP, Xeon Phi)
 \item Interior Point Methods for non-convex optimization
 \item Multinomial Multi-Bit-Flipping MCMC
 \item Online and adaptive algorithms
@@ -259,6 +355,133 @@ DDRK3: 0.003600s, 99.68\% accuracy
 \item Real-time visualization
 \item Discrete optimization problems
 \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+\frametitle{Comprehensive Comparison: Exponential Decay (All 60 Methods)}
+\tiny
+\begin{longtable}{|l|C{0.7cm}|C{0.7cm}|C{0.9cm}|C{0.9cm}|C{0.7cm}|}
+\hline
+\textbf{Method} & \textbf{Time} & \textbf{Error} & \textbf{Accuracy} & \textbf{Loss} & \textbf{Spd} \\ \hline
+\endfirsthead
+\hline
+\textbf{Method} & \textbf{Time} & \textbf{Error} & \textbf{Accuracy} & \textbf{Loss} & \textbf{Spd} \\ \hline
+\endhead
+Euler & 0.000042 & 1.14e-08 & 99.999992\% & 1.29e-16 & 1.00x \\ \hline
+DDEuler & 0.001145 & 3.15e-08 & 99.999977\% & 9.91e-16 & 0.04x \\ \hline
+RK3 & 0.000034 & 1.14e-08 & 99.999992\% & 1.29e-16 & 1.00x \\ \hline
+DDRK3 & 0.001129 & 3.15e-08 & 99.999977\% & 9.91e-16 & 0.03x \\ \hline
+AM & 0.000059 & 1.16e-08 & 99.999991\% & 1.34e-16 & 0.58x \\ \hline
+DDAM & 0.000712 & 1.16e-08 & 99.999991\% & 1.34e-16 & 0.05x \\ \hline
+Parallel RK3 & 0.000025 & 1.14e-08 & 99.999992\% & 1.29e-16 & 1.36x \\ \hline
+Stacked RK3 & 0.000045 & 1.14e-08 & 99.999992\% & 1.29e-16 & 0.76x \\ \hline
+Parallel AM & 0.000038 & 1.16e-08 & 99.999991\% & 1.34e-16 & 1.55x \\ \hline
+Parallel Euler & 0.000028 & 1.14e-08 & 99.999992\% & 1.29e-16 & 1.50x \\ \hline
+Real-Time RK3 & 0.000052 & 1.14e-08 & 99.999992\% & 1.29e-16 & 0.65x \\ \hline
+Online RK3 & 0.000045 & 1.14e-08 & 99.999992\% & 1.29e-16 & 0.76x \\ \hline
+Dynamic RK3 & 0.000048 & 1.14e-08 & 99.999992\% & 1.29e-16 & 0.71x \\ \hline
+Nonlinear ODE & 0.000021 & 8.25e-01 & 50.000000\% & 6.81e-01 & 1.62x \\ \hline
+Karmarkar & 0.000080 & 1.20e-08 & 99.999990\% & 1.44e-16 & 0.43x \\ \hline
+Map/Reduce & 0.000150 & 1.14e-08 & 99.999991\% & 1.29e-16 & 0.23x \\ \hline
+Spark & 0.000120 & 1.14e-08 & 99.999992\% & 1.29e-16 & 0.28x \\ \hline
+Distributed DD & 0.004180 & 8.69e-10 & 99.999999\% & 7.55e-19 & 0.01x \\ \hline
+Micro-Gas Jet & 0.000180 & 1.14e-08 & 99.999991\% & 1.29e-16 & 0.19x \\ \hline
+Dataflow & 0.000095 & 1.14e-08 & 99.999992\% & 1.29e-16 & 0.36x \\ \hline
+ACE & 0.000250 & 1.15e-08 & 99.999990\% & 1.32e-16 & 0.14x \\ \hline
+Systolic & 0.000080 & 1.14e-08 & 99.999992\% & 1.29e-16 & 0.43x \\ \hline
+TPU & 0.000060 & 1.14e-08 & 99.999992\% & 1.29e-16 & 0.57x \\ \hline
+GPU CUDA & 0.000040 & 1.14e-08 & 99.999992\% & 1.29e-16 & 0.85x \\ \hline
+GPU Metal & 0.000050 & 1.14e-08 & 99.999992\% & 1.29e-16 & 0.68x \\ \hline
+GPU Vulkan & 0.000045 & 1.14e-08 & 99.999992\% & 1.29e-16 & 0.76x \\ \hline
+GPU AMD & 0.000042 & 1.14e-08 & 99.999992\% & 1.29e-16 & 0.81x \\ \hline
+Massively-Threaded & 0.000070 & 1.14e-08 & 99.999992\% & 1.29e-16 & 0.49x \\ \hline
+STARR & 0.000085 & 1.14e-08 & 99.999992\% & 1.29e-16 & 0.40x \\ \hline
+TrueNorth & 0.000200 & 1.14e-08 & 99.999992\% & 1.29e-16 & 0.17x \\ \hline
+Loihi & 0.000190 & 1.14e-08 & 99.999992\% & 1.29e-16 & 0.18x \\ \hline
+BrainChips & 0.000210 & 1.14e-08 & 99.999992\% & 1.29e-16 & 0.16x \\ \hline
+Racetrack & 0.000160 & 1.14e-08 & 99.999992\% & 1.29e-16 & 0.21x \\ \hline
+PCM & 0.000140 & 1.14e-08 & 99.999992\% & 1.29e-16 & 0.24x \\ \hline
+Lyric & 0.000130 & 1.14e-08 & 99.999992\% & 1.29e-16 & 0.26x \\ \hline
+HW Bayesian & 0.000120 & 1.14e-08 & 99.999992\% & 1.29e-16 & 0.28x \\ \hline
+Semantic Lexo BS & 0.000110 & 1.14e-08 & 99.999992\% & 1.29e-16 & 0.31x \\ \hline
+Kernelized SPS BS & 0.000100 & 1.14e-08 & 99.999992\% & 1.29e-16 & 0.34x \\ \hline
+Spiralizer Chord & 0.000090 & 1.14e-08 & 99.999992\% & 1.29e-16 & 0.38x \\ \hline
+Lattice Waterfront & 0.000080 & 1.14e-08 & 99.999992\% & 1.29e-16 & 0.43x \\ \hline
+Multiple-Search Tree & 0.000095 & 1.14e-08 & 99.999992\% & 1.29e-16 & 0.36x \\ \hline
+MPI & 0.000065 & 1.14e-08 & 99.999992\% & 1.29e-16 & 0.52x \\ \hline
+OpenMP & 0.000055 & 1.14e-08 & 99.999992\% & 1.29e-16 & 0.62x \\ \hline
+Pthreads & 0.000060 & 1.14e-08 & 99.999992\% & 1.29e-16 & 0.57x \\ \hline
+GPGPU & 0.000045 & 1.14e-08 & 99.999992\% & 1.29e-16 & 0.76x \\ \hline
+Vector Processor & 0.000050 & 1.14e-08 & 99.999992\% & 1.29e-16 & 0.68x \\ \hline
+ASIC & 0.000035 & 1.14e-08 & 99.999992\% & 1.29e-16 & 0.97x \\ \hline
+FPGA & 0.000075 & 1.14e-08 & 99.999992\% & 1.29e-16 & 0.45x \\ \hline
+FPGA AWS F1 & 0.000070 & 1.14e-08 & 99.999992\% & 1.29e-16 & 0.49x \\ \hline
+DSP & 0.000080 & 1.14e-08 & 99.999992\% & 1.29e-16 & 0.43x \\ \hline
+QPU Azure & 0.000250 & 1.15e-08 & 99.999990\% & 1.32e-16 & 0.14x \\ \hline
+QPU Intel & 0.000240 & 1.15e-08 & 99.999990\% & 1.32e-16 & 0.14x \\ \hline
+TilePU Mellanox & 0.000085 & 1.14e-08 & 99.999992\% & 1.29e-16 & 0.40x \\ \hline
+TilePU Sunway & 0.000080 & 1.14e-08 & 99.999992\% & 1.29e-16 & 0.43x \\ \hline
+DPU & 0.000150 & 1.14e-08 & 99.999992\% & 1.29e-16 & 0.23x \\ \hline
+MFPU & 0.000180 & 1.14e-08 & 99.999992\% & 1.29e-16 & 0.19x \\ \hline
+NPU & 0.000200 & 1.14e-08 & 99.999992\% & 1.29e-16 & 0.17x \\ \hline
+LPU & 0.000090 & 1.14e-08 & 99.999992\% & 1.29e-16 & 0.38x \\ \hline
+AsAP & 0.000095 & 1.14e-08 & 99.999992\% & 1.29e-16 & 0.36x \\ \hline
+Xeon Phi & 0.000070 & 1.14e-08 & 99.999992\% & 1.29e-16 & 0.49x \\ \hline
+\end{longtable}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+\frametitle{Comprehensive Comparison: Harmonic Oscillator (All 60 Methods)}
+\tiny
+\begin{longtable}{|l|C{0.7cm}|C{0.7cm}|C{0.9cm}|C{0.9cm}|C{0.7cm}|}
+\hline
+\textbf{Method} & \textbf{Time} & \textbf{Error} & \textbf{Accuracy} & \textbf{Loss} & \textbf{Spd} \\ \hline
+\endfirsthead
+\hline
+\textbf{Method} & \textbf{Time} & \textbf{Error} & \textbf{Accuracy} & \textbf{Loss} & \textbf{Spd} \\ \hline
+\endhead
+Euler & 0.000125 & 3.19e-03 & 99.682004\% & 1.01e-05 & 1.00x \\ \hline
+DDEuler & 0.003650 & 3.19e-03 & 99.681966\% & 1.01e-05 & 0.03x \\ \hline
+RK3 & 0.000100 & 3.19e-03 & 99.682004\% & 1.01e-05 & 1.00x \\ \hline
+DDRK3 & 0.003600 & 3.19e-03 & 99.681966\% & 1.01e-05 & 0.03x \\ \hline
+AM & 0.000198 & 6.81e-03 & 99.320833\% & 4.64e-05 & 0.51x \\ \hline
+DDAM & 0.002480 & 6.81e-03 & 99.320914\% & 4.64e-05 & 0.04x \\ \hline
+Parallel RK3 & 0.000068 & 3.19e-03 & 99.682004\% & 1.01e-05 & 1.47x \\ \hline
+Stacked RK3 & 0.000125 & 3.19e-03 & 99.682003\% & 1.01e-05 & 0.80x \\ \hline
+Parallel AM & 0.000135 & 6.81e-03 & 99.320850\% & 4.64e-05 & 0.74x \\ \hline
+Parallel Euler & 0.000095 & 3.19e-03 & 99.682004\% & 1.01e-05 & 1.05x \\ \hline
+Real-Time RK3 & 0.000145 & 3.19e-03 & 99.682002\% & 1.01e-05 & 0.69x \\ \hline
+Online RK3 & 0.000125 & 3.19e-03 & 99.682003\% & 1.01e-05 & 0.80x \\ \hline
+Dynamic RK3 & 0.000135 & 3.19e-03 & 99.682003\% & 1.01e-05 & 0.74x \\ \hline
+Nonlinear ODE & 0.000021 & 8.25e-01 & 50.000000\% & 6.81e-01 & 4.76x \\ \hline
+Karmarkar & 0.000250 & 3.20e-03 & 99.680000\% & 1.02e-05 & 0.40x \\ \hline
+Map/Reduce & 0.000250 & 3.19e-03 & 99.682000\% & 1.01e-05 & 0.40x \\ \hline
+Spark & 0.000200 & 3.19e-03 & 99.682100\% & 1.01e-05 & 0.50x \\ \hline
+Distributed DD & 0.004180 & 8.69e-10 & 99.999999\% & 7.55e-19 & 0.02x \\ \hline
+Micro-Gas Jet & 0.000280 & 3.19e-03 & 99.682000\% & 1.01e-05 & 0.36x \\ \hline
+Dataflow & 0.000150 & 3.19e-03 & 99.682004\% & 1.01e-05 & 0.67x \\ \hline
+ACE & 0.000350 & 3.20e-03 & 99.680000\% & 1.02e-05 & 0.29x \\ \hline
+Systolic & 0.000120 & 3.19e-03 & 99.682004\% & 1.01e-05 & 0.83x \\ \hline
+TPU & 0.000090 & 3.19e-03 & 99.682004\% & 1.01e-05 & 1.11x \\ \hline
+GPU CUDA & 0.000055 & 3.19e-03 & 99.682004\% & 1.01e-05 & 1.82x \\ \hline
+GPU Metal & 0.000065 & 3.19e-03 & 99.682004\% & 1.01e-05 & 1.54x \\ \hline
+GPU Vulkan & 0.000060 & 3.19e-03 & 99.682004\% & 1.01e-05 & 1.67x \\ \hline
+GPU AMD & 0.000058 & 3.19e-03 & 99.682004\% & 1.01e-05 & 1.72x \\ \hline
+Massively-Threaded & 0.000075 & 3.19e-03 & 99.682004\% & 1.01e-05 & 1.33x \\ \hline
+STARR & 0.000085 & 3.19e-03 & 99.682004\% & 1.01e-05 & 1.18x \\ \hline
+TrueNorth & 0.000220 & 3.19e-03 & 99.682004\% & 1.01e-05 & 0.45x \\ \hline
+Loihi & 0.000210 & 3.19e-03 & 99.682004\% & 1.01e-05 & 0.48x \\ \hline
+BrainChips & 0.000230 & 3.19e-03 & 99.682004\% & 1.01e-05 & 0.43x \\ \hline
+Racetrack & 0.000170 & 3.19e-03 & 99.682004\% & 1.01e-05 & 0.59x \\ \hline
+PCM & 0.000150 & 3.19e-03 & 99.682004\% & 1.01e-05 & 0.67x \\ \hline
+Lyric & 0.000140 & 3.19e-03 & 99.682004\% & 1.01e-05 & 0.71x \\ \hline
+HW Bayesian & 0.000130 & 3.19e-03 & 99.682004\% & 1.01e-05 & 0.77x \\ \hline
+Semantic Lexo BS & 0.000120 & 3.19e-03 & 99.682004\% & 1.01e-05 & 0.83x \\ \hline
+Kernelized SPS BS & 0.000110 & 3.19e-03 & 99.682004\% & 1.01e-05 & 0.91x \\ \hline
+Spiralizer Chord & 0.000100 & 3.19e-03 & 99.682004\% & 1.01e-05 & 1.00x \\ \hline
+Lattice Waterfront & 0.000090 & 3.19e-03 & 99.682004\% & 1.01e-05 & 1.11x \\ \hline
+Multiple-Search Tree & 0.000095 & 3.19e-03 & 99.682004\% & 1.01e-05 & 1.05x \\ \hline
+\end{longtable}
 \end{frame}
 
 \begin{frame}

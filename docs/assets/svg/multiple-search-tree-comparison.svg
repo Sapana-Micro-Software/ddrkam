@@ -1,0 +1,154 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 750" style="background: #1e293b; border-radius: 0.5rem;">
+  <defs>
+    <linearGradient id="mstGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#84cc16;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#65a30d;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="rk3Grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#10b981;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#059669;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="karmarkarGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#14b8a6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0d9488;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="parallelGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#06b6d4;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0891b2;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Title -->
+  <text x="500" y="40" text-anchor="middle" font-size="26" font-weight="700" fill="#f1f5f9" font-family="Inter, sans-serif">
+    Multiple-Search Representation Tree Algorithm
+  </text>
+  <text x="500" y="68" text-anchor="middle" font-size="14" fill="#94a3b8" font-family="Inter, sans-serif">
+    Search-Based Pathfinding vs Other Solvers
+  </text>
+  
+  <!-- Chart area -->
+  <g transform="translate(120, 120)">
+    <!-- Y-axis -->
+    <line x1="0" y1="0" x2="0" y2="450" stroke="#cbd5e1" stroke-width="2"/>
+    <!-- X-axis -->
+    <line x1="0" y1="450" x2="800" y2="450" stroke="#cbd5e1" stroke-width="2"/>
+    
+    <!-- Y-axis label -->
+    <text x="-225" y="15" text-anchor="middle" font-size="14" fill="#cbd5e1" transform="rotate(-90)" font-family="Inter, sans-serif">
+      Performance Metric (Normalized)
+    </text>
+    
+    <!-- Grid lines -->
+    <line x1="0" y1="90" x2="800" y2="90" stroke="#334155" stroke-width="1" stroke-dasharray="4,4" opacity="0.5"/>
+    <line x1="0" y1="180" x2="800" y2="180" stroke="#334155" stroke-width="1" stroke-dasharray="4,4" opacity="0.5"/>
+    <line x1="0" y1="270" x2="800" y2="270" stroke="#334155" stroke-width="1" stroke-dasharray="4,4" opacity="0.5"/>
+    <line x1="0" y1="360" x2="800" y2="360" stroke="#334155" stroke-width="1" stroke-dasharray="4,4" opacity="0.5"/>
+    
+    <!-- Speed comparison -->
+    <g id="speed-comparison">
+      <text x="400" y="-20" text-anchor="middle" font-size="16" font-weight="600" fill="#f1f5f9" font-family="Inter, sans-serif">Speed Comparison (Lower is Better)</text>
+      
+      <!-- RK3: 0.000034s -->
+      <rect x="50" y="90" width="120" height="360" fill="url(#rk3Grad)" rx="4" opacity="0.9"/>
+      <text x="110" y="75" text-anchor="middle" font-size="12" fill="#f1f5f9" font-weight="600" font-family="Inter, sans-serif">RK3</text>
+      <text x="110" y="465" text-anchor="middle" font-size="10" fill="#94a3b8" font-family="Inter, sans-serif">0.034ms</text>
+      
+      <!-- Multiple-Search Tree: 0.000095s -->
+      <rect x="200" y="200" width="120" height="250" fill="url(#mstGrad)" rx="4" opacity="0.9"/>
+      <text x="260" y="185" text-anchor="middle" font-size="12" fill="#f1f5f9" font-weight="600" font-family="Inter, sans-serif">M-S Tree</text>
+      <text x="260" y="465" text-anchor="middle" font-size="10" fill="#94a3b8" font-family="Inter, sans-serif">0.095ms</text>
+      
+      <!-- Karmarkar: 0.000080s -->
+      <rect x="350" y="180" width="120" height="270" fill="url(#karmarkarGrad)" rx="4" opacity="0.9"/>
+      <text x="410" y="165" text-anchor="middle" font-size="12" fill="#f1f5f9" font-weight="600" font-family="Inter, sans-serif">Karmarkar</text>
+      <text x="410" y="465" text-anchor="middle" font-size="10" fill="#94a3b8" font-family="Inter, sans-serif">0.080ms</text>
+      
+      <!-- Parallel RK3: 0.000025s -->
+      <rect x="500" y="45" width="120" height="405" fill="url(#parallelGrad)" rx="4" opacity="0.9"/>
+      <text x="560" y="30" text-anchor="middle" font-size="12" fill="#f1f5f9" font-weight="600" font-family="Inter, sans-serif">Parallel RK3</text>
+      <text x="560" y="465" text-anchor="middle" font-size="10" fill="#94a3b8" font-family="Inter, sans-serif">0.025ms</text>
+    </g>
+    
+    <!-- Accuracy comparison -->
+    <g id="accuracy-comparison" transform="translate(0, 500)">
+      <text x="400" y="-20" text-anchor="middle" font-size="16" font-weight="600" fill="#f1f5f9" font-family="Inter, sans-serif">Accuracy Comparison (Higher is Better)</text>
+      
+      <!-- All methods have similar high accuracy -->
+      <rect x="50" y="-400" width="120" height="400" fill="url(#rk3Grad)" rx="4" opacity="0.9"/>
+      <text x="110" y="-415" text-anchor="middle" font-size="12" fill="#f1f5f9" font-weight="600" font-family="Inter, sans-serif">RK3</text>
+      <text x="110" y="15" text-anchor="middle" font-size="10" fill="#94a3b8" font-family="Inter, sans-serif">99.999992%</text>
+      
+      <rect x="200" y="-400" width="120" height="400" fill="url(#mstGrad)" rx="4" opacity="0.9"/>
+      <text x="260" y="-415" text-anchor="middle" font-size="12" fill="#f1f5f9" font-weight="600" font-family="Inter, sans-serif">M-S Tree</text>
+      <text x="260" y="15" text-anchor="middle" font-size="10" fill="#94a3b8" font-family="Inter, sans-serif">99.999992%</text>
+      
+      <rect x="350" y="-398" width="120" height="398" fill="url(#karmarkarGrad)" rx="4" opacity="0.9"/>
+      <text x="410" y="-413" text-anchor="middle" font-size="12" fill="#f1f5f9" font-weight="600" font-family="Inter, sans-serif">Karmarkar</text>
+      <text x="410" y="15" text-anchor="middle" font-size="10" fill="#94a3b8" font-family="Inter, sans-serif">99.999990%</text>
+      
+      <rect x="500" y="-400" width="120" height="400" fill="url(#parallelGrad)" rx="4" opacity="0.9"/>
+      <text x="560" y="-415" text-anchor="middle" font-size="12" fill="#f1f5f9" font-weight="600" font-family="Inter, sans-serif">Parallel RK3</text>
+      <text x="560" y="15" text-anchor="middle" font-size="10" fill="#94a3b8" font-family="Inter, sans-serif">99.999992%</text>
+    </g>
+    
+    <!-- Search Strategies Diagram -->
+    <g transform="translate(0, 520)">
+      <text x="400" y="-10" text-anchor="middle" font-size="16" font-weight="600" fill="#f1f5f9" font-family="Inter, sans-serif">Search Strategies</text>
+      
+      <!-- BFS -->
+      <circle cx="100" cy="30" r="25" fill="url(#mstGrad)" opacity="0.8"/>
+      <text x="100" y="36" text-anchor="middle" font-size="11" fill="#1e293b" font-weight="600" font-family="Inter, sans-serif">BFS</text>
+      <text x="100" y="70" text-anchor="middle" font-size="10" fill="#94a3b8" font-family="Inter, sans-serif">Breadth-First</text>
+      
+      <!-- DFS -->
+      <circle cx="250" cy="30" r="25" fill="url(#mstGrad)" opacity="0.8"/>
+      <text x="250" y="36" text-anchor="middle" font-size="11" fill="#1e293b" font-weight="600" font-family="Inter, sans-serif">DFS</text>
+      <text x="250" y="70" text-anchor="middle" font-size="10" fill="#94a3b8" font-family="Inter, sans-serif">Depth-First</text>
+      
+      <!-- A* -->
+      <circle cx="400" cy="30" r="25" fill="url(#mstGrad)" opacity="0.8"/>
+      <text x="400" y="36" text-anchor="middle" font-size="11" fill="#1e293b" font-weight="600" font-family="Inter, sans-serif">A*</text>
+      <text x="400" y="70" text-anchor="middle" font-size="10" fill="#94a3b8" font-family="Inter, sans-serif">Optimal Path</text>
+      
+      <!-- Best-First -->
+      <circle cx="550" cy="30" r="25" fill="url(#mstGrad)" opacity="0.8"/>
+      <text x="550" y="36" text-anchor="middle" font-size="11" fill="#1e293b" font-weight="600" font-family="Inter, sans-serif">Best</text>
+      <text x="550" y="70" text-anchor="middle" font-size="10" fill="#94a3b8" font-family="Inter, sans-serif">Greedy</text>
+      
+      <!-- Connecting lines -->
+      <line x1="125" y1="30" x2="225" y2="30" stroke="#84cc16" stroke-width="2" opacity="0.5"/>
+      <line x1="275" y1="30" x2="375" y2="30" stroke="#84cc16" stroke-width="2" opacity="0.5"/>
+      <line x1="425" y1="30" x2="525" y2="30" stroke="#84cc16" stroke-width="2" opacity="0.5"/>
+    </g>
+    
+    <!-- Legend -->
+    <g transform="translate(0, 600)">
+      <rect x="0" y="0" width="15" height="15" fill="url(#mstGrad)" rx="2"/>
+      <text x="25" y="12" font-size="12" fill="#cbd5e1" font-family="Inter, sans-serif">Multiple-Search Tree - BFS, DFS, A*, Best-First</text>
+      
+      <rect x="0" y="25" width="15" height="15" fill="url(#rk3Grad)" rx="2"/>
+      <text x="25" y="37" font-size="12" fill="#cbd5e1" font-family="Inter, sans-serif">RK3 - Standard Runge-Kutta 3rd Order</text>
+      
+      <rect x="400" y="0" width="15" height="15" fill="url(#karmarkarGrad)" rx="2"/>
+      <text x="425" y="12" font-size="12" fill="#cbd5e1" font-family="Inter, sans-serif">Karmarkar - Polynomial-time LP</text>
+      
+      <rect x="400" y="25" width="15" height="15" fill="url(#parallelGrad)" rx="2"/>
+      <text x="425" y="37" font-size="12" fill="#cbd5e1" font-family="Inter, sans-serif">Parallel RK3 - Multi-threaded</text>
+    </g>
+  </g>
+  
+  <!-- Key Features Box -->
+  <g transform="translate(50, 650)">
+    <rect x="0" y="0" width="900" height="80" fill="#0f172a" rx="8" opacity="0.8"/>
+    <text x="450" y="25" text-anchor="middle" font-size="14" font-weight="600" fill="#84cc16" font-family="Inter, sans-serif">Multiple-Search Representation Tree Algorithm Key Features</text>
+    <text x="50" y="50" font-size="11" fill="#cbd5e1" font-family="Inter, sans-serif">✓ Multiple search strategies (BFS, DFS, A*, Best-First) run in parallel</text>
+    <text x="50" y="70" font-size="11" fill="#cbd5e1" font-family="Inter, sans-serif">✓ Tree and graph state representations</text>
+    <text x="450" y="50" font-size="11" fill="#cbd5e1" font-family="Inter, sans-serif">✓ Optimal pathfinding (A* with f(n) = g(n) + h(n))</text>
+    <text x="450" y="70" font-size="11" fill="#cbd5e1" font-family="Inter, sans-serif">✓ Best for: Pathfinding, complex state space exploration</text>
+  </g>
+  
+  <!-- Footer -->
+  <text x="500" y="745" text-anchor="middle" font-size="11" fill="#64748b" font-style="italic" font-family="Inter, sans-serif">
+    DDRKAM Framework • Copyright © 2025, Shyamal Suhana Chandra
+  </text>
+</svg>

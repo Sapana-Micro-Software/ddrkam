@@ -12,6 +12,8 @@ DDRKAM is a comprehensive framework for solving differential equations (both **O
 - **Real-Time Solvers**: Streaming data processing for RK3 and Adams methods
 - **Stochastic Solvers**: Noise injection and Brownian motion support
 - **Data-Driven Control**: Adaptive step size and method selection
+- **Karmarkar's Algorithm**: Polynomial-time interior point method for linear programming and constrained optimization
+- **Multiple-Search Representation Tree Algorithm**: Advanced search-based solver using multiple parallel search strategies (BFS, DFS, A*, Best-First) for optimal pathfinding
 
 ## Features
 
@@ -75,7 +77,7 @@ initialState:@[@1.0, @1.0] stepSize:0.01 params:NULL];
 
 ## Method Comparison
 
-Compare all four methods (RK3, DDRK3, AM, DDAM):
+Compare all methods including RK3, DDRK3, AM, DDAM, Karmarkar's Algorithm, and more:
 
 ```c
 #include "comparison.h"
@@ -85,7 +87,7 @@ compare_methods(my_ode, t0, t_end, y0, n, h, params, exact, &results);
 print_comparison_results(&results);
 ```
 
-See `docs/COMPARISON.md` for detailed comparison guide.
+See `docs/COMPARISON.md` for detailed comparison guide with SVG charts and visualizations.
 
 ## PDE Solving
 
@@ -112,6 +114,8 @@ See `docs/PDE_GUIDE.md` for complete PDE documentation.
 - Reference Manual: `docs/reference_manual.tex`
 - DDMCMC Guide: `docs/DDMCMC_README.md`
 - Comparison Guide: `docs/COMPARISON.md`
+- Karmarkar's Algorithm Guide: `docs/KARMARKAR_COMPARISON.md`
+- Advanced Architectures Guide: `docs/ADVANCED_ARCHITECTURES.md` (includes Multiple-Search Representation Tree Algorithm)
 - PDE Guide: `docs/PDE_GUIDE.md`
 - Real-Time & Stochastic Guide: `docs/REALTIME_STOCHASTIC.md`
 

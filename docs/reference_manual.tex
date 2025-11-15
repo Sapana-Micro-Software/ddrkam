@@ -1,8 +1,13 @@
 \documentclass[12pt]{article}
+\usepackage[landscape,margin=0.5in]{geometry}
 \usepackage{amsmath}
 \usepackage{listings}
 \usepackage{xcolor}
 \usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
 
 \title{DDRKAM Reference Manual\\Data-Driven Runge-Kutta and Adams Methods}
 \author{Shyamal Suhana Chandra}
@@ -258,6 +263,32 @@ double dynamic_rk_step(DynamicRKSolver* solver, ODEFunction f,
 
 \section{Nonlinear Programming Solvers}
 
+\subsection{Karmarkar's Algorithm}
+
+Karmarkar's Algorithm is a polynomial-time interior point method for linear programming. It provides guaranteed polynomial-time convergence for linear programming problems.
+
+\subsubsection{karmarkar\_solver\_init}
+
+Initialize Karmarkar solver.
+
+\begin{lstlisting}
+int karmarkar_solver_init(KarmarkarSolver* solver, size_t state_dim,
+                          ADAMSolverType type, double alpha, double beta,
+                          double mu, double epsilon, const double* c,
+                          const double** A, const double* b,
+                          size_t num_constraints);
+\end{lstlisting}
+
+\subsubsection{karmarkar\_ode\_solve}
+
+Solve ODE using Karmarkar's algorithm.
+
+\begin{lstlisting}
+int karmarkar_ode_solve(KarmarkarSolver* solver, ODEFunction f,
+                        double t0, double t_end, const double* y0,
+                        void* params, double* y_out);
+\end{lstlisting}
+
 \subsection{Nonlinear ODE Solver}
 
 \subsubsection{nonlinear\_ode\_init}
@@ -499,6 +530,388 @@ Hierarchical solver for Objective-C.
 DDRKAMHierarchicalSolver* solver = 
     [[DDRKAMHierarchicalSolver alloc] 
      initWithDimension:3 numLayers:4 hiddenDim:32];
+\end{lstlisting}
+
+\section{Map/Reduce Framework}
+
+\subsection{Overview}
+
+The Map/Reduce framework provides distributed ODE solving on commodity hardware with fault tolerance through redundancy. It partitions the state space across mapper nodes, processes derivatives in parallel, and aggregates results through reducer nodes.
+
+\subsection{API Reference}
+
+\subsubsection{mapreduce\_ode\_init}
+
+Initializes a Map/Reduce ODE solver.
+
+\begin{lstlisting}
+int mapreduce_ode_init(MapReduceODESolver* solver, 
+                       size_t state_dim,
+                       const MapReduceConfig* config);
+\end{lstlisting}
+
+\textbf{Parameters:}
+\begin{itemize}
+\item \texttt{solver}: Pointer to Map/Reduce solver structure
+\item \texttt{state\_dim}: Dimension of the ODE system
+\item \texttt{config}: Configuration structure with mapper/reducer counts, redundancy settings, etc.
+\end{itemize}
+
+\textbf{Returns:} 0 on success, -1 on failure
+
+\subsubsection{mapreduce\_ode\_solve}
+
+Solves an ODE system using Map/Reduce framework.
+
+\begin{lstlisting}
+int mapreduce_ode_solve(MapReduceODESolver* solver,
+                        ODEFunction f,
+                        double t0, double t_end,
+                        const double* y0,
+                        double h, void* params,
+                        double* y_out);
+\end{lstlisting}
+
+\textbf{Parameters:}
+\begin{itemize}
+\item \texttt{solver}: Initialized Map/Reduce solver
+\item \texttt{f}: ODE function pointer
+\item \texttt{t0, t\_end}: Time interval
+\item \texttt{y0}: Initial state
+\item \texttt{h}: Step size
+\item \texttt{params}: User-defined parameters
+\item \texttt{y\_out}: Output state
+\end{itemize}
+
+\textbf{Returns:} 0 on success, -1 on failure
+
+\subsubsection{mapreduce\_estimate\_cost}
+
+Estimates the computational cost for Map/Reduce execution.
+
+\begin{lstlisting}
+double mapreduce_estimate_cost(const MapReduceODESolver* solver,
+                                double* compute_hours,
+                                double* network_cost);
+\end{lstlisting}
+
+\subsection{Example}
+
+\begin{lstlisting}
+#include "mapreduce_solvers.h"
+
+MapReduceODESolver solver;
+MapReduceConfig config = {
+    .num_mappers = 4,
+    .num_reducers = 2,
+    .chunk_size = 100,
+    .enable_redundancy = 1,
+    .redundancy_factor = 3,
+    .use_commodity_hardware = 1,
+    .network_bandwidth = 100.0,
+    .compute_cost_per_hour = 0.10
+};
+
+mapreduce_ode_init(&solver, 1000, &config);
+
+double y0[1000] = {1.0, ...};
+double y_out[1000];
+mapreduce_ode_solve(&solver, my_ode, 0.0, 1.0, y0, 0.01, NULL, y_out);
+
+double cost = mapreduce_estimate_cost(&solver, NULL, NULL);
+mapreduce_ode_free(&solver);
+\end{lstlisting}
+
+\section{Apache Spark Framework}
+
+\subsection{Overview}
+
+The Apache Spark framework provides distributed ODE solving using Resilient Distributed Datasets (RDDs) for fault-tolerant computation. Spark offers superior performance for iterative algorithms through RDD caching and lineage-based recovery.
+
+\subsection{API Reference}
+
+\subsubsection{spark\_ode\_init}
+
+Initializes a Spark ODE solver.
+
+\begin{lstlisting}
+int spark_ode_init(SparkODESolver* solver,
+                   size_t state_dim,
+                   const SparkConfig* config);
+\end{lstlisting}
+
+\textbf{Parameters:}
+\begin{itemize}
+\item \texttt{solver}: Pointer to Spark solver structure
+\item \texttt{state\_dim}: Dimension of the ODE system
+\item \texttt{config}: Configuration structure with executor counts, caching settings, etc.
+\end{itemize}
+
+\textbf{Returns:} 0 on success, -1 on failure
+
+\subsubsection{spark\_ode\_solve}
+
+Solves an ODE system using Spark framework.
+
+\begin{lstlisting}
+int spark_ode_solve(SparkODESolver* solver,
+                    ODEFunction f,
+                    double t0, double t_end,
+                    const double* y0,
+                    double h, void* params,
+                    double* y_out);
+\end{lstlisting}
+
+\textbf{Parameters:}
+\begin{itemize}
+\item \texttt{solver}: Initialized Spark solver
+\item \texttt{f}: ODE function pointer
+\item \texttt{t0, t\_end}: Time interval
+\item \texttt{y0}: Initial state
+\item \texttt{h}: Step size
+\item \texttt{params}: User-defined parameters
+\item \texttt{y\_out}: Output state
+\end{itemize}
+
+\textbf{Returns:} 0 on success, -1 on failure
+
+\subsubsection{spark\_estimate\_cost}
+
+Estimates the computational cost for Spark execution.
+
+\begin{lstlisting}
+double spark_estimate_cost(const SparkODESolver* solver,
+                           double* compute_hours,
+                           double* network_cost,
+                           double* storage_cost);
+\end{lstlisting}
+
+\subsection{Example}
+
+\begin{lstlisting}
+#include "spark_solvers.h"
+
+SparkODESolver solver;
+SparkConfig config = {
+    .num_executors = 4,
+    .cores_per_executor = 2,
+    .memory_per_executor = 2048,
+    .num_partitions = 8,
+    .enable_caching = 1,
+    .enable_checkpointing = 1,
+    .checkpoint_interval = 1.0,
+    .use_commodity_hardware = 1,
+    .network_bandwidth = 100.0,
+    .compute_cost_per_hour = 0.10,
+    .enable_dynamic_allocation = 1
+};
+
+spark_ode_init(&solver, 1000, &config);
+
+double y0[1000] = {1.0, ...};
+double y_out[1000];
+spark_ode_solve(&solver, my_ode, 0.0, 1.0, y0, 0.01, NULL, y_out);
+
+double cost = spark_estimate_cost(&solver, NULL, NULL, NULL);
+spark_ode_free(&solver);
+\end{lstlisting}
+
+\section{Non-Orthodox Architectures}
+
+\subsection{Micro-Gas Jet Circuit}
+
+Micro-gas jet circuits use fluid dynamics for computation. See \texttt{nonorthodox\_architectures.h} for API.
+
+\subsection{Dataflow (Arvind)}
+
+Tagged token dataflow computing for fine-grained parallelism.
+
+\subsection{ACE (Turing)}
+
+Turing's stored-program computer architecture implementation.
+
+\subsection{Systolic Array}
+
+Regular array of processing elements with local communication.
+
+\subsection{TPU (Patterson)}
+
+Google TPU architecture for matrix acceleration.
+
+\subsection{GPU Architectures}
+
+Support for CUDA, Metal, Vulkan, and AMD GPU acceleration.
+
+\subsection{Spiralizer with Chord Algorithm (Chandra, Shyamal)}
+
+Spiralizer architecture combining Chord distributed hash tables with Robert Morris collision hashing (MIT) and spiral traversal patterns.
+
+\textbf{API:}
+\begin{lstlisting}[language=C]
+SpiralizerChordConfig config = {
+    .num_nodes = 256,
+    .finger_table_size = 8,
+    .hash_table_size = 1024,
+    .enable_morris_hashing = 1,
+    .enable_spiral_traversal = 1
+};
+SpiralizerChordSolver solver;
+spiralizer_chord_ode_init(&solver, n, &config);
+spiralizer_chord_ode_solve(&solver, f, t0, t_end, y0, h, params, y_out);
+spiralizer_chord_ode_free(&solver);
+\end{lstlisting}
+
+\subsection{Lattice Architecture (Waterfront variation - Chandra, Shyamal)}
+
+Variation of Turing's Waterfront architecture, presented by USC alum from HP Labs at MIT event online at Strata. Multi-dimensional lattice with Waterfront buffering.
+
+\textbf{API:}
+\begin{lstlisting}[language=C]
+LatticeWaterfrontConfig config = {
+    .lattice_dimensions = 4,
+    .nodes_per_dimension = 16,
+    .waterfront_size = 256,
+    .enable_waterfront_buffering = 1,
+    .enable_lattice_routing = 1
+};
+LatticeWaterfrontSolver solver;
+lattice_waterfront_ode_init(&solver, n, &config);
+lattice_waterfront_ode_solve(&solver, f, t0, t_end, y0, h, params, y_out);
+lattice_waterfront_ode_free(&solver);
+\end{lstlisting}
+
+\subsection{Standard Parallel Computing Architectures}
+
+\textbf{MPI (Message Passing Interface):}
+\begin{lstlisting}[language=C]
+MPIConfig config = {
+    .num_processes = 8,
+    .process_rank = 0,
+    .communication_buffer_size = 1024,
+    .enable_collective_ops = 1
+};
+MPISolver solver;
+mpi_ode_init(&solver, n, &config);
+mpi_ode_solve(&solver, f, t0, t_end, y0, h, params, y_out);
+mpi_ode_free(&solver);
+\end{lstlisting}
+
+\textbf{OpenMP (Open Multi-Processing):}
+\begin{lstlisting}[language=C]
+OpenMPConfig config = {
+    .num_threads = 8,
+    .chunk_size = 64,
+    .schedule_type = 1,  // dynamic
+    .enable_affinity = 1
+};
+OpenMPSolver solver;
+openmp_ode_init(&solver, n, &config);
+openmp_ode_solve(&solver, f, t0, t_end, y0, h, params, y_out);
+openmp_ode_free(&solver);
+\end{lstlisting}
+
+\textbf{Pthreads (POSIX Threads):}
+\begin{lstlisting}[language=C]
+PthreadsConfig config = {
+    .num_threads = 8,
+    .enable_work_stealing = 1,
+    .enable_barrier_sync = 1
+};
+PthreadsSolver solver;
+pthreads_ode_init(&solver, n, &config);
+pthreads_ode_solve(&solver, f, t0, t_end, y0, h, params, y_out);
+pthreads_ode_free(&solver);
+\end{lstlisting}
+
+\subsection{Specialized Hardware Architectures}
+
+\textbf{FPGA AWS F1 (Xilinx UltraScale+):}
+\begin{lstlisting}[language=C]
+FPGAAWSF1Config config = {
+    .num_fpga_devices = 1,
+    .num_logic_cells = 2500000,
+    .num_dsp_slices = 6840,
+    .pcie_bandwidth = 16,  // GB/s
+    .enable_hls_acceleration = 1
+};
+FPGAAWSF1Solver solver;
+fpga_aws_f1_ode_init(&solver, n, &config);
+fpga_aws_f1_ode_solve(&solver, f, t0, t_end, y0, h, params, y_out);
+fpga_aws_f1_ode_free(&solver);
+\end{lstlisting}
+
+\textbf{TilePU Sunway (SW26010):}
+\begin{lstlisting}[language=C]
+TilePUSunwayConfig config = {
+    .num_core_groups = 4,
+    .cores_per_group = 64,
+    .num_management_cores = 4,
+    .enable_dma = 1,
+    .enable_register_communication = 1
+};
+TilePUSunwaySolver solver;
+tilepu_sunway_ode_init(&solver, n, &config);
+tilepu_sunway_ode_solve(&solver, f, t0, t_end, y0, h, params, y_out);
+tilepu_sunway_ode_free(&solver);
+\end{lstlisting}
+
+\textbf{Coprocessor Intel Xeon Phi:}
+\begin{lstlisting}[language=C]
+CoprocessorXeonPhiConfig config = {
+    .num_cores = 72,
+    .num_threads_per_core = 4,
+    .high_bandwidth_memory = 16,  // GB
+    .enable_wide_vector = 1,  // 512-bit
+    .enable_mic_architecture = 1
+};
+CoprocessorXeonPhiSolver solver;
+coprocessor_xeon_phi_ode_init(&solver, n, &config);
+coprocessor_xeon_phi_ode_solve(&solver, f, t0, t_end, y0, h, params, y_out);
+coprocessor_xeon_phi_ode_free(&solver);
+\end{lstlisting}
+
+\subsection{Additional Architectures}
+
+See \texttt{nonorthodox\_architectures.h} for:
+\begin{itemize}
+\item Standard Parallel Computing: MPI (Message Passing Interface), OpenMP (Open Multi-Processing), Pthreads (POSIX Threads)
+\item GPGPU (General-Purpose GPU) for platform-agnostic GPU computing
+\item Vector Processor architecture for SIMD data-parallel operations
+\item Specialized Hardware: ASIC (Application-Specific Integrated Circuit), FPGA (Field-Programmable Gate Array), FPGA AWS F1 (Xilinx UltraScale+), DSP (Digital Signal Processor)
+\item Quantum Processing Units: QPU Azure (Microsoft Quantum), QPU Intel Horse Ridge (cryogenic quantum control)
+\item Specialized Processing Units: TilePU Mellanox (Tile-GX72), TilePU Sunway (SW26010), DPU Microsoft (biological computation), MFPU (Microfluidic Processing Unit), NPU (Neuromorphic Processing Unit), LPU Lightmatter (photonic computing)
+\item AsAP (Asynchronous Array of Simple Processors) - UC Davis architecture
+\item Coprocessor: Intel Xeon Phi many-core coprocessor with wide vector units
+\item Massively-Threaded (Korf) - Frontier search with massive threading
+\item STARR (Chandra et al.) - Semantic memory architecture - https://github.com/shyamalschandra/STARR
+\item TrueNorth (IBM), Loihi (Intel), BrainChips - Neuromorphic architectures
+\item Racetrack (Parkin), Phase Change Memory (IBM)
+\item Lyric (MIT), HW Bayesian Networks (Chandra)
+\item Semantic Lexographic Binary Search (Chandra \& Chandra)
+\item Kernelized SPS Binary Search (Chandra, Shyamal)
+\item Multiple-Search Representation Tree Algorithm
+\end{itemize}
+
+\subsection{Multiple-Search Representation Tree Algorithm}
+
+Uses multiple search strategies (BFS, DFS, A*, Best-First) with tree and graph state representations.
+
+\textbf{API:}
+\begin{lstlisting}[language=C]
+MultipleSearchTreeConfig config = {
+    .max_tree_depth = 100,
+    .max_nodes = 10000,
+    .num_search_strategies = 4,
+    .enable_bfs = 1,
+    .enable_dfs = 1,
+    .enable_astar = 1,
+    .enable_best_first = 1,
+    .heuristic_weight = 1.0
+};
+MultipleSearchTreeSolver solver;
+multiple_search_tree_ode_init(&solver, n, &config);
+multiple_search_tree_ode_solve(&solver, f, t0, t_end, y0, h, params, y_out);
+multiple_search_tree_ode_free(&solver);
 \end{lstlisting}
 
 \section{Platform Support}

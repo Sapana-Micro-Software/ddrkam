@@ -1,0 +1,136 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1000" style="background: #1e293b; border-radius: 0.5rem;">
+  <defs>
+    <linearGradient id="decisionGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2563eb;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="methodGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#10b981;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#059669;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="specialGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#d97706;stop-opacity:1" />
+    </linearGradient>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#cbd5e1" />
+    </marker>
+  </defs>
+  
+  <!-- Title -->
+  <text x="600" y="40" text-anchor="middle" font-size="28" font-weight="700" fill="#f1f5f9" font-family="Inter, sans-serif">
+    Method Selection Flowchart
+  </text>
+  <text x="600" y="68" text-anchor="middle" font-size="14" fill="#94a3b8" font-family="Inter, sans-serif">
+    Choose the Right Solver for Your Problem
+  </text>
+  
+  <!-- Start -->
+  <rect x="500" y="100" width="200" height="60" rx="10" fill="url(#decisionGrad)" opacity="0.9"/>
+  <text x="600" y="130" text-anchor="middle" font-size="16" font-weight="600" fill="#f1f5f9" font-family="Inter, sans-serif">Start: ODE Problem</text>
+  <text x="600" y="150" text-anchor="middle" font-size="12" fill="#e0e7ff" font-family="Inter, sans-serif">What type of problem?</text>
+  
+  <!-- Decision: Constrained? -->
+  <polygon points="600,200 700,240 600,280 500,240" fill="url(#decisionGrad)" opacity="0.9"/>
+  <text x="600" y="235" text-anchor="middle" font-size="14" font-weight="600" fill="#f1f5f9" font-family="Inter, sans-serif">Constrained?</text>
+  
+  <!-- Yes: Constrained -->
+  <line x1="500" y1="240" x2="350" y2="240" stroke="#cbd5e1" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="425" y="235" text-anchor="middle" font-size="12" fill="#94a3b8" font-family="Inter, sans-serif">Yes</text>
+  
+  <!-- Decision: Linear constraints? -->
+  <polygon points="200,280 300,320 200,360 100,320" fill="url(#decisionGrad)" opacity="0.9"/>
+  <text x="200" y="315" text-anchor="middle" font-size="13" font-weight="600" fill="#f1f5f9" font-family="Inter, sans-serif">Linear?</text>
+  
+  <!-- Karmarkar -->
+  <line x1="100" y1="320" x2="50" y2="320" stroke="#cbd5e1" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <rect x="0" y="290" width="100" height="60" rx="8" fill="url(#methodGrad)" opacity="0.9"/>
+  <text x="50" y="315" text-anchor="middle" font-size="12" font-weight="600" fill="#1e293b" font-family="Inter, sans-serif">Karmarkar</text>
+  <text x="50" y="335" text-anchor="middle" font-size="9" fill="#1e293b" font-family="Inter, sans-serif">O(n^3.5 L)</text>
+  
+  <!-- Nonlinear constraints -->
+  <line x1="300" y1="320" x2="350" y2="320" stroke="#cbd5e1" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="325" y="315" text-anchor="middle" font-size="12" fill="#94a3b8" font-family="Inter, sans-serif">No</text>
+  <rect x="350" y="290" width="100" height="60" rx="8" fill="url(#specialGrad)" opacity="0.9"/>
+  <text x="400" y="315" text-anchor="middle" font-size="12" font-weight="600" fill="#1e293b" font-family="Inter, sans-serif">Nonlinear</text>
+  <text x="400" y="335" text-anchor="middle" font-size="9" fill="#1e293b" font-family="Inter, sans-serif">NLP Solver</text>
+  
+  <!-- No: Unconstrained -->
+  <line x1="700" y1="240" x2="850" y2="240" stroke="#cbd5e1" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="775" y="235" text-anchor="middle" font-size="12" fill="#94a3b8" font-family="Inter, sans-serif">No</text>
+  
+  <!-- Decision: Need pathfinding? -->
+  <polygon points="1000,280 1100,320 1000,360 900,320" fill="url(#decisionGrad)" opacity="0.9"/>
+  <text x="1000" y="315" text-anchor="middle" font-size="13" font-weight="600" fill="#f1f5f9" font-family="Inter, sans-serif">Pathfinding?</text>
+  
+  <!-- Multiple-Search Tree -->
+  <line x1="900" y1="320" x2="850" y2="320" stroke="#cbd5e1" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="875" y="315" text-anchor="middle" font-size="12" fill="#94a3b8" font-family="Inter, sans-serif">Yes</text>
+  <rect x="750" y="290" width="100" height="60" rx="8" fill="url(#methodGrad)" opacity="0.9"/>
+  <text x="800" y="315" text-anchor="middle" font-size="12" font-weight="600" fill="#1e293b" font-family="Inter, sans-serif">M-S Tree</text>
+  <text x="800" y="335" text-anchor="middle" font-size="9" fill="#1e293b" font-family="Inter, sans-serif">BFS/DFS/A*</text>
+  
+  <!-- No pathfinding: Decision: Parallel? -->
+  <line x1="1100" y1="320" x2="1100" y2="400" stroke="#cbd5e1" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="1115" y="360" text-anchor="middle" font-size="12" fill="#94a3b8" font-family="Inter, sans-serif">No</text>
+  
+  <polygon points="1100,440 1200,480 1100,520 1000,480" fill="url(#decisionGrad)" opacity="0.9"/>
+  <text x="1100" y="475" text-anchor="middle" font-size="13" font-weight="600" fill="#f1f5f9" font-family="Inter, sans-serif">Parallel?</text>
+  
+  <!-- Parallel methods -->
+  <line x1="1000" y1="480" x2="950" y2="480" stroke="#cbd5e1" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="975" y="475" text-anchor="middle" font-size="12" fill="#94a3b8" font-family="Inter, sans-serif">Yes</text>
+  <rect x="850" y="450" width="100" height="60" rx="8" fill="url(#methodGrad)" opacity="0.9"/>
+  <text x="900" y="475" text-anchor="middle" font-size="12" font-weight="600" fill="#1e293b" font-family="Inter, sans-serif">Parallel RK3</text>
+  <text x="900" y="495" text-anchor="middle" font-size="9" fill="#1e293b" font-family="Inter, sans-serif">Multi-core</text>
+  
+  <!-- Sequential methods -->
+  <line x1="1200" y1="480" x2="1200" y2="560" stroke="#cbd5e1" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="1215" y="520" text-anchor="middle" font-size="12" fill="#94a3b8" font-family="Inter, sans-serif">No</text>
+  
+  <!-- Decision: Need adaptive? -->
+  <polygon points="1200,600 1300,640 1200,680 1100,640" fill="url(#decisionGrad)" opacity="0.9"/>
+  <text x="1200" y="635" text-anchor="middle" font-size="13" font-weight="600" fill="#f1f5f9" font-family="Inter, sans-serif">Adaptive?</text>
+  
+  <!-- Data-driven methods -->
+  <line x1="1100" y1="640" x2="1050" y2="640" stroke="#cbd5e1" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="1075" y="635" text-anchor="middle" font-size="12" fill="#94a3b8" font-family="Inter, sans-serif">Yes</text>
+  <rect x="950" y="610" width="100" height="60" rx="8" fill="url(#specialGrad)" opacity="0.9"/>
+  <text x="1000" y="635" text-anchor="middle" font-size="12" font-weight="600" fill="#1e293b" font-family="Inter, sans-serif">DDRK3</text>
+  <text x="1000" y="655" text-anchor="middle" font-size="9" fill="#1e293b" font-family="Inter, sans-serif">Hierarchical</text>
+  
+  <!-- Standard methods -->
+  <line x1="1300" y1="640" x2="1300" y2="720" stroke="#cbd5e1" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="1315" y="680" text-anchor="middle" font-size="12" fill="#94a3b8" font-family="Inter, sans-serif">No</text>
+  
+  <!-- Decision: Multi-step? -->
+  <polygon points="1300,760 1400,800 1300,840 1200,800" fill="url(#decisionGrad)" opacity="0.9"/>
+  <text x="1300" y="795" text-anchor="middle" font-size="13" font-weight="600" fill="#f1f5f9" font-family="Inter, sans-serif">Multi-step?</text>
+  
+  <!-- Adams Methods -->
+  <line x1="1200" y1="800" x2="1150" y2="800" stroke="#cbd5e1" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="1175" y="795" text-anchor="middle" font-size="12" fill="#94a3b8" font-family="Inter, sans-serif">Yes</text>
+  <rect x="1050" y="770" width="100" height="60" rx="8" fill="url(#methodGrad)" opacity="0.9"/>
+  <text x="1100" y="795" text-anchor="middle" font-size="12" font-weight="600" fill="#1e293b" font-family="Inter, sans-serif">AM</text>
+  <text x="1100" y="815" text-anchor="middle" font-size="9" fill="#1e293b" font-family="Inter, sans-serif">Adams</text>
+  
+  <!-- RK3 -->
+  <line x1="1400" y1="800" x2="1400" y2="880" stroke="#cbd5e1" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="1415" y="840" text-anchor="middle" font-size="12" fill="#94a3b8" font-family="Inter, sans-serif">No</text>
+  <rect x="1300" y="850" width="100" height="60" rx="8" fill="url(#methodGrad)" opacity="0.9"/>
+  <text x="1350" y="875" text-anchor="middle" font-size="12" font-weight="600" fill="#1e293b" font-family="Inter, sans-serif">RK3</text>
+  <text x="1350" y="895" text-anchor="middle" font-size="9" fill="#1e293b" font-family="Inter, sans-serif">Standard</text>
+  
+  <!-- Key -->
+  <g transform="translate(50, 950)">
+    <rect x="0" y="0" width="1100" height="40" fill="#0f172a" rx="8" opacity="0.8"/>
+    <text x="550" y="25" text-anchor="middle" font-size="12" font-weight="600" fill="#cbd5e1" font-family="Inter, sans-serif">
+      Decision Node (Diamond) → Method Recommendation (Rectangle) | Follow arrows based on your problem characteristics
+    </text>
+  </g>
+  
+  <!-- Footer -->
+  <text x="600" y="990" text-anchor="middle" font-size="11" fill="#64748b" font-style="italic" font-family="Inter, sans-serif">
+    DDRKAM Framework • Copyright © 2025, Shyamal Suhana Chandra
+  </text>
+</svg>

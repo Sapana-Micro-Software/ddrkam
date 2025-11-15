@@ -117,6 +117,34 @@ typedef struct {
     // Nonlinear programming solvers
     double nonlinear_ode_time;
     double nonlinear_pde_time;
+    
+    // Karmarkar's Algorithm
+    double karmarkar_time;
+    double karmarkar_error;
+    double karmarkar_accuracy;
+    size_t karmarkar_steps;
+    size_t karmarkar_iterations;
+    
+    // Map/Reduce Framework
+    double mapreduce_time;
+    double mapreduce_error;
+    double mapreduce_accuracy;
+    size_t mapreduce_steps;
+    double mapreduce_map_time;
+    double mapreduce_reduce_time;
+    double mapreduce_shuffle_time;
+    double mapreduce_cost;
+    
+    // Spark Framework
+    double spark_time;
+    double spark_error;
+    double spark_accuracy;
+    size_t spark_steps;
+    double spark_map_time;
+    double spark_reduce_time;
+    double spark_shuffle_time;
+    double spark_cache_hit_rate;
+    double spark_cost;
     double nonlinear_ode_error;
     double nonlinear_pde_error;
     double nonlinear_ode_accuracy;
@@ -134,6 +162,152 @@ typedef struct {
     double speedup_am;        // Speedup factor for parallel AM
     double speedup_euler;    // Speedup factor for parallel Euler
     size_t num_workers;       // Number of parallel workers used
+    
+    // Non-orthodox architectures
+    double microgasjet_time;
+    double microgasjet_error;
+    double microgasjet_accuracy;
+    size_t microgasjet_steps;
+    double microgasjet_flow_energy;
+    
+    double dataflow_time;
+    double dataflow_error;
+    double dataflow_accuracy;
+    size_t dataflow_steps;
+    size_t dataflow_tokens;
+    double dataflow_token_matching_time;
+    
+    double ace_time;
+    double ace_error;
+    double ace_accuracy;
+    size_t ace_steps;
+    size_t ace_instructions;
+    double ace_memory_time;
+    
+    double systolic_time;
+    double systolic_error;
+    double systolic_accuracy;
+    size_t systolic_steps;
+    double systolic_communication_time;
+    
+    double tpu_time;
+    double tpu_error;
+    double tpu_accuracy;
+    size_t tpu_steps;
+    size_t tpu_matrix_ops;
+    double tpu_bandwidth_utilization;
+    
+    double gpu_cuda_time;
+    double gpu_cuda_error;
+    double gpu_cuda_accuracy;
+    size_t gpu_cuda_steps;
+    size_t gpu_cuda_kernel_launches;
+    double gpu_cuda_memory_transfer_time;
+    
+    double gpu_metal_time;
+    double gpu_metal_error;
+    double gpu_metal_accuracy;
+    size_t gpu_metal_steps;
+    
+    double gpu_vulkan_time;
+    double gpu_vulkan_error;
+    double gpu_vulkan_accuracy;
+    size_t gpu_vulkan_steps;
+    
+    double gpu_amd_time;
+    double gpu_amd_error;
+    double gpu_amd_accuracy;
+    size_t gpu_amd_steps;
+    
+    // Additional non-orthodox architectures
+    double massively_threaded_time;
+    double massively_threaded_error;
+    double massively_threaded_accuracy;
+    size_t massively_threaded_steps;
+    size_t massively_threaded_nodes_expanded;
+    
+    double starr_time;
+    double starr_error;
+    double starr_accuracy;
+    size_t starr_steps;
+    size_t starr_semantic_hits;
+    size_t starr_associative_hits;
+    
+    double truenorth_time;
+    double truenorth_error;
+    double truenorth_accuracy;
+    size_t truenorth_steps;
+    size_t truenorth_spikes;
+    double truenorth_energy;
+    
+    double loihi_time;
+    double loihi_error;
+    double loihi_accuracy;
+    size_t loihi_steps;
+    size_t loihi_spikes;
+    
+    double brainchips_time;
+    double brainchips_error;
+    double brainchips_accuracy;
+    size_t brainchips_steps;
+    size_t brainchips_events;
+    
+    double racetrack_time;
+    double racetrack_error;
+    double racetrack_accuracy;
+    size_t racetrack_steps;
+    size_t racetrack_domain_movements;
+    
+    double pcm_time;
+    double pcm_error;
+    double pcm_accuracy;
+    size_t pcm_steps;
+    size_t pcm_phase_transitions;
+    
+    double lyric_time;
+    double lyric_error;
+    double lyric_accuracy;
+    size_t lyric_steps;
+    size_t lyric_samples;
+    
+    double hw_bayesian_time;
+    double hw_bayesian_error;
+    double hw_bayesian_accuracy;
+    size_t hw_bayesian_steps;
+    size_t hw_bayesian_inference_ops;
+    
+    double semantic_lexo_bs_time;
+    double semantic_lexo_bs_error;
+    double semantic_lexo_bs_accuracy;
+    size_t semantic_lexo_bs_steps;
+    size_t semantic_lexo_bs_nodes_searched;
+    
+    double kernelized_sps_bs_time;
+    double kernelized_sps_bs_error;
+    double kernelized_sps_bs_accuracy;
+    size_t kernelized_sps_bs_steps;
+    size_t kernelized_sps_bs_kernel_evals;
+    
+    double spiralizer_chord_time;
+    double spiralizer_chord_error;
+    double spiralizer_chord_accuracy;
+    size_t spiralizer_chord_steps;
+    size_t spiralizer_chord_collisions;
+    size_t spiralizer_chord_spiral_steps;
+    
+    double lattice_waterfront_time;
+    double lattice_waterfront_error;
+    double lattice_waterfront_accuracy;
+    size_t lattice_waterfront_steps;
+    size_t lattice_waterfront_routing_ops;
+    size_t lattice_waterfront_waterfront_ops;
+    
+    double multiple_search_tree_time;
+    double multiple_search_tree_error;
+    double multiple_search_tree_accuracy;
+    size_t multiple_search_tree_steps;
+    size_t multiple_search_tree_nodes_expanded;
+    size_t multiple_search_tree_nodes_generated;
 } ComparisonResults;
 
 /**

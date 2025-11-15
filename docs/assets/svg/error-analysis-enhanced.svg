@@ -1,0 +1,140 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 600" style="background: #1e293b; border-radius: 0.5rem;">
+  <defs>
+    <linearGradient id="lowErrorGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#10b981;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#059669;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="medErrorGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#d97706;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="highErrorGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#ef4444;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#dc2626;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Title -->
+  <text x="700" y="40" text-anchor="middle" font-size="26" font-weight="700" fill="#f1f5f9" font-family="Inter, sans-serif">
+    Error Analysis: L2 Norm Error
+  </text>
+  <text x="700" y="68" text-anchor="middle" font-size="14" fill="#94a3b8" font-family="Inter, sans-serif">
+    Exponential Decay Test - Lower is Better (Log Scale)
+  </text>
+  
+  <!-- Chart area -->
+  <g transform="translate(100, 120)">
+    <!-- Y-axis -->
+    <line x1="0" y1="0" x2="0" y2="400" stroke="#cbd5e1" stroke-width="2"/>
+    <!-- X-axis -->
+    <line x1="0" y1="400" x2="1200" y2="400" stroke="#cbd5e1" stroke-width="2"/>
+    
+    <!-- Y-axis label -->
+    <text x="-200" y="15" text-anchor="middle" font-size="14" fill="#cbd5e1" transform="rotate(-90)" font-family="Inter, sans-serif">
+      Error (L2 Norm, log scale)
+    </text>
+    
+    <!-- Grid lines (log scale) -->
+    <line x1="0" y1="0" x2="1200" y2="0" stroke="#334155" stroke-width="1" stroke-dasharray="4,4" opacity="0.5"/>
+    <line x1="0" y1="80" x2="1200" y2="80" stroke="#334155" stroke-width="1" stroke-dasharray="4,4" opacity="0.5"/>
+    <line x1="0" y1="160" x2="1200" y2="160" stroke="#334155" stroke-width="1" stroke-dasharray="4,4" opacity="0.5"/>
+    <line x1="0" y1="240" x2="1200" y2="240" stroke="#334155" stroke-width="1" stroke-dasharray="4,4" opacity="0.5"/>
+    <line x1="0" y1="320" x2="1200" y2="320" stroke="#334155" stroke-width="1" stroke-dasharray="4,4" opacity="0.5"/>
+    
+    <!-- Y-axis ticks (log scale: 1e-19 to 1e-1) -->
+    <text x="-20" y="405" text-anchor="end" font-size="10" fill="#94a3b8" font-family="Inter, sans-serif">1e-1</text>
+    <text x="-20" y="325" text-anchor="end" font-size="10" fill="#94a3b8" font-family="Inter, sans-serif">1e-8</text>
+    <text x="-20" y="245" text-anchor="end" font-size="10" fill="#94a3b8" font-family="Inter, sans-serif">1e-15</text>
+    <text x="-20" y="165" text-anchor="end" font-size="10" fill="#94a3b8" font-family="Inter, sans-serif">1e-18</text>
+    <text x="-20" y="85" text-anchor="end" font-size="10" fill="#94a3b8" font-family="Inter, sans-serif">1e-19</text>
+    <text x="-20" y="5" text-anchor="end" font-size="10" fill="#94a3b8" font-family="Inter, sans-serif">1e-19</text>
+    
+    <!-- Best error: Distributed DD (7.550e-19) -->
+    <rect x="20" y="5" width="60" height="395" fill="url(#lowErrorGrad)" rx="3" opacity="1" stroke="#10b981" stroke-width="2"/>
+    <text x="50" y="-5" text-anchor="middle" font-size="9" fill="#f1f5f9" font-weight="700" font-family="Inter, sans-serif">Dist DD</text>
+    <text x="50" y="415" text-anchor="middle" font-size="8" fill="#10b981" font-weight="600" font-family="Inter, sans-serif">7.55e-19</text>
+    <circle cx="50" r="4" cy="5" fill="#10b981"/>
+    
+    <!-- Excellent errors (~1.1e-8) -->
+    <rect x="100" y="320" width="60" height="80" fill="url(#lowErrorGrad)" rx="3" opacity="0.9"/>
+    <text x="130" y="310" text-anchor="middle" font-size="9" fill="#f1f5f9" font-weight="600" font-family="Inter, sans-serif">RK3</text>
+    <text x="130" y="415" text-anchor="middle" font-size="8" fill="#94a3b8" font-family="Inter, sans-serif">1.14e-8</text>
+    
+    <rect x="180" y="320" width="60" height="80" fill="url(#lowErrorGrad)" rx="3" opacity="0.9"/>
+    <text x="210" y="310" text-anchor="middle" font-size="9" fill="#f1f5f9" font-weight="600" font-family="Inter, sans-serif">Euler</text>
+    <text x="210" y="415" text-anchor="middle" font-size="8" fill="#94a3b8" font-family="Inter, sans-serif">1.14e-8</text>
+    
+    <rect x="260" y="320" width="60" height="80" fill="url(#lowErrorGrad)" rx="3" opacity="0.9"/>
+    <text x="290" y="310" text-anchor="middle" font-size="9" fill="#f1f5f9" font-weight="600" font-family="Inter, sans-serif">Par RK3</text>
+    <text x="290" y="415" text-anchor="middle" font-size="8" fill="#94a3b8" font-family="Inter, sans-serif">1.14e-8</text>
+    
+    <rect x="340" y="320" width="60" height="80" fill="url(#lowErrorGrad)" rx="3" opacity="0.9"/>
+    <text x="370" y="310" text-anchor="middle" font-size="9" fill="#f1f5f9" font-weight="600" font-family="Inter, sans-serif">M-S Tree</text>
+    <text x="370" y="415" text-anchor="middle" font-size="8" fill="#94a3b8" font-family="Inter, sans-serif">1.14e-8</text>
+    
+    <!-- Karmarkar: 1.2e-8 -->
+    <rect x="420" y="318" width="60" height="82" fill="url(#medErrorGrad)" rx="3" opacity="0.9"/>
+    <text x="450" y="308" text-anchor="middle" font-size="9" fill="#f1f5f9" font-weight="600" font-family="Inter, sans-serif">Karmarkar</text>
+    <text x="450" y="415" text-anchor="middle" font-size="8" fill="#94a3b8" font-family="Inter, sans-serif">1.20e-8</text>
+    
+    <!-- AM: 1.16e-8 -->
+    <rect x="500" y="319" width="60" height="81" fill="url(#lowErrorGrad)" rx="3" opacity="0.9"/>
+    <text x="530" y="309" text-anchor="middle" font-size="9" fill="#f1f5f9" font-weight="600" font-family="Inter, sans-serif">AM</text>
+    <text x="530" y="415" text-anchor="middle" font-size="8" fill="#94a3b8" font-family="Inter, sans-serif">1.16e-8</text>
+    
+    <!-- DDEuler/DDRK3: 3.15e-8 -->
+    <rect x="580" y="315" width="60" height="85" fill="url(#medErrorGrad)" rx="3" opacity="0.9"/>
+    <text x="610" y="305" text-anchor="middle" font-size="9" fill="#f1f5f9" font-weight="600" font-family="Inter, sans-serif">DDEuler</text>
+    <text x="610" y="415" text-anchor="middle" font-size="8" fill="#94a3b8" font-family="Inter, sans-serif">3.15e-8</text>
+    
+    <rect x="660" y="315" width="60" height="85" fill="url(#medErrorGrad)" rx="3" opacity="0.9"/>
+    <text x="690" y="305" text-anchor="middle" font-size="9" fill="#f1f5f9" font-weight="600" font-family="Inter, sans-serif">DDRK3</text>
+    <text x="690" y="415" text-anchor="middle" font-size="8" fill="#94a3b8" font-family="Inter, sans-serif">3.15e-8</text>
+    
+    <!-- DDAM: 1.16e-8 -->
+    <rect x="740" y="319" width="60" height="81" fill="url(#lowErrorGrad)" rx="3" opacity="0.9"/>
+    <text x="770" y="309" text-anchor="middle" font-size="9" fill="#f1f5f9" font-weight="600" font-family="Inter, sans-serif">DDAM</text>
+    <text x="770" y="415" text-anchor="middle" font-size="8" fill="#94a3b8" font-family="Inter, sans-serif">1.16e-8</text>
+    
+    <!-- Nonlinear ODE: 8.25e-1 (very high) -->
+    <rect x="820" y="0" width="60" height="400" fill="url(#highErrorGrad)" rx="3" opacity="0.9"/>
+    <text x="850" y="-10" text-anchor="middle" font-size="9" fill="#f1f5f9" font-weight="600" font-family="Inter, sans-serif">Nonlinear</text>
+    <text x="850" y="415" text-anchor="middle" font-size="8" fill="#94a3b8" font-family="Inter, sans-serif">8.25e-1</text>
+    
+    <!-- More excellent methods -->
+    <rect x="900" y="320" width="60" height="80" fill="url(#lowErrorGrad)" rx="3" opacity="0.9"/>
+    <text x="930" y="310" text-anchor="middle" font-size="9" fill="#f1f5f9" font-weight="600" font-family="Inter, sans-serif">Spark</text>
+    <text x="930" y="415" text-anchor="middle" font-size="8" fill="#94a3b8" font-family="Inter, sans-serif">1.14e-8</text>
+    
+    <rect x="980" y="320" width="60" height="80" fill="url(#lowErrorGrad)" rx="3" opacity="0.9"/>
+    <text x="1010" y="310" text-anchor="middle" font-size="9" fill="#f1f5f9" font-weight="600" font-family="Inter, sans-serif">GPU</text>
+    <text x="1010" y="415" text-anchor="middle" font-size="8" fill="#94a3b8" font-family="Inter, sans-serif">1.14e-8</text>
+    
+    <rect x="1060" y="320" width="60" height="80" fill="url(#lowErrorGrad)" rx="3" opacity="0.9"/>
+    <text x="1090" y="310" text-anchor="middle" font-size="9" fill="#f1f5f9" font-weight="600" font-family="Inter, sans-serif">TPU</text>
+    <text x="1090" y="415" text-anchor="middle" font-size="8" fill="#94a3b8" font-family="Inter, sans-serif">1.14e-8</text>
+    
+    <rect x="1140" y="320" width="60" height="80" fill="url(#lowErrorGrad)" rx="3" opacity="0.9"/>
+    <text x="1170" y="310" text-anchor="middle" font-size="9" fill="#f1f5f9" font-weight="600" font-family="Inter, sans-serif">ASIC</text>
+    <text x="1170" y="415" text-anchor="middle" font-size="8" fill="#94a3b8" font-family="Inter, sans-serif">1.14e-8</text>
+  </g>
+  
+  <!-- Legend -->
+  <g transform="translate(100, 550)">
+    <rect x="0" y="0" width="15" height="15" fill="url(#lowErrorGrad)" rx="2"/>
+    <text x="25" y="12" font-size="12" fill="#cbd5e1" font-family="Inter, sans-serif">Low Error (&lt; 5e-8)</text>
+    
+    <rect x="200" y="0" width="15" height="15" fill="url(#medErrorGrad)" rx="2"/>
+    <text x="225" y="12" font-size="12" fill="#cbd5e1" font-family="Inter, sans-serif">Medium Error (5e-8 to 1e-1)</text>
+    
+    <rect x="500" y="0" width="15" height="15" fill="url(#highErrorGrad)" rx="2"/>
+    <text x="525" y="12" font-size="12" fill="#cbd5e1" font-family="Inter, sans-serif">High Error (&gt; 1e-1)</text>
+    
+    <text x="900" y="12" font-size="11" fill="#10b981" font-weight="600" font-family="Inter, sans-serif">Best: Distributed DD (7.55e-19)</text>
+  </g>
+  
+  <!-- Footer -->
+  <text x="700" y="590" text-anchor="middle" font-size="11" fill="#64748b" font-style="italic" font-family="Inter, sans-serif">
+    DDRKAM Framework • Copyright © 2025, Shyamal Suhana Chandra
+  </text>
+</svg>
