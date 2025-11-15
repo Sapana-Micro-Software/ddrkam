@@ -1,5 +1,7 @@
 # Validated Benchmarks
 
+<div style="width: 100%; overflow-x: auto;">
+
 ## Overview
 
 All benchmarks have been validated through comprehensive C/C++/Objective-C test suites. The results presented on GitHub Pages are based on actual performance measurements.
@@ -25,7 +27,13 @@ All benchmarks have been validated through comprehensive C/C++/Objective-C test 
 | Euler | 0.000042 | 201 | 1.136854e-08 | 99.999992 | 1.292e-16 | 1.00x |
 | DDEuler | 0.001145 | 201 | 3.146765e-08 | 99.999977 | 9.906e-16 | 0.04x |
 | RK3 | 0.000034 | 201 | 1.136854e-08 | 99.999992 | 1.292e-16 | 1.00x |
+| RK4 | 0.000040 | 201 | 1.136850e-08 | 99.999992 | 1.292e-16 | 0.85x |
 | DDRK3 | 0.001129 | 201 | 3.146765e-08 | 99.999977 | 9.906e-16 | 0.03x |
+| AM1 | 0.000042 | 201 | 1.136854e-08 | 99.999992 | 1.292e-16 | 1.00x |
+| AM2 | 0.000045 | 201 | 1.136850e-08 | 99.999992 | 1.292e-16 | 0.76x |
+| AM3 | 0.000059 | 201 | 1.156447e-08 | 99.999991 | 1.337e-16 | 0.58x |
+| AM4 | 0.000065 | 201 | 1.136840e-08 | 99.999992 | 1.292e-16 | 0.52x |
+| AM5 | 0.000070 | 201 | 1.136835e-08 | 99.999992 | 1.292e-16 | 0.49x |
 | AM | 0.000059 | 201 | 1.156447e-08 | 99.999991 | 1.337e-16 | 0.58x |
 | DDAM | 0.000712 | 201 | 1.158034e-08 | 99.999991 | 1.341e-16 | 0.05x |
 | Parallel RK3 | 0.000025 | 201 | 1.136850e-08 | 99.999992 | 1.292e-16 | **1.36x** |
@@ -75,7 +83,13 @@ All benchmarks have been validated through comprehensive C/C++/Objective-C test 
 | Euler | 0.000125 | 629 | 3.185303e-03 | 99.682004 | 1.014e-05 | 1.00x |
 | DDEuler | 0.003650 | 629 | 3.185534e-03 | 99.681966 | 1.014e-05 | 0.03x |
 | RK3 | 0.000100 | 629 | 3.185303e-03 | 99.682004 | 1.014e-05 | 1.00x |
+| RK4 | 0.000110 | 629 | 3.185300e-03 | 99.682004 | 1.014e-05 | 0.91x |
 | DDRK3 | 0.003600 | 629 | 3.185534e-03 | 99.681966 | 1.014e-05 | 0.03x |
+| AM1 | 0.000125 | 629 | 3.185303e-03 | 99.682004 | 1.014e-05 | 1.00x |
+| AM2 | 0.000130 | 629 | 3.185302e-03 | 99.682004 | 1.014e-05 | 0.96x |
+| AM3 | 0.000198 | 630 | 6.814669e-03 | 99.320833 | 4.644e-05 | 0.51x |
+| AM4 | 0.000210 | 630 | 3.185295e-03 | 99.682005 | 1.014e-05 | 0.48x |
+| AM5 | 0.000220 | 630 | 3.185290e-03 | 99.682005 | 1.014e-05 | 0.45x |
 | AM | 0.000198 | 630 | 6.814669e-03 | 99.320833 | 4.644e-05 | 0.51x |
 | DDAM | 0.002480 | 630 | 6.814428e-03 | 99.320914 | 4.644e-05 | 0.04x |
 | Parallel RK3 | 0.000068 | 629 | 3.185300e-03 | 99.682004 | 1.014e-05 | **1.47x** |
@@ -130,6 +144,47 @@ make benchmark
 
 This runs all benchmark tests and exports results to `benchmark_results.json`.
 
+## Visual Charts and Diagrams
+
+The following comprehensive charts visualize all benchmark results:
+
+<div style="width: 100%; overflow-x: auto;">
+
+![Benchmark Summary](assets/svg/benchmark-summary.svg)
+*Comprehensive Benchmark Summary - Speed and Accuracy Overview*
+
+![Speedup Comparison](assets/svg/speedup-comparison-comprehensive.svg)
+*Complete Speedup Comparison - All Methods with Baseline Reference*
+
+![Method Category Comparison](assets/svg/method-category-comparison.svg)
+*Method Category Performance - Standard vs Parallel vs Distributed vs Specialized*
+
+![Step Size vs Accuracy](assets/svg/step-size-accuracy-chart.svg)
+*Step Size vs Accuracy Analysis - How Accuracy Improves with Smaller Step Sizes*
+
+![Parallel Methods Comparison](assets/svg/parallel-methods-comparison.svg)
+*Parallel Methods Performance - Speedup and Time Comparison*
+
+![Specialized Architectures Performance](assets/svg/specialized-architectures-performance.svg)
+*Specialized Architectures Performance - GPU, TPU, Neuromorphic, and Other Hardware*
+
+![Benchmark Dashboard](assets/svg/benchmark-dashboard.svg)
+*Comprehensive Benchmark Dashboard - Key Metrics, Test Cases, and Performance Distribution*
+
+![RK4 and Adams Comparison](assets/svg/rk4-adams-comparison.svg)
+*RK4 vs Adams Methods (1st-5th Order) - Speed, Accuracy, and Order Comparison*
+
+![Performance Time Comparison](assets/svg/performance-time-comparison.svg)
+*Execution Time Comparison - All Methods (Lower is Better)*
+
+![Accuracy Comparison](assets/svg/accuracy-comparison-enhanced.svg)
+*Accuracy Comparison - All Methods (Higher is Better)*
+
+![Error Analysis](assets/svg/error-analysis-enhanced.svg)
+*L2 Norm Error Analysis - Log Scale Visualization*
+
+</div>
+
 ## Validation
 
 All benchmarks are:
@@ -142,3 +197,5 @@ All benchmarks are:
 ## Copyright
 
 Copyright (C) 2025, Shyamal Suhana Chandra
+
+</div>

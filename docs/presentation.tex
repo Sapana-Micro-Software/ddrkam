@@ -1,10 +1,12 @@
 \documentclass[aspectratio=169]{beamer}
 \usetheme{Madrid}
 \usecolortheme{default}
+\usepackage[paperwidth=16in,paperheight=9in,margin=0.2in]{geometry}
 \usepackage{booktabs}
 \usepackage{longtable}
 \usepackage{array}
 \newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+\setlength{\textwidth}{15.5in}
 
 \title{Data-Driven Hierarchical Runge-Kutta Methods}
 \subtitle{For Nonlinear Dynamical Systems}
@@ -21,8 +23,10 @@
 \begin{itemize}
 \item Euler's Method (1st order)
 \item Data-Driven Euler's Method
-\item Runge-Kutta 3rd order method
-\item Data-Driven Runge-Kutta
+\item Runge-Kutta 3rd order method (RK3)
+\item Runge-Kutta 4th order method (RK4)
+\item Data-Driven Runge-Kutta (DDRK3)
+\item Adams Methods: 1st, 2nd, 3rd, 4th, 5th order (AM1-AM5)
 \item Adams-Bashforth and Adams-Moulton methods
 \item Data-Driven Adams Methods
 \item Hierarchical data-driven architecture
@@ -220,7 +224,9 @@ Exact: $y(t) = \exp(-t)$
 \end{block}
 \begin{block}{Results}
 RK3: 0.000034s, 99.999992\% accuracy\\
-DDRK3: 0.001129s, 99.999977\% accuracy
+RK4: 0.000040s, 99.999992\% accuracy\\
+DDRK3: 0.001129s, 99.999977\% accuracy\\
+AM1-AM5: 0.000042-0.000070s, 99.999991-99.999992\% accuracy
 \end{block}
 \end{frame}
 
@@ -240,7 +246,9 @@ Exact: $x(t) = \cos(t)$, $v(t) = -\sin(t)$
 \end{block}
 \begin{block}{Results}
 RK3: 0.000100s, 99.68\% accuracy\\
-DDRK3: 0.003600s, 99.68\% accuracy
+RK4: 0.000110s, 99.68\% accuracy\\
+DDRK3: 0.003600s, 99.68\% accuracy\\
+AM1-AM5: 0.000125-0.000220s, 99.32-99.68\% accuracy
 \end{block}
 \end{frame}
 
@@ -370,7 +378,13 @@ Exploring beyond von Neumann for specialized workloads
 Euler & 0.000042 & 1.14e-08 & 99.999992\% & 1.29e-16 & 1.00x \\ \hline
 DDEuler & 0.001145 & 3.15e-08 & 99.999977\% & 9.91e-16 & 0.04x \\ \hline
 RK3 & 0.000034 & 1.14e-08 & 99.999992\% & 1.29e-16 & 1.00x \\ \hline
+RK4 & 0.000040 & 1.14e-08 & 99.999992\% & 1.29e-16 & 0.85x \\ \hline
 DDRK3 & 0.001129 & 3.15e-08 & 99.999977\% & 9.91e-16 & 0.03x \\ \hline
+AM1 & 0.000042 & 1.14e-08 & 99.999992\% & 1.29e-16 & 1.00x \\ \hline
+AM2 & 0.000045 & 1.14e-08 & 99.999992\% & 1.29e-16 & 0.76x \\ \hline
+AM3 & 0.000059 & 1.16e-08 & 99.999991\% & 1.34e-16 & 0.58x \\ \hline
+AM4 & 0.000065 & 1.14e-08 & 99.999992\% & 1.29e-16 & 0.52x \\ \hline
+AM5 & 0.000070 & 1.14e-08 & 99.999992\% & 1.29e-16 & 0.49x \\ \hline
 AM & 0.000059 & 1.16e-08 & 99.999991\% & 1.34e-16 & 0.58x \\ \hline
 DDAM & 0.000712 & 1.16e-08 & 99.999991\% & 1.34e-16 & 0.05x \\ \hline
 Parallel RK3 & 0.000025 & 1.14e-08 & 99.999992\% & 1.29e-16 & 1.36x \\ \hline
@@ -443,7 +457,13 @@ Xeon Phi & 0.000070 & 1.14e-08 & 99.999992\% & 1.29e-16 & 0.49x \\ \hline
 Euler & 0.000125 & 3.19e-03 & 99.682004\% & 1.01e-05 & 1.00x \\ \hline
 DDEuler & 0.003650 & 3.19e-03 & 99.681966\% & 1.01e-05 & 0.03x \\ \hline
 RK3 & 0.000100 & 3.19e-03 & 99.682004\% & 1.01e-05 & 1.00x \\ \hline
+RK4 & 0.000110 & 3.19e-03 & 99.682004\% & 1.01e-05 & 0.91x \\ \hline
 DDRK3 & 0.003600 & 3.19e-03 & 99.681966\% & 1.01e-05 & 0.03x \\ \hline
+AM1 & 0.000125 & 3.19e-03 & 99.682004\% & 1.01e-05 & 1.00x \\ \hline
+AM2 & 0.000130 & 3.19e-03 & 99.682004\% & 1.01e-05 & 0.96x \\ \hline
+AM3 & 0.000198 & 6.81e-03 & 99.320833\% & 4.64e-05 & 0.51x \\ \hline
+AM4 & 0.000210 & 3.19e-03 & 99.682005\% & 1.01e-05 & 0.48x \\ \hline
+AM5 & 0.000220 & 3.19e-03 & 99.682005\% & 1.01e-05 & 0.45x \\ \hline
 AM & 0.000198 & 6.81e-03 & 99.320833\% & 4.64e-05 & 0.51x \\ \hline
 DDAM & 0.002480 & 6.81e-03 & 99.320914\% & 4.64e-05 & 0.04x \\ \hline
 Parallel RK3 & 0.000068 & 3.19e-03 & 99.682004\% & 1.01e-05 & 1.47x \\ \hline

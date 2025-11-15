@@ -1,5 +1,7 @@
 # Method Comparison: RK3 vs DDRK3 vs AM vs DDAM
 
+<div style="width: 100%; overflow-x: auto;">
+
 ## Overview
 
 This document provides a comprehensive comparison of numerical methods implemented in DDRKAM:
@@ -1008,3 +1010,5 @@ Output files:
 ## Copyright
 
 Copyright (C) 2025, Shyamal Suhana Chandra
+
+</div>
