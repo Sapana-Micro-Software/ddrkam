@@ -385,6 +385,39 @@ section {
     letter-spacing: 0.05em;
 }
 
+.pdf-card {
+    position: relative;
+    border: 2px solid rgba(99, 102, 241, 0.3);
+    transition: all 0.3s;
+}
+
+.pdf-card:hover {
+    border-color: var(--primary-color);
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-xl);
+}
+
+.pdf-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: var(--gradient-1);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.pdf-download-all {
+    padding: 2rem;
+    background: var(--bg-light);
+    border-radius: 1rem;
+    border: 1px solid rgba(148, 163, 184, 0.1);
+}
+
 .doc-link {
     color: var(--primary-color);
     font-weight: 600;

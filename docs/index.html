@@ -55,9 +55,9 @@
                 </a>
             </div>
             <div class="hero-quick-links" style="margin-top: 2rem; display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;">
-                <a href="paper.pdf" class="quick-link" target="_blank" download style="color: var(--text-secondary); text-decoration: none; font-size: 0.9rem;">📄 Paper</a>
-                <a href="presentation.pdf" class="quick-link" target="_blank" download style="color: var(--text-secondary); text-decoration: none; font-size: 0.9rem;">📽️ Presentation</a>
-                <a href="reference_manual.pdf" class="quick-link" target="_blank" download style="color: var(--text-secondary); text-decoration: none; font-size: 0.9rem;">📖 Manual</a>
+                <a href="paper.pdf" class="quick-link" target="_blank" download="DDRKAM_Paper.pdf" style="color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; padding: 0.5rem 1rem; border: 1px solid rgba(148, 163, 184, 0.2); border-radius: 0.5rem; transition: all 0.3s;">📄 Paper PDF</a>
+                <a href="presentation.pdf" class="quick-link" target="_blank" download="DDRKAM_Presentation.pdf" style="color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; padding: 0.5rem 1rem; border: 1px solid rgba(148, 163, 184, 0.2); border-radius: 0.5rem; transition: all 0.3s;">📽️ Presentation PDF</a>
+                <a href="reference_manual.pdf" class="quick-link" target="_blank" download="DDRKAM_Reference_Manual.pdf" style="color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; padding: 0.5rem 1rem; border: 1px solid rgba(148, 163, 184, 0.2); border-radius: 0.5rem; transition: all 0.3s;">📖 Manual PDF</a>
             </div>
         </div>
         <div class="hero-visualization">
@@ -156,29 +156,41 @@
             <h2 class="section-title">Publications & Documentation</h2>
             
             <div class="publications-section">
-                <h3 class="subsection-title">📚 Academic Publications</h3>
+                <h3 class="subsection-title">📚 Academic Publications (PDF)</h3>
+                <p style="text-align: center; color: var(--text-secondary); margin-bottom: 3rem; font-size: 1.1rem;">
+                    All publications are available as downloadable PDFs. Click any card to view or download.
+                </p>
                 <div class="docs-grid">
-                    <a href="paper.pdf" class="doc-card" target="_blank" download="DDRKAM_Paper.pdf">
+                    <a href="paper.pdf" class="doc-card pdf-card" target="_blank" download="DDRKAM_Paper.pdf">
                         <div class="doc-icon">📄</div>
                         <h3>Academic Paper</h3>
-                        <p class="doc-meta">3 pages • 144 KB</p>
-                        <p>Complete mathematical formulation and theoretical analysis of Runge-Kutta 3rd order, Adams methods, and hierarchical data-driven architectures for solving nonlinear differential equations.</p>
+                        <p class="doc-meta">3 pages • 144 KB • PDF</p>
+                        <p>Complete mathematical formulation and theoretical analysis of Runge-Kutta 3rd order, Adams methods, hierarchical data-driven architectures, and DDMCMC optimization for solving nonlinear differential equations.</p>
+                        <div class="pdf-badge">PDF Available</div>
                         <span class="doc-link">Download PDF →</span>
                     </a>
-                    <a href="presentation.pdf" class="doc-card" target="_blank" download="DDRKAM_Presentation.pdf">
+                    <a href="presentation.pdf" class="doc-card pdf-card" target="_blank" download="DDRKAM_Presentation.pdf">
                         <div class="doc-icon">📽️</div>
                         <h3>Beamer Presentation</h3>
-                        <p class="doc-meta">8 slides • 123 KB</p>
-                        <p>Comprehensive presentation covering key concepts, algorithms, performance benchmarks, and applications of the DDRKAM framework.</p>
+                        <p class="doc-meta">8 slides • 123 KB • PDF</p>
+                        <p>Comprehensive presentation covering key concepts, algorithms, performance benchmarks, DDMCMC optimization, and applications of the DDRKAM framework.</p>
+                        <div class="pdf-badge">PDF Available</div>
                         <span class="doc-link">Download PDF →</span>
                     </a>
-                    <a href="reference_manual.pdf" class="doc-card" target="_blank" download="DDRKAM_Reference_Manual.pdf">
+                    <a href="reference_manual.pdf" class="doc-card pdf-card" target="_blank" download="DDRKAM_Reference_Manual.pdf">
                         <div class="doc-icon">📖</div>
                         <h3>Reference Manual</h3>
-                        <p class="doc-meta">8 pages • 112 KB</p>
-                        <p>Complete API documentation with function signatures, usage examples, and implementation guidelines for C/C++ and Objective-C interfaces.</p>
+                        <p class="doc-meta">8 pages • 112 KB • PDF</p>
+                        <p>Complete API documentation with function signatures, usage examples, DDMCMC methods, and implementation guidelines for C/C++ and Objective-C interfaces.</p>
+                        <div class="pdf-badge">PDF Available</div>
                         <span class="doc-link">Download PDF →</span>
                     </a>
+                </div>
+                
+                <div class="pdf-download-all" style="text-align: center; margin-top: 3rem;">
+                    <a href="paper.pdf" download="DDRKAM_Paper.pdf" class="btn btn-primary" style="margin: 0.5rem;">📄 Download Paper</a>
+                    <a href="presentation.pdf" download="DDRKAM_Presentation.pdf" class="btn btn-primary" style="margin: 0.5rem;">📽️ Download Presentation</a>
+                    <a href="reference_manual.pdf" download="DDRKAM_Reference_Manual.pdf" class="btn btn-primary" style="margin: 0.5rem;">📖 Download Manual</a>
                 </div>
             </div>
 
