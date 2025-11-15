@@ -2237,6 +2237,94 @@ void print_comparison_results(const ComparisonResults* results) {
         max_accuracy = results->tpu_accuracy;
         best_accuracy = "TPU";
     }
+    if (results->massively_threaded_time > 0 && results->massively_threaded_time < min_time) {
+        min_time = results->massively_threaded_time;
+        best_time = "Massively-Threaded (Korf)";
+    }
+    if (results->massively_threaded_accuracy > max_accuracy) {
+        max_accuracy = results->massively_threaded_accuracy;
+        best_accuracy = "Massively-Threaded (Korf)";
+    }
+    if (results->starr_time > 0 && results->starr_time < min_time) {
+        min_time = results->starr_time;
+        best_time = "STARR (Chandra)";
+    }
+    if (results->starr_accuracy > max_accuracy) {
+        max_accuracy = results->starr_accuracy;
+        best_accuracy = "STARR (Chandra)";
+    }
+    if (results->truenorth_time > 0 && results->truenorth_time < min_time) {
+        min_time = results->truenorth_time;
+        best_time = "TrueNorth (IBM)";
+    }
+    if (results->truenorth_accuracy > max_accuracy) {
+        max_accuracy = results->truenorth_accuracy;
+        best_accuracy = "TrueNorth (IBM)";
+    }
+    if (results->loihi_time > 0 && results->loihi_time < min_time) {
+        min_time = results->loihi_time;
+        best_time = "Loihi (Intel)";
+    }
+    if (results->loihi_accuracy > max_accuracy) {
+        max_accuracy = results->loihi_accuracy;
+        best_accuracy = "Loihi (Intel)";
+    }
+    if (results->brainchips_time > 0 && results->brainchips_time < min_time) {
+        min_time = results->brainchips_time;
+        best_time = "BrainChips";
+    }
+    if (results->brainchips_accuracy > max_accuracy) {
+        max_accuracy = results->brainchips_accuracy;
+        best_accuracy = "BrainChips";
+    }
+    if (results->racetrack_time > 0 && results->racetrack_time < min_time) {
+        min_time = results->racetrack_time;
+        best_time = "Racetrack (Parkin)";
+    }
+    if (results->racetrack_accuracy > max_accuracy) {
+        max_accuracy = results->racetrack_accuracy;
+        best_accuracy = "Racetrack (Parkin)";
+    }
+    if (results->pcm_time > 0 && results->pcm_time < min_time) {
+        min_time = results->pcm_time;
+        best_time = "Phase Change Memory";
+    }
+    if (results->pcm_accuracy > max_accuracy) {
+        max_accuracy = results->pcm_accuracy;
+        best_accuracy = "Phase Change Memory";
+    }
+    if (results->lyric_time > 0 && results->lyric_time < min_time) {
+        min_time = results->lyric_time;
+        best_time = "Lyric (MIT)";
+    }
+    if (results->lyric_accuracy > max_accuracy) {
+        max_accuracy = results->lyric_accuracy;
+        best_accuracy = "Lyric (MIT)";
+    }
+    if (results->hw_bayesian_time > 0 && results->hw_bayesian_time < min_time) {
+        min_time = results->hw_bayesian_time;
+        best_time = "HW Bayesian (Chandra)";
+    }
+    if (results->hw_bayesian_accuracy > max_accuracy) {
+        max_accuracy = results->hw_bayesian_accuracy;
+        best_accuracy = "HW Bayesian (Chandra)";
+    }
+    if (results->semantic_lexo_bs_time > 0 && results->semantic_lexo_bs_time < min_time) {
+        min_time = results->semantic_lexo_bs_time;
+        best_time = "Semantic Lexo BS (Chandra & Chandra)";
+    }
+    if (results->semantic_lexo_bs_accuracy > max_accuracy) {
+        max_accuracy = results->semantic_lexo_bs_accuracy;
+        best_accuracy = "Semantic Lexo BS (Chandra & Chandra)";
+    }
+    if (results->kernelized_sps_bs_time > 0 && results->kernelized_sps_bs_time < min_time) {
+        min_time = results->kernelized_sps_bs_time;
+        best_time = "Kernelized SPS BS (Chandra, Shyamal)";
+    }
+    if (results->kernelized_sps_bs_accuracy > max_accuracy) {
+        max_accuracy = results->kernelized_sps_bs_accuracy;
+        best_accuracy = "Kernelized SPS BS (Chandra, Shyamal)";
+    }
     
     printf("🏆 Best Performance: %s (%.6f seconds)\n", best_time, min_time);
     printf("🎯 Best Accuracy: %s (%.6f%%)\n", best_accuracy, max_accuracy * 100);

@@ -58,7 +58,12 @@ This document provides a comprehensive comparison of numerical methods implement
 - **Systolic Array**: Pipelined matrix operations
 - **TPU (Patterson)**: Specialized matrix acceleration
 - **GPU Architectures**: CUDA, Metal, Vulkan, AMD
-- **Neuromorphic**: TrueNorth (IBM), Loihi (Intel), BrainChips
+- **Massively-Threaded / Frontier Threaded (Korf)**: ⭐ Richard Korf's frontier search with massive threading (1024+ threads), work-stealing queues, and tail recursion optimization
+- **STARR (Chandra et al.)**: ⭐ Semantic and associative memory architecture - https://github.com/shyamalschandra/STARR
+- **Neuromorphic**: TrueNorth (IBM Almaden), Loihi (Intel Research), BrainChips
+- **Memory Architectures**: Racetrack (Parkin et al.), Phase Change Memory (IBM Research)
+- **Probabilistic Architectures**: Lyric (MIT), HW Bayesian Networks (Chandra)
+- **Search Algorithms**: Semantic Lexographic Binary Search (Massively-Threaded with tail recursion - Chandra & Chandra), Kernelized Semantic & Pragmatic & Syntactic Binary Search (Chandra, Shyamal)
 - And many more specialized architectures (see full list in benchmark results)
 
 > **Note**: 
