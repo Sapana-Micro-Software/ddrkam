@@ -3,9 +3,20 @@
 
 CC = gcc
 CXX = g++
-CFLAGS = -Wall -Wextra -O2 -fPIC -std=c11
-CXXFLAGS = -Wall -Wextra -O2 -fPIC -std=c++11
-LDFLAGS = -shared
+CFLAGS = -Wall -Wextra -O2 -fPIC -std=c11 -pthread
+CXXFLAGS = -Wall -Wextra -O2 -fPIC -std=c++11 -pthread
+LDFLAGS = -shared -pthread
+
+# OpenMP support (if available)
+ifneq ($(shell which gcc),)
+  ifeq ($(shell gcc -dumpversion | cut -d. -f1),)
+    OPENMP_FLAG = 
+  else
+    OPENMP_FLAG = -fopenmp
+  endif
+endif
+CFLAGS += $(OPENMP_FLAG)
+LDFLAGS += $(OPENMP_FLAG)
 
 SRC_DIR = src
 INC_DIR = include
