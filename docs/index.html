@@ -302,14 +302,14 @@
             <div class="publications-section">
                 <h3 class="subsection-title">📚 Academic Publications (PDF)</h3>
                 <p style="text-align: center; color: var(--text-secondary); margin-bottom: 3rem; font-size: 1.1rem;">
-                    All publications are available as downloadable PDFs. Updated with latest features including DDMCMC optimization, method comparison framework (RK3 vs DDRK3 vs AM vs DDAM), comprehensive benchmarks, and <strong>PDE solver capabilities</strong> for both ordinary and partial differential equations (Heat, Wave, Advection, Burgers, Laplace, Poisson). Click any card to view or download.
+                    All publications are available as downloadable PDFs. Updated with latest features including DDMCMC optimization, method comparison framework (RK3 vs DDRK3 vs AM vs DDAM), comprehensive benchmarks, <strong>PDE solver capabilities</strong> for both ordinary and partial differential equations (Heat, Wave, Advection, Burgers, Laplace, Poisson), <strong>real-time and stochastic solvers</strong> for streaming data and uncertainty quantification, and <strong>complete, unabridged, lossless implementations</strong> with full precision. Click any card to view or download.
                 </p>
                 <div class="docs-grid">
                     <a href="paper.pdf" class="doc-card pdf-card" target="_blank" download="DDRKAM_Paper.pdf">
                         <div class="doc-icon">📄</div>
                         <h3>Academic Paper</h3>
                         <p class="doc-meta">3 pages • 144 KB • PDF • Updated 2025</p>
-                        <p>Complete mathematical formulation and theoretical analysis of Runge-Kutta 3rd order (RK3), Data-Driven RK3 (DDRK3), Adams methods (AM), Data-Driven Adams (DDAM), hierarchical transformer-inspired architectures, DDMCMC optimization, and <strong>PDE solver</strong> for both ordinary and partial differential equations. Includes comprehensive method comparison framework and finite difference methods for Heat, Wave, Advection, Burgers, Laplace, and Poisson equations.</p>
+                        <p>Complete mathematical formulation and theoretical analysis of Runge-Kutta 3rd order (RK3), Data-Driven RK3 (DDRK3), Adams methods (AM), Data-Driven Adams (DDAM), hierarchical transformer-inspired architectures with full self-attention mechanisms (QK^T/sqrt(d_k) with softmax), DDMCMC optimization, <strong>PDE solver</strong> for both ordinary and partial differential equations, and <strong>real-time/stochastic solvers</strong> for streaming data and uncertainty quantification. Includes comprehensive method comparison framework, finite difference methods for Heat, Wave, Advection, Burgers, Laplace, and Poisson equations, and complete lossless implementations.</p>
                         <div class="pdf-badge">PDF Available</div>
                         <span class="doc-link">Download PDF →</span>
                     </a>
@@ -317,7 +317,7 @@
                         <div class="doc-icon">📽️</div>
                         <h3>Beamer Presentation</h3>
                         <p class="doc-meta">8 slides • 123 KB • PDF • Updated 2025</p>
-                        <p>Comprehensive presentation covering key concepts, algorithms, performance benchmarks, method comparison (RK3 vs DDRK3 vs AM vs DDAM), DDMCMC optimization for multinomial variables, efficient search algorithms, <strong>PDE solving capabilities</strong> (Heat, Wave, Advection, Burgers, Laplace, Poisson equations), and applications of the DDRKAM framework. Invented by Shyamal Suhana Chandra.</p>
+                        <p>Comprehensive presentation covering key concepts, algorithms, performance benchmarks, method comparison (RK3 vs DDRK3 vs AM vs DDAM), DDMCMC optimization for multinomial variables, efficient search algorithms, <strong>PDE solving capabilities</strong> (Heat, Wave, Advection, Burgers, Laplace, Poisson equations), <strong>real-time solvers</strong> for streaming data processing, <strong>stochastic solvers</strong> with noise injection and Brownian motion, <strong>data-driven adaptive control</strong>, and complete lossless implementations. Invented by Shyamal Suhana Chandra.</p>
                         <div class="pdf-badge">PDF Available</div>
                         <span class="doc-link">Download PDF →</span>
                     </a>
@@ -325,7 +325,7 @@
                         <div class="doc-icon">📖</div>
                         <h3>Reference Manual</h3>
                         <p class="doc-meta">8 pages • 112 KB • PDF • Updated 2025</p>
-                        <p>Complete API documentation with function signatures, usage examples, DDMCMC methods for multinomial optimization, method comparison framework (RK3/DDRK3/AM/DDAM), <strong>PDE solver API</strong> for Heat, Wave, Advection, Burgers, Laplace, and Poisson equations (1D & 2D), and implementation guidelines for C/C++ and Objective-C interfaces. Includes timing, error, accuracy metrics, and stability conditions.</p>
+                        <p>Complete API documentation with function signatures, usage examples, DDMCMC methods for multinomial optimization, method comparison framework (RK3/DDRK3/AM/DDAM), <strong>PDE solver API</strong> for Heat, Wave, Advection, Burgers, Laplace, and Poisson equations (1D & 2D), <strong>real-time solver API</strong> for streaming data processing with callback support, <strong>stochastic solver API</strong> with white noise and Brownian motion, <strong>data-driven adaptive step size control</strong> and method selection, and implementation guidelines for C/C++ and Objective-C interfaces. Includes timing, error, accuracy metrics, stability conditions, and complete lossless implementation details.</p>
                         <div class="pdf-badge">PDF Available</div>
                         <span class="doc-link">Download PDF →</span>
                     </a>
@@ -334,7 +334,7 @@
                 <div class="pdf-download-all" style="text-align: center; margin-top: 3rem; padding: 2rem; background: var(--bg-light); border-radius: 1rem; border: 1px solid rgba(148, 163, 184, 0.1);">
                     <h4 style="color: var(--text-primary); margin-bottom: 1.5rem; font-size: 1.25rem;">Quick Download All PDFs</h4>
                     <p style="color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 0.95rem;">
-                        All publications updated with DDMCMC, method comparison, <strong>PDE solver capabilities</strong> (ODEs & PDEs), and latest features. Includes comprehensive documentation for Heat, Wave, Advection, Burgers, Laplace, and Poisson equation solvers.
+                        All publications updated with DDMCMC, method comparison, <strong>PDE solver capabilities</strong> (ODEs & PDEs), <strong>real-time and stochastic solvers</strong>, <strong>data-driven adaptive control</strong>, and complete lossless implementations. Includes comprehensive documentation for Heat, Wave, Advection, Burgers, Laplace, and Poisson equation solvers, streaming data processing, uncertainty quantification, and full precision implementations.
                     </p>
                     <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
                         <a href="paper.pdf" download="DDRKAM_Paper.pdf" class="btn btn-primary" style="margin: 0.5rem;">📄 Download Paper</a>
@@ -367,6 +367,12 @@
                         <div class="doc-icon">🌊</div>
                         <h3>PDE Solver Guide</h3>
                         <p>Complete guide for solving partial differential equations: Heat, Wave, Advection, Burgers, Laplace, and Poisson equations with examples and stability conditions.</p>
+                        <span class="doc-link">View Guide →</span>
+                    </a>
+                    <a href="REALTIME_STOCHASTIC.md" class="doc-card" target="_blank">
+                        <div class="doc-icon">⚡</div>
+                        <h3>Real-Time & Stochastic Guide</h3>
+                        <p>Complete guide for real-time streaming solvers, stochastic methods with noise injection, Brownian motion, and data-driven adaptive control.</p>
                         <span class="doc-link">View Guide →</span>
                     </a>
                 </div>
