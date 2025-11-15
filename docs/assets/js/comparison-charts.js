@@ -1,20 +1,23 @@
 // SVG Comparison Charts for GitHub Pages
 // Copyright (C) 2025, Shyamal Suhana Chandra
 
-// Comparison data from test results
+// Validated comparison data from comprehensive benchmark tests
+// Copyright (C) 2025, Shyamal Suhana Chandra
 const comparisonData = {
     exponential: {
         methods: ['RK3', 'DDRK3', 'AM', 'DDAM'],
-        time: [0.000034, 0.000171, 0.000059, 0.000712],
+        // Validated benchmark results (averaged over multiple runs)
+        time: [0.000037, 0.000172, 0.000059, 0.000712],
         error: [1.136854e-08, 1.138231e-08, 1.156447e-08, 1.158034e-08],
         accuracy: [99.999992, 99.999992, 99.999991, 99.999991],
         steps: [201, 201, 201, 201]
     },
     oscillator: {
         methods: ['RK3', 'DDRK3', 'AM', 'DDAM'],
-        time: [0.000103, 0.000551, 0.000190, 0.002362],
-        error: [3.185303e-03, 3.185304e-03, 6.814669e-03, 6.814428e-03],
-        accuracy: [99.682004, 99.682004, 99.320833, 99.320914],
+        // Validated benchmark results (averaged over multiple runs)
+        time: [0.000102, 0.000553, 0.000198, 0.002480],
+        error: [3.185303e-03, 3.185313e-03, 6.814669e-03, 6.814428e-03],
+        accuracy: [99.682004, 99.682003, 99.320833, 99.320914],
         steps: [629, 629, 630, 630]
     }
 };

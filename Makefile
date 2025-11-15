@@ -51,3 +51,9 @@ test: $(LIBRARY) | $(BIN_DIR)
 	$(BIN_DIR)/test_ddmcmc
 	$(CC) $(CFLAGS) -I$(INC_DIR) tests/test_comparison.c -L$(LIB_DIR) -lddrkam -o $(BIN_DIR)/test_comparison
 	$(BIN_DIR)/test_comparison
+	$(CC) $(CFLAGS) -I$(INC_DIR) tests/test_benchmarks.c -L$(LIB_DIR) -lddrkam -lm -o $(BIN_DIR)/test_benchmarks
+	$(BIN_DIR)/test_benchmarks
+
+benchmark: test
+	@echo "Running comprehensive benchmarks..."
+	$(BIN_DIR)/test_benchmarks

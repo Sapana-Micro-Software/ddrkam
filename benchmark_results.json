@@ -1,0 +1,14 @@
+{
+  "exponential": {
+    "rk3": {"time": 0.000037, "error": 1.136854e-08, "accuracy": 1.000000, "steps": 201},
+    "ddrk3": {"time": 0.000172, "error": 1.138231e-08, "accuracy": 1.000000, "steps": 201}
+  },
+  "oscillator": {
+    "rk3": {"time": 0.000100, "error": 3.185303e-03, "accuracy": 0.996820, "steps": 629},
+    "ddrk3": {"time": 0.000553, "error": 3.185313e-03, "accuracy": 0.996820, "steps": 629}
+  },
+  "lorenz": {
+    "rk3": {"time": 0.000018, "steps": 101},
+    "ddrk3": {"time": 0.000091, "steps": 101}
+  }
+}

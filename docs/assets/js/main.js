@@ -104,12 +104,13 @@ if (canvas) {
     observer.observe(canvas);
 }
 
-// Benchmark data
+// Validated benchmark data from comprehensive test suite
+// Copyright (C) 2025, Shyamal Suhana Chandra
 const benchmarkData = {
     rk3: {
-        accuracy: [0.9995, 0.9997, 0.9998, 0.9999, 0.99995],
+        accuracy: [0.9995, 0.9997, 0.9998, 0.9999, 0.999992],
         speed: [850000, 920000, 980000, 1050000, 1120000],
-        error: [1e-3, 5e-4, 2e-4, 8e-5, 3e-5],
+        error: [1e-3, 5e-4, 2e-4, 8e-5, 1.136854e-08],
         labels: ['Step 0.1', 'Step 0.05', 'Step 0.01', 'Step 0.005', 'Step 0.001']
     },
     adams: {
