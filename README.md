@@ -69,12 +69,27 @@ NSDictionary* result = [solver solveWithFunction:^(double t,
 initialState:@[@1.0, @1.0] stepSize:0.01 params:NULL];
 ```
 
+## Method Comparison
+
+Compare all four methods (RK3, DDRK3, AM, DDAM):
+
+```c
+#include "comparison.h"
+
+ComparisonResults results;
+compare_methods(my_ode, t0, t_end, y0, n, h, params, exact, &results);
+print_comparison_results(&results);
+```
+
+See `docs/COMPARISON.md` for detailed comparison guide.
+
 ## Documentation
 
 - Paper: `docs/paper.tex`
 - Presentation: `docs/presentation.tex`
 - Reference Manual: `docs/reference_manual.tex`
 - DDMCMC Guide: `docs/DDMCMC_README.md`
+- Comparison Guide: `docs/COMPARISON.md`
 
 ## License
 

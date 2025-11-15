@@ -111,6 +111,36 @@
         </div>
     </section>
 
+    <section id="comparison" class="benchmarks" style="background: var(--bg-darker);">
+        <div class="container">
+            <h2 class="section-title">Method Comparison</h2>
+            <p style="text-align: center; color: var(--text-secondary); margin-bottom: 3rem; font-size: 1.1rem;">
+                Comprehensive comparison of RK3, DDRK3, AM, and DDAM methods
+            </p>
+            <div class="comparison-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin-bottom: 3rem;">
+                <div class="comparison-card" style="background: var(--bg-light); padding: 2rem; border-radius: 1rem; border: 1px solid rgba(148, 163, 184, 0.1); text-align: center;">
+                    <h3 style="color: var(--primary-color); margin-bottom: 1rem;">RK3</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">Standard Runge-Kutta 3rd order<br>Fast, accurate, well-tested</p>
+                </div>
+                <div class="comparison-card" style="background: var(--bg-light); padding: 2rem; border-radius: 1rem; border: 1px solid rgba(148, 163, 184, 0.1); text-align: center;">
+                    <h3 style="color: var(--secondary-color); margin-bottom: 1rem;">DDRK3</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">Data-Driven RK3<br>Hierarchical, adaptive refinement</p>
+                </div>
+                <div class="comparison-card" style="background: var(--bg-light); padding: 2rem; border-radius: 1rem; border: 1px solid rgba(148, 163, 184, 0.1); text-align: center;">
+                    <h3 style="color: var(--accent-color); margin-bottom: 1rem;">AM</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">Adams Methods<br>Multi-step, predictor-corrector</p>
+                </div>
+                <div class="comparison-card" style="background: var(--bg-light); padding: 2rem; border-radius: 1rem; border: 1px solid rgba(148, 163, 184, 0.1); text-align: center;">
+                    <h3 style="color: var(--primary-color); margin-bottom: 1rem;">DDAM</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">Data-Driven Adams<br>Hierarchical, optimized</p>
+                </div>
+            </div>
+            <div style="text-align: center;">
+                <a href="https://github.com/Sapana-Micro-Software/ddrkam/blob/main/docs/COMPARISON.md" class="btn btn-primary" target="_blank">View Comparison Guide →</a>
+            </div>
+        </div>
+    </section>
+
     <section id="benchmarks" class="benchmarks">
         <div class="container">
             <h2 class="section-title">Performance Benchmarks</h2>
