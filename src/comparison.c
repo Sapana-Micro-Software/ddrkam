@@ -1,0 +1,326 @@
+/*
+ * Method Comparison Implementation
+ * Copyright (C) 2025, Shyamal Suhana Chandra
+ */
+
+#include "comparison.h"
+#include "rk3.h"
+#include "hierarchical_rk.h"
+#include "adams.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+#include <time.h>
+
+// Data-Driven Adams Method (simplified - using hierarchical approach)
+static void ddam_step(ODEFunction f, const double* t, const double* y,
+                      size_t n, double h, void* params, double* y_next) {
+    // Use hierarchical RK approach for DDAM
+    HierarchicalRKSolver solver;
+    if (hierarchical_rk_init(&solver, 2, n, 16) == 0) {
+        double* y_current = (double*)malloc(n * sizeof(double));
+        if (y_current) {
+            memcpy(y_current, &y[2 * n], n * sizeof(double));
+            hierarchical_rk_step(&solver, f, t[2], y_current, h, params);
+            memcpy(y_next, y_current, n * sizeof(double));
+            free(y_current);
+        }
+        hierarchical_rk_free(&solver);
+    }
+}
+
+static double compute_error(const double* computed, const double* exact, size_t n) {
+    double error = 0.0;
+    for (size_t i = 0; i < n; i++) {
+        double diff = computed[i] - exact[i];
+        error += diff * diff;
+    }
+    return sqrt(error);
+}
+
+static double compute_accuracy(const double* computed, const double* exact, size_t n) {
+    double total_exact = 0.0;
+    double total_computed = 0.0;
+    
+    for (size_t i = 0; i < n; i++) {
+        total_exact += fabs(exact[i]);
+        total_computed += fabs(computed[i]);
+    }
+    
+    if (total_exact == 0.0) return 1.0;
+    
+    return 1.0 - fabs(total_computed - total_exact) / total_exact;
+}
+
+int compare_methods(ODEFunction f, double t0, double t_end, const double* y0,
+                   size_t n, double h, void* params, const double* exact_solution,
+                   ComparisonResults* results) {
+    if (!f || !y0 || !exact_solution || !results || n == 0) {
+        return -1;
+    }
+    
+    memset(results, 0, sizeof(ComparisonResults));
+    
+    size_t max_steps = (size_t)((t_end - t0) / h) + 10;
+    double* t_out = (double*)malloc(max_steps * sizeof(double));
+    double* y_out = (double*)malloc(max_steps * n * sizeof(double));
+    
+    if (!t_out || !y_out) {
+        if (t_out) free(t_out);
+        if (y_out) free(y_out);
+        return -1;
+    }
+    
+    clock_t start, end;
+    
+    // Test RK3
+    double* y0_copy = (double*)malloc(n * sizeof(double));
+    memcpy(y0_copy, y0, n * sizeof(double));
+    
+    start = clock();
+    size_t rk3_steps = rk3_solve(f, t0, t_end, y0_copy, n, h, params, t_out, y_out);
+    end = clock();
+    
+    results->rk3_time = ((double)(end - start)) / CLOCKS_PER_SEC;
+    results->rk3_steps = rk3_steps;
+    
+    if (rk3_steps > 0) {
+        double* final_rk3 = &y_out[(rk3_steps - 1) * n];
+        results->rk3_error = compute_error(final_rk3, exact_solution, n);
+        results->rk3_accuracy = compute_accuracy(final_rk3, exact_solution, n);
+    }
+    
+    free(y0_copy);
+    
+    // Test DDRK3 (Hierarchical RK)
+    HierarchicalRKSolver ddrk3_solver;
+    if (hierarchical_rk_init(&ddrk3_solver, 3, n, 16) == 0) {
+        y0_copy = (double*)malloc(n * sizeof(double));
+        memcpy(y0_copy, y0, n * sizeof(double));
+        
+        start = clock();
+        size_t ddrk3_steps = hierarchical_rk_solve(&ddrk3_solver, f, t0, t_end, y0_copy,
+                                                   h, params, t_out, y_out);
+        end = clock();
+        
+        results->ddrk3_time = ((double)(end - start)) / CLOCKS_PER_SEC;
+        results->ddrk3_steps = ddrk3_steps;
+        
+        if (ddrk3_steps > 0) {
+            double* final_ddrk3 = &y_out[(ddrk3_steps - 1) * n];
+            results->ddrk3_error = compute_error(final_ddrk3, exact_solution, n);
+            results->ddrk3_accuracy = compute_accuracy(final_ddrk3, exact_solution, n);
+        }
+        
+        hierarchical_rk_free(&ddrk3_solver);
+        free(y0_copy);
+    }
+    
+    // Test AM (Adams Methods) - simplified implementation
+    // Need at least 3 previous points for Adams-Bashforth 3
+    if (max_steps >= 3) {
+        y0_copy = (double*)malloc(n * sizeof(double));
+        memcpy(y0_copy, y0, n * sizeof(double));
+        
+        // Initialize with RK3 for first few steps
+        double* t_am = (double*)malloc(3 * sizeof(double));
+        double* y_am = (double*)malloc(3 * n * sizeof(double));
+        
+        if (t_am && y_am) {
+            // Get first 3 points using RK3
+            size_t init_steps = rk3_solve(f, t0, t0 + 2*h, y0_copy, n, h, params, t_am, y_am);
+            
+            if (init_steps >= 3) {
+                start = clock();
+                
+                double t_current = t_am[2];
+                size_t am_steps = 3;
+                
+                while (t_current < t_end && am_steps < max_steps) {
+                    double* y_pred = (double*)malloc(n * sizeof(double));
+                    double* y_corr = (double*)malloc(n * sizeof(double));
+                    
+                    if (y_pred && y_corr) {
+                        adams_bashforth3(f, t_am, y_am, n, h, params, y_pred);
+                        adams_moulton3(f, t_am, y_am, n, h, params, y_pred, y_corr);
+                        
+                        // Shift arrays
+                        memmove(&t_am[0], &t_am[1], 2 * sizeof(double));
+                        memmove(&y_am[0], &y_am[n], 2 * n * sizeof(double));
+                        
+                        t_am[2] = t_current + h;
+                        memcpy(&y_am[2 * n], y_corr, n * sizeof(double));
+                        
+                        t_current += h;
+                        am_steps++;
+                    }
+                    
+                    if (y_pred) free(y_pred);
+                    if (y_corr) free(y_corr);
+                }
+                
+                end = clock();
+                
+                results->am_time = ((double)(end - start)) / CLOCKS_PER_SEC;
+                results->am_steps = am_steps;
+                
+                if (am_steps > 0) {
+                    double* final_am = &y_am[2 * n];
+                    results->am_error = compute_error(final_am, exact_solution, n);
+                    results->am_accuracy = compute_accuracy(final_am, exact_solution, n);
+                }
+            }
+            
+            free(t_am);
+            free(y_am);
+        }
+        
+        free(y0_copy);
+    }
+    
+    // Test DDAM (Data-Driven Adams)
+    HierarchicalRKSolver ddam_solver;
+    if (hierarchical_rk_init(&ddam_solver, 2, n, 16) == 0) {
+        y0_copy = (double*)malloc(n * sizeof(double));
+        memcpy(y0_copy, y0, n * sizeof(double));
+        
+        // Initialize with hierarchical RK
+        double* t_ddam = (double*)malloc(3 * sizeof(double));
+        double* y_ddam = (double*)malloc(3 * n * sizeof(double));
+        
+        if (t_ddam && y_ddam) {
+            size_t init_steps = hierarchical_rk_solve(&ddam_solver, f, t0, t0 + 2*h,
+                                                      y0_copy, h, params, t_ddam, y_ddam);
+            
+            if (init_steps >= 3) {
+                start = clock();
+                
+                double t_current = t_ddam[2];
+                size_t ddam_steps = 3;
+                
+                while (t_current < t_end && ddam_steps < max_steps) {
+                    double* y_next = (double*)malloc(n * sizeof(double));
+                    
+                    if (y_next) {
+                        ddam_step(f, t_ddam, y_ddam, n, h, params, y_next);
+                        
+                        // Shift arrays
+                        memmove(&t_ddam[0], &t_ddam[1], 2 * sizeof(double));
+                        memmove(&y_ddam[0], &y_ddam[n], 2 * n * sizeof(double));
+                        
+                        t_ddam[2] = t_current + h;
+                        memcpy(&y_ddam[2 * n], y_next, n * sizeof(double));
+                        
+                        t_current += h;
+                        ddam_steps++;
+                    }
+                    
+                    if (y_next) free(y_next);
+                }
+                
+                end = clock();
+                
+                results->ddam_time = ((double)(end - start)) / CLOCKS_PER_SEC;
+                results->ddam_steps = ddam_steps;
+                
+                if (ddam_steps > 0) {
+                    double* final_ddam = &y_ddam[2 * n];
+                    results->ddam_error = compute_error(final_ddam, exact_solution, n);
+                    results->ddam_accuracy = compute_accuracy(final_ddam, exact_solution, n);
+                }
+            }
+            
+            free(t_ddam);
+            free(y_ddam);
+        }
+        
+        hierarchical_rk_free(&ddam_solver);
+        free(y0_copy);
+    }
+    
+    free(t_out);
+    free(y_out);
+    
+    return 0;
+}
+
+void print_comparison_results(const ComparisonResults* results) {
+    if (!results) return;
+    
+    printf("\n");
+    printf("╔════════════════════════════════════════════════════════════════╗\n");
+    printf("║          METHOD COMPARISON: RK3 vs DDRK3 vs AM vs DDAM         ║\n");
+    printf("╠════════════════════════════════════════════════════════════════╣\n");
+    printf("║ Method │ Time (s) │ Steps │ Error      │ Accuracy              ║\n");
+    printf("╠════════╪══════════╪═══════╪════════════╪═══════════════════════╣\n");
+    printf("║ RK3    │ %8.6f │ %5zu │ %10.6e │ %19.6f%% ║\n",
+           results->rk3_time, results->rk3_steps, results->rk3_error, results->rk3_accuracy * 100);
+    printf("║ DDRK3  │ %8.6f │ %5zu │ %10.6e │ %19.6f%% ║\n",
+           results->ddrk3_time, results->ddrk3_steps, results->ddrk3_error, results->ddrk3_accuracy * 100);
+    printf("║ AM     │ %8.6f │ %5zu │ %10.6e │ %19.6f%% ║\n",
+           results->am_time, results->am_steps, results->am_error, results->am_accuracy * 100);
+    printf("║ DDAM   │ %8.6f │ %5zu │ %10.6e │ %19.6f%% ║\n",
+           results->ddam_time, results->ddam_steps, results->ddam_error, results->ddam_accuracy * 100);
+    printf("╚════════╧══════════╧═══════╧════════════╧═══════════════════════╝\n");
+    printf("\n");
+    
+    // Find best method
+    const char* best_time = "RK3";
+    double min_time = results->rk3_time;
+    if (results->ddrk3_time > 0 && results->ddrk3_time < min_time) {
+        min_time = results->ddrk3_time;
+        best_time = "DDRK3";
+    }
+    if (results->am_time > 0 && results->am_time < min_time) {
+        min_time = results->am_time;
+        best_time = "AM";
+    }
+    if (results->ddam_time > 0 && results->ddam_time < min_time) {
+        min_time = results->ddam_time;
+        best_time = "DDAM";
+    }
+    
+    const char* best_accuracy = "RK3";
+    double max_accuracy = results->rk3_accuracy;
+    if (results->ddrk3_accuracy > max_accuracy) {
+        max_accuracy = results->ddrk3_accuracy;
+        best_accuracy = "DDRK3";
+    }
+    if (results->am_accuracy > max_accuracy) {
+        max_accuracy = results->am_accuracy;
+        best_accuracy = "AM";
+    }
+    if (results->ddam_accuracy > max_accuracy) {
+        max_accuracy = results->ddam_accuracy;
+        best_accuracy = "DDAM";
+    }
+    
+    printf("🏆 Best Performance: %s (%.6f seconds)\n", best_time, min_time);
+    printf("🎯 Best Accuracy: %s (%.6f%%)\n", best_accuracy, max_accuracy * 100);
+    printf("\n");
+}
+
+int export_comparison_csv(const char* filename, const ComparisonResults* results) {
+    if (!filename || !results) {
+        return -1;
+    }
+    
+    FILE* fp = fopen(filename, "w");
+    if (!fp) {
+        return -1;
+    }
+    
+    fprintf(fp, "Method,Time(s),Steps,Error,Accuracy(%%)\n");
+    fprintf(fp, "RK3,%.6f,%zu,%.6e,%.6f\n",
+            results->rk3_time, results->rk3_steps, results->rk3_error, results->rk3_accuracy * 100);
+    fprintf(fp, "DDRK3,%.6f,%zu,%.6e,%.6f\n",
+            results->ddrk3_time, results->ddrk3_steps, results->ddrk3_error, results->ddrk3_accuracy * 100);
+    fprintf(fp, "AM,%.6f,%zu,%.6e,%.6f\n",
+            results->am_time, results->am_steps, results->am_error, results->am_accuracy * 100);
+    fprintf(fp, "DDAM,%.6f,%zu,%.6e,%.6f\n",
+            results->ddam_time, results->ddam_steps, results->ddam_error, results->ddam_accuracy * 100);
+    
+    fclose(fp);
+    return 0;
+}

@@ -49,3 +49,5 @@ test: $(LIBRARY) | $(BIN_DIR)
 	$(BIN_DIR)/test_rk3
 	$(CC) $(CFLAGS) -I$(INC_DIR) tests/test_ddmcmc.c -L$(LIB_DIR) -lddrkam -o $(BIN_DIR)/test_ddmcmc
 	$(BIN_DIR)/test_ddmcmc
+	$(CC) $(CFLAGS) -I$(INC_DIR) tests/test_comparison.c -L$(LIB_DIR) -lddrkam -o $(BIN_DIR)/test_comparison
+	$(BIN_DIR)/test_comparison

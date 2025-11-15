@@ -15,3 +15,4 @@ FOUNDATION_EXPORT const unsigned char DDRKAMVersionString[];
 #import <DDRKAM/DDRKAMSolver.h>
 #import <DDRKAM/DDRKAMVisualizer.h>
 #import <DDRKAM/DDRKAMHierarchicalSolver.h>
+#import <DDRKAM/DDRKAMComparison.h>
