@@ -40,7 +40,7 @@ function createSVGChart(containerId, data, type, title) {
     svg.setAttribute('width', width);
     svg.setAttribute('height', height);
     svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
-    svg.style.background = 'var(--bg-light)';
+    svg.style.background = '#1e293b';
     svg.style.borderRadius = '0.5rem';
     
     // Title
@@ -50,7 +50,7 @@ function createSVGChart(containerId, data, type, title) {
     titleEl.setAttribute('text-anchor', 'middle');
     titleEl.setAttribute('font-size', '18');
     titleEl.setAttribute('font-weight', '600');
-    titleEl.setAttribute('fill', 'var(--text-primary)');
+    titleEl.setAttribute('fill', '#f1f5f9');
     titleEl.textContent = title;
     svg.appendChild(titleEl);
     
@@ -89,7 +89,7 @@ function createSVGChart(containerId, data, type, title) {
     yAxis.setAttribute('y1', 0);
     yAxis.setAttribute('x2', 0);
     yAxis.setAttribute('y2', chartHeight);
-    yAxis.setAttribute('stroke', 'var(--text-secondary)');
+    yAxis.setAttribute('stroke', '#cbd5e1');
     yAxis.setAttribute('stroke-width', '2');
     chartGroup.appendChild(yAxis);
     
@@ -99,7 +99,7 @@ function createSVGChart(containerId, data, type, title) {
     xAxis.setAttribute('y1', chartHeight);
     xAxis.setAttribute('x2', chartWidth);
     xAxis.setAttribute('y2', chartHeight);
-    xAxis.setAttribute('stroke', 'var(--text-secondary)');
+    xAxis.setAttribute('stroke', '#cbd5e1');
     xAxis.setAttribute('stroke-width', '2');
     chartGroup.appendChild(xAxis);
     
@@ -114,7 +114,7 @@ function createSVGChart(containerId, data, type, title) {
         tick.setAttribute('y1', y);
         tick.setAttribute('x2', 0);
         tick.setAttribute('y2', y);
-        tick.setAttribute('stroke', 'var(--text-muted)');
+        tick.setAttribute('stroke', '#94a3b8');
         tick.setAttribute('stroke-width', '1');
         chartGroup.appendChild(tick);
         
@@ -123,7 +123,7 @@ function createSVGChart(containerId, data, type, title) {
         label.setAttribute('y', y + 4);
         label.setAttribute('text-anchor', 'end');
         label.setAttribute('font-size', '12');
-        label.setAttribute('fill', 'var(--text-secondary)');
+        label.setAttribute('fill', '#cbd5e1');
         label.textContent = type === 'error' ? value.toExponential(1) : 
                            type === 'time' ? value.toFixed(6) : 
                            type === 'accuracy' ? value.toFixed(2) + '%' : 
@@ -177,7 +177,7 @@ function createSVGChart(containerId, data, type, title) {
         valueLabel.setAttribute('text-anchor', 'middle');
         valueLabel.setAttribute('font-size', '11');
         valueLabel.setAttribute('font-weight', '600');
-        valueLabel.setAttribute('fill', 'var(--text-primary)');
+        valueLabel.setAttribute('fill', '#f1f5f9');
         valueLabel.textContent = type === 'error' ? value.toExponential(2) :
                                 type === 'time' ? value.toFixed(6) :
                                 type === 'accuracy' ? value.toFixed(2) + '%' :
@@ -203,7 +203,7 @@ function createSVGChart(containerId, data, type, title) {
     yLabel.setAttribute('text-anchor', 'middle');
     yLabel.setAttribute('font-size', '14');
     yLabel.setAttribute('font-weight', '600');
-    yLabel.setAttribute('fill', 'var(--text-secondary)');
+    yLabel.setAttribute('fill', '#cbd5e1');
     yLabel.setAttribute('transform', 'rotate(-90)');
     yLabel.textContent = type === 'time' ? 'Time (seconds)' :
                         type === 'error' ? 'Error (L2 norm)' :
@@ -232,7 +232,7 @@ document.addEventListener('DOMContentLoaded', function() {
         ['time', 'error', 'accuracy'].forEach(type => {
             const chartDiv = document.createElement('div');
             chartDiv.id = `chart-exp-${type}`;
-            chartDiv.style.cssText = 'background: var(--bg-light); padding: 1rem; border-radius: 0.5rem; margin-bottom: 1rem;';
+            chartDiv.style.cssText = 'background: #1e293b; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1rem; border: 1px solid rgba(148, 163, 184, 0.1);';
             expSection.appendChild(chartDiv);
             createSVGChart(`chart-exp-${type}`, comparisonData.exponential, type, 
                           type === 'time' ? 'Execution Time' :
@@ -249,7 +249,7 @@ document.addEventListener('DOMContentLoaded', function() {
         ['time', 'error', 'accuracy'].forEach(type => {
             const chartDiv = document.createElement('div');
             chartDiv.id = `chart-osc-${type}`;
-            chartDiv.style.cssText = 'background: var(--bg-light); padding: 1rem; border-radius: 0.5rem; margin-bottom: 1rem;';
+            chartDiv.style.cssText = 'background: #1e293b; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1rem; border: 1px solid rgba(148, 163, 184, 0.1);';
             oscSection.appendChild(chartDiv);
             createSVGChart(`chart-osc-${type}`, comparisonData.oscillator, type,
                           type === 'time' ? 'Execution Time' :
