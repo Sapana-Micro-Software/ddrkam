@@ -900,21 +900,32 @@
     // ============================================================================
     
     function initializeTestVisualizations() {
+        console.log('[TestViz] Initializing test visualizations...');
+        
         // Wait for DOM and layout to be ready
         function init() {
             if (document.readyState === 'loading') {
+                console.log('[TestViz] Document still loading, waiting...');
                 document.addEventListener('DOMContentLoaded', () => {
                     setTimeout(init, 100);
                 });
                 return;
             }
             
+            console.log('[TestViz] Document ready, scheduling draw...');
+            
             // Use requestAnimationFrame to ensure layout is complete
             requestAnimationFrame(() => {
                 // Double-check with a small delay to ensure elements are visible
                 setTimeout(() => {
-                    drawAllVisualizations();
-                }, 150);
+                    console.log('[TestViz] Drawing all visualizations...');
+                    try {
+                        drawAllVisualizations();
+                        console.log('[TestViz] ✓ All visualizations drawn');
+                    } catch (e) {
+                        console.error('[TestViz] Error drawing visualizations:', e);
+                    }
+                }, 200);
             });
         }
         
@@ -924,35 +935,92 @@
         let resizeTimer;
         window.addEventListener('resize', () => {
             clearTimeout(resizeTimer);
-            resizeTimer = setTimeout(drawAllVisualizations, 250);
+            resizeTimer = setTimeout(() => {
+                console.log('[TestViz] Window resized, redrawing...');
+                drawAllVisualizations();
+            }, 250);
         });
         
         // Also redraw when section becomes visible (Intersection Observer)
         const testSection = document.getElementById('test-visualizations');
         if (testSection) {
+            console.log('[TestViz] Setting up Intersection Observer');
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
+                        console.log('[TestViz] Section visible, redrawing...');
                         setTimeout(drawAllVisualizations, 100);
                     }
                 });
             }, { threshold: 0.1 });
             observer.observe(testSection);
+        } else {
+            console.warn('[TestViz] test-visualizations section not found');
         }
     }
     
     function drawAllVisualizations() {
+        console.log('[TestViz] Drawing all visualizations...');
+        
         // Harmonic Oscillator
-        drawOscillatorTimeSeries();
-        drawOscillatorPhaseSpace();
-        drawOscillatorError();
-        drawOscillatorMethodComparison();
+        try {
+            drawOscillatorTimeSeries();
+            console.log('[TestViz] ✓ Oscillator time series');
+        } catch (e) {
+            console.error('[TestViz] Error drawing oscillator time series:', e);
+        }
+        
+        try {
+            drawOscillatorPhaseSpace();
+            console.log('[TestViz] ✓ Oscillator phase space');
+        } catch (e) {
+            console.error('[TestViz] Error drawing oscillator phase space:', e);
+        }
+        
+        try {
+            drawOscillatorError();
+            console.log('[TestViz] ✓ Oscillator error');
+        } catch (e) {
+            console.error('[TestViz] Error drawing oscillator error:', e);
+        }
+        
+        try {
+            drawOscillatorMethodComparison();
+            console.log('[TestViz] ✓ Oscillator method comparison');
+        } catch (e) {
+            console.error('[TestViz] Error drawing oscillator comparison:', e);
+        }
         
         // Exponential Decay
-        drawExponentialTimeSeries();
-        drawExponentialError();
-        drawExponentialLogError();
-        drawExponentialMethodComparison();
+        try {
+            drawExponentialTimeSeries();
+            console.log('[TestViz] ✓ Exponential time series');
+        } catch (e) {
+            console.error('[TestViz] Error drawing exponential time series:', e);
+        }
+        
+        try {
+            drawExponentialError();
+            console.log('[TestViz] ✓ Exponential error');
+        } catch (e) {
+            console.error('[TestViz] Error drawing exponential error:', e);
+        }
+        
+        try {
+            drawExponentialLogError();
+            console.log('[TestViz] ✓ Exponential log error');
+        } catch (e) {
+            console.error('[TestViz] Error drawing exponential log error:', e);
+        }
+        
+        try {
+            drawExponentialMethodComparison();
+            console.log('[TestViz] ✓ Exponential method comparison');
+        } catch (e) {
+            console.error('[TestViz] Error drawing exponential comparison:', e);
+        }
+        
+        console.log('[TestViz] ✓ All visualizations complete');
     }
     
     // Initialize

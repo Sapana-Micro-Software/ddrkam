@@ -535,23 +535,70 @@ function drawComparisonBarCharts() {
 
 // Initialize charts on load with proper timing
 function initializeCharts() {
+    console.log('[Charts] Initializing charts...');
+    
     // Wait for layout to complete
     if (document.readyState === 'loading') {
+        console.log('[Charts] Document still loading, waiting for DOMContentLoaded...');
         document.addEventListener('DOMContentLoaded', () => {
             setTimeout(initializeCharts, 100);
         });
         return;
     }
     
+    console.log('[Charts] Document ready, initializing in next frame...');
+    
     // Use requestAnimationFrame to ensure layout is complete
     requestAnimationFrame(() => {
-        updateCharts('rk3');
-        drawComparisonBarCharts();
-        
-        // Make updateCharts available globally
-        window.updateCharts = updateCharts;
-        window.drawComparisonBarCharts = drawComparisonBarCharts;
-        window.drawAccuracySpeedChart = drawAccuracySpeedChart;
+        setTimeout(() => {
+            console.log('[Charts] Drawing initial charts...');
+            try {
+                updateCharts('rk3');
+                console.log('[Charts] ✓ Initial charts drawn');
+            } catch (e) {
+                console.error('[Charts] Error drawing initial charts:', e);
+            }
+            
+            try {
+                drawComparisonBarCharts();
+                console.log('[Charts] ✓ Comparison bar charts drawn');
+            } catch (e) {
+                console.error('[Charts] Error drawing comparison charts:', e);
+            }
+            
+            // Setup benchmark button handlers
+            setupBenchmarkButtons();
+            
+            // Make functions available globally
+            window.updateCharts = updateCharts;
+            window.drawComparisonBarCharts = drawComparisonBarCharts;
+            window.drawAccuracySpeedChart = drawAccuracySpeedChart;
+            
+            console.log('[Charts] ✓ Initialization complete');
+        }, 200);
+    });
+}
+
+// Setup benchmark button click handlers
+function setupBenchmarkButtons() {
+    const buttons = document.querySelectorAll('.benchmark-btn');
+    console.log('[Charts] Setting up', buttons.length, 'benchmark buttons');
+    
+    buttons.forEach(btn => {
+        btn.addEventListener('click', function() {
+            console.log('[Charts] Button clicked:', this.dataset.method);
+            
+            // Update active state
+            buttons.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Update charts
+            try {
+                updateCharts(this.dataset.method);
+            } catch (e) {
+                console.error('[Charts] Error updating charts:', e);
+            }
+        });
     });
 }
 
@@ -563,6 +610,7 @@ let resizeTimeout;
 window.addEventListener('resize', () => {
     clearTimeout(resizeTimeout);
     resizeTimeout = setTimeout(() => {
+        console.log('[Charts] Window resized, redrawing charts...');
         const activeBtn = document.querySelector('.benchmark-btn.active');
         if (activeBtn) {
             updateCharts(activeBtn.dataset.method);
@@ -571,11 +619,4 @@ window.addEventListener('resize', () => {
         }
         drawComparisonBarCharts();
     }, 250);
-});
-
-// Update charts when benchmark button is clicked
-document.querySelectorAll('.benchmark-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-        updateCharts(this.dataset.method);
-    });
 });
