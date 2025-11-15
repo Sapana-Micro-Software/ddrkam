@@ -2,12 +2,29 @@
 
 ## Overview
 
-This document provides a comprehensive comparison of four numerical methods implemented in DDRKAM:
+This document provides a comprehensive comparison of numerical methods implemented in DDRKAM:
 
+**Standard Methods:**
 - **RK3**: Standard Runge-Kutta 3rd order method
 - **DDRK3**: Data-Driven Runge-Kutta 3rd order (hierarchical/transformer-inspired)
 - **AM**: Standard Adams Methods (Bashforth & Moulton)
 - **DDAM**: Data-Driven Adams Methods (hierarchical)
+
+**Parallel Methods:**
+- **Parallel RK3**: Multi-threaded RK3 with OpenMP/pthreads
+- **Parallel AM**: Multi-threaded Adams Methods
+- **Stacked RK3**: Hierarchical stacked layers with attention
+
+**Real-Time & Online Methods:**
+- **Real-Time RK3**: Streaming data processing with minimal latency
+- **Online RK3**: Adaptive online learning with step size adjustment
+- **Dynamic RK3**: Dynamic step size adaptation
+
+**Advanced Solvers:**
+- **Nonlinear ODE Solver**: Gradient descent-based nonlinear programming
+- **Distributed Data-Driven**: Distributed computing with data-driven methods
+- **Online Data-Driven**: Online learning combined with data-driven architecture
+- **Real-Time Data-Driven**: Real-time processing with data-driven enhancement
 
 ## Usage
 
@@ -67,10 +84,26 @@ The comparison framework evaluates:
 
 ### Performance Characteristics
 
+**Standard Methods:**
 - **RK3**: Fast, good accuracy, standard method
 - **DDRK3**: Slightly slower due to hierarchical processing, potentially better accuracy
 - **AM**: Multi-step method, good for smooth solutions
 - **DDAM**: Hierarchical Adams, adaptive refinement
+
+**Parallel Methods:**
+- **Parallel RK3**: Faster execution on multi-core systems, maintains accuracy
+- **Stacked RK3**: Enhanced accuracy through hierarchical refinement, moderate overhead
+
+**Real-Time & Online:**
+- **Real-Time RK3**: Optimized for streaming data, minimal latency
+- **Online RK3**: Adaptive step sizing, good for varying dynamics
+- **Dynamic RK3**: Automatic step size adjustment based on error estimates
+
+**Advanced Solvers:**
+- **Nonlinear ODE**: Handles nonlinear constraints and optimization objectives
+- **Distributed Data-Driven**: Scalable to large systems, combines distributed computing with ML
+- **Online Data-Driven**: Continuous learning from streaming data
+- **Real-Time Data-Driven**: Low-latency processing with adaptive learning
 
 ### When to Use
 
@@ -78,6 +111,11 @@ The comparison framework evaluates:
 - **DDRK3**: Complex systems, adaptive refinement needed
 - **AM**: Smooth solutions, multi-step efficiency
 - **DDAM**: High-dimensional, complex optimization landscapes
+- **Parallel RK3**: Multi-core systems, large-scale problems
+- **Real-Time RK3**: Streaming data, live monitoring applications
+- **Online RK3**: Systems with varying dynamics, adaptive control
+- **Nonlinear ODE**: Constrained optimization problems, nonlinear programming
+- **Distributed Data-Driven**: Large-scale distributed systems, cloud computing
 
 ## Running Comparisons
 

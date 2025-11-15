@@ -114,6 +114,21 @@ typedef struct {
     double dynamic_am_accuracy;
     double dynamic_euler_accuracy;
     
+    // Nonlinear programming solvers
+    double nonlinear_ode_time;
+    double nonlinear_pde_time;
+    double nonlinear_ode_error;
+    double nonlinear_pde_error;
+    double nonlinear_ode_accuracy;
+    double nonlinear_pde_accuracy;
+    
+    // Additional distributed/data-driven/online/real-time solvers
+    double distributed_datadriven_time;
+    double online_datadriven_time;
+    double realtime_datadriven_time;
+    double distributed_online_time;
+    double distributed_realtime_time;
+    
     // Parallel performance metrics
     double speedup_rk3;      // Speedup factor for parallel RK3
     double speedup_am;        // Speedup factor for parallel AM

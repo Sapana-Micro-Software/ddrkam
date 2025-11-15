@@ -256,6 +256,73 @@ double dynamic_rk_step(DynamicRKSolver* solver, ODEFunction f,
                        double t, double* y, void* params);
 \end{lstlisting}
 
+\section{Nonlinear Programming Solvers}
+
+\subsection{Nonlinear ODE Solver}
+
+\subsubsection{nonlinear\_ode\_init}
+
+Initialize nonlinear ODE solver using NLP methods.
+
+\begin{lstlisting}
+int nonlinear_ode_init(NonlinearODESolver* solver, size_t state_dim,
+                       NLPSolverType solver_type, ObjectiveFunction objective,
+                       ConstraintFunction constraints, void* params);
+\end{lstlisting}
+
+\subsubsection{nonlinear\_ode\_solve}
+
+Solve ODE using nonlinear programming.
+
+\begin{lstlisting}
+int nonlinear_ode_solve(NonlinearODESolver* solver, ODEFunction f,
+                       double t0, double t_end, const double* y0,
+                       double* y_out);
+\end{lstlisting}
+
+\subsection{Nonlinear PDE Solver}
+
+\subsubsection{nonlinear\_pde\_init}
+
+Initialize nonlinear PDE solver.
+
+\begin{lstlisting}
+int nonlinear_pde_init(NonlinearPDESolver* solver, size_t spatial_dim,
+                      const size_t* grid_size, NLPSolverType solver_type,
+                      PDEFunction pde_func, void* params);
+\end{lstlisting}
+
+\subsubsection{nonlinear\_pde\_solve}
+
+Solve PDE using nonlinear programming.
+
+\begin{lstlisting}
+int nonlinear_pde_solve(NonlinearPDESolver* solver, double t0, double t_end,
+                      const double* u0, double* u_out);
+\end{lstlisting}
+
+\section{Additional Distributed, Data-Driven, Online, Real-Time Solvers}
+
+\subsection{Distributed Data-Driven Solver}
+
+Combines distributed computing with data-driven methods.
+
+\subsection{Online Data-Driven Solver}
+
+Combines online learning with data-driven methods.
+
+\subsection{Real-Time Data-Driven Solver}
+
+Combines real-time processing with data-driven methods.
+
+\subsection{Distributed Online Solver}
+
+Combines distributed computing with online learning.
+
+\subsection{Distributed Real-Time Solver}
+
+Combines distributed computing with real-time processing.
+
 \section{Runge-Kutta 3rd Order Method}
 
 \subsection{Overview}

@@ -120,6 +120,58 @@ Dynamic methods provide fully adaptive execution with dynamic step sizes and par
 \item Adaptive mode switching
 \end{itemize}
 
+\subsection{Nonlinear Programming-Based Solvers}
+
+We extend the framework with nonlinear programming (NLP) methods for solving ODEs and PDEs as optimization problems. This includes:
+
+\subsubsection{Nonlinear ODE Solvers}
+
+Nonlinear ODE solvers formulate ODE integration as an optimization problem:
+\begin{equation}
+\min \int_{t_0}^{t_f} \| \dot{y} - f(t, y) \|^2 dt
+\end{equation}
+
+Methods include:
+\begin{itemize}
+\item Gradient descent
+\item Newton's method
+\item Quasi-Newton (BFGS)
+\item Interior point methods
+\item Sequential quadratic programming (SQP)
+\item Trust region methods
+\end{itemize}
+
+\subsubsection{Nonlinear PDE Solvers}
+
+Nonlinear PDE solvers apply optimization techniques to partial differential equations:
+\begin{equation}
+\min \int_{\Omega} \| \frac{\partial u}{\partial t} - F(t, x, u, \nabla u) \|^2 d\Omega
+\end{equation}
+
+\subsection{Additional Distributed, Data-Driven, Online, and Real-Time Solvers}
+
+We provide comprehensive combinations of execution modes:
+
+\subsubsection{Distributed Data-Driven Solvers}
+
+Combine distributed computing with hierarchical data-driven methods for scalable, adaptive solutions.
+
+\subsubsection{Online Data-Driven Solvers}
+
+Combine online learning with data-driven architectures for adaptive, incremental refinement.
+
+\subsubsection{Real-Time Data-Driven Solvers}
+
+Combine real-time processing with data-driven methods for low-latency, adaptive streaming.
+
+\subsubsection{Distributed Online Solvers}
+
+Combine distributed computing with online learning for scalable, adaptive execution.
+
+\subsubsection{Distributed Real-Time Solvers}
+
+Combine distributed computing with real-time processing for scalable, low-latency execution.
+
 \section{Hierarchical and Stacked Architecture}
 
 We propose hierarchical and stacked architectures inspired by transformer networks that process ODE solutions through multiple layers with attention mechanisms. Each layer applies transformations to the state space, enabling adaptive refinement of the numerical solution.
@@ -248,9 +300,71 @@ All methods demonstrate excellent accuracy:
 \item DDAM: 99.320914\% accuracy, 630 steps
 \end{itemize}
 
+\section{Cellular Automata and Petri Net Solvers}
+
+We extend the framework with cellular automata (CA) and Petri net-based solvers for both ODEs and PDEs, providing alternative computational paradigms.
+
+\subsection{Cellular Automata ODE Solvers}
+
+Cellular automata ODE solvers map ODE state spaces to CA grids, where each cell evolves according to local rules:
+
+\begin{equation}
+y_{i,j}^{n+1} = \mathcal{R}(y_{i,j}^n, \mathcal{N}(y_{i,j}^n))
+\end{equation}
+
+where $\mathcal{R}$ is the CA rule and $\mathcal{N}$ denotes the neighborhood. We support:
+\begin{itemize}
+\item Elementary CA (1D) with rule numbers
+\item Game of Life (2D) for complex dynamics
+\item Totalistic CA for symmetric rules
+\item Quantum CA (simulated) for quantum-inspired computation
+\end{itemize}
+
+\subsection{Cellular Automata PDE Solvers}
+
+CA-based PDE solvers discretize spatial domains into grids where each cell represents a spatial point. The evolution follows:
+
+\begin{equation}
+u_{i,j}^{n+1} = \mathcal{R}(u_{i,j}^n, \nabla u_{i,j}^n, \Delta u_{i,j}^n)
+\end{equation}
+
+This approach is particularly effective for reaction-diffusion equations and pattern formation.
+
+\subsection{Petri Net ODE Solvers}
+
+Petri net ODE solvers model ODEs as continuous Petri nets where:
+\begin{itemize}
+\item Places represent state variables
+\item Transitions represent rate functions
+\item Tokens represent continuous values
+\item Firing rates correspond to ODE right-hand sides
+\end{itemize}
+
+The evolution follows:
+\begin{equation}
+\frac{dM_i}{dt} = \sum_{j} w_{ji} \lambda_j - \sum_{k} w_{ik} \lambda_k
+\end{equation}
+
+where $M_i$ is the marking (token count) of place $i$, $\lambda_j$ are transition firing rates, and $w_{ij}$ are arc weights.
+
+\subsection{Petri Net PDE Solvers}
+
+Petri net PDE solvers extend the concept to spatial domains by distributing places and transitions across spatial grids, enabling distributed computation of PDE solutions.
+
 \section{Results}
 
 Our comprehensive test suite validates all implementations across multiple test cases. The exponential decay test demonstrates exceptional accuracy (99.99999\%) for all methods, while the harmonic oscillator test shows excellent performance (99.3-99.7\%) over a full period.
+
+The framework now includes:
+\begin{itemize}
+\item Standard methods (RK3, DDRK3, AM, DDAM)
+\item Parallel methods (Parallel RK3, Parallel AM, Stacked RK3)
+\item Real-time and online methods (Real-Time RK3, Online RK3, Dynamic RK3)
+\item Nonlinear programming solvers (Nonlinear ODE, Nonlinear PDE)
+\item Distributed solvers (Distributed Data-Driven, Distributed Online, Distributed Real-Time)
+\item Cellular automata solvers (CA ODE, CA PDE)
+\item Petri net solvers (Petri Net ODE, Petri Net PDE)
+\end{itemize}
 
 \section{Conclusion}
 

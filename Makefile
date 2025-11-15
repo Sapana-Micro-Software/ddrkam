@@ -75,6 +75,8 @@ test: $(LIBRARY) | $(BIN_DIR)
 	$(BIN_DIR)/test_parallel
 	$(CC) $(CFLAGS) -I$(INC_DIR) tests/test_realtime_online.c -L$(LIB_DIR) -lddrkam -lm -o $(BIN_DIR)/test_realtime_online
 	$(BIN_DIR)/test_realtime_online
+	$(CC) $(CFLAGS) -I$(INC_DIR) tests/test_nonlinear.c -L$(LIB_DIR) -lddrkam -lm -o $(BIN_DIR)/test_nonlinear
+	$(BIN_DIR)/test_nonlinear
 
 benchmark: test
 	@echo "Running comprehensive benchmarks..."

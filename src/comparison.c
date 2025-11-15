@@ -13,6 +13,8 @@
 #include "parallel_adams.h"
 #include "parallel_euler.h"
 #include "realtime_online.h"
+#include "nonlinear_solver.h"
+#include "distributed_solvers.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -524,6 +526,68 @@ int compare_methods(ODEFunction f, double t0, double t_end, const double* y0,
         free(y0_copy);
     }
     
+    // Test Nonlinear ODE Solver
+    NonlinearODESolver nonlinear_ode;
+    if (nonlinear_ode_init(&nonlinear_ode, n, NLP_GRADIENT_DESCENT, NULL, NULL, NULL) == 0) {
+        y0_copy = (double*)malloc(n * sizeof(double));
+        memcpy(y0_copy, y0, n * sizeof(double));
+        
+        start = clock();
+        double* y_nlp = (double*)malloc(n * sizeof(double));
+        if (y_nlp) {
+            nonlinear_ode_solve(&nonlinear_ode, f, t0, t_end, y0_copy, y_nlp);
+            end = clock();
+            
+            results->nonlinear_ode_time = ((double)(end - start)) / CLOCKS_PER_SEC;
+            results->nonlinear_ode_error = compute_error(y_nlp, exact_solution, n);
+            results->nonlinear_ode_accuracy = compute_accuracy(y_nlp, exact_solution, n);
+            free(y_nlp);
+        }
+        
+        nonlinear_ode_free(&nonlinear_ode);
+        free(y0_copy);
+    }
+    
+    // Test Distributed Data-Driven Solver
+    DistributedDataDrivenSolver dist_dd;
+    if (distributed_datadriven_init(&dist_dd, n, 4, 3) == 0) {
+        y0_copy = (double*)malloc(n * sizeof(double));
+        memcpy(y0_copy, y0, n * sizeof(double));
+        
+        start = clock();
+        double* y_ddd = (double*)malloc(n * sizeof(double));
+        if (y_ddd) {
+            distributed_datadriven_solve(&dist_dd, f, t0, t_end, y0_copy, h, params, y_ddd);
+            end = clock();
+            
+            results->distributed_datadriven_time = ((double)(end - start)) / CLOCKS_PER_SEC;
+            free(y_ddd);
+        }
+        
+        distributed_datadriven_free(&dist_dd);
+        free(y0_copy);
+    }
+    
+    // Test Online Data-Driven Solver
+    OnlineDataDrivenSolver online_dd;
+    if (online_datadriven_init(&online_dd, n, 3, h, 0.01) == 0) {
+        y0_copy = (double*)malloc(n * sizeof(double));
+        memcpy(y0_copy, y0, n * sizeof(double));
+        
+        start = clock();
+        double* y_odd = (double*)malloc(n * sizeof(double));
+        if (y_odd) {
+            online_datadriven_solve(&online_dd, f, t0, t_end, y0_copy, params, y_odd);
+            end = clock();
+            
+            results->online_datadriven_time = ((double)(end - start)) / CLOCKS_PER_SEC;
+            free(y_odd);
+        }
+        
+        online_datadriven_free(&online_dd);
+        free(y0_copy);
+    }
+    
     free(t_out);
     free(y_out);
     
@@ -581,6 +645,18 @@ void print_comparison_results(const ComparisonResults* results) {
     if (results->dynamic_rk3_time > 0) {
         printf("║ Dynamic RK3    │ %8.6f │   N/A │ %10.6e │ %17.6f%% ║\n",
                results->dynamic_rk3_time, results->dynamic_rk3_error, results->dynamic_rk3_accuracy * 100);
+    }
+    if (results->nonlinear_ode_time > 0) {
+        printf("║ Nonlinear ODE │ %8.6f │   N/A │ %10.6e │ %17.6f%% ║\n",
+               results->nonlinear_ode_time, results->nonlinear_ode_error, results->nonlinear_ode_accuracy * 100);
+    }
+    if (results->distributed_datadriven_time > 0) {
+        printf("║ Dist+DD Solver │ %8.6f │   N/A │       N/A │              N/A ║\n",
+               results->distributed_datadriven_time);
+    }
+    if (results->online_datadriven_time > 0) {
+        printf("║ Online+DD      │ %8.6f │   N/A │       N/A │              N/A ║\n",
+               results->online_datadriven_time);
     }
     printf("╚═════════════╧══════════╧═══════╧════════════╧═══════════════════╝\n");
     printf("\n");

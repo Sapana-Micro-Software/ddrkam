@@ -15,6 +15,11 @@ extern "C" {
 #include "nonlinear_solver.h"
 
 /**
+ * ODE function pointer type
+ */
+typedef void (*ODEFunction)(double t, const double* y, double* dydt, void* params);
+
+/**
  * Distributed Data-Driven Solver
  * Combines distributed computing with data-driven methods
  */
