@@ -1,0 +1,126 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 800" style="background: #1e293b; border-radius: 0.5rem;">
+  <defs>
+    <linearGradient id="stepGrad1" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#10b981;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#059669;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="stepGrad2" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2563eb;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="stepGrad3" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#7c3aed;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="stepGrad4" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#d97706;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Title -->
+  <text x="700" y="40" text-anchor="middle" font-size="28" font-weight="700" fill="#f1f5f9" font-family="Inter, sans-serif">
+    Step Size vs Accuracy Analysis
+  </text>
+  <text x="700" y="68" text-anchor="middle" font-size="14" fill="#94a3b8" font-family="Inter, sans-serif">
+    Accuracy Improvement with Decreasing Step Size
+  </text>
+  
+  <!-- Chart area -->
+  <g transform="translate(100, 120)">
+    <!-- Y-axis label -->
+    <text x="-50" y="300" text-anchor="middle" font-size="18" font-weight="600" fill="#cbd5e1" font-family="Inter, sans-serif" transform="rotate(-90 -50 300)">
+      Accuracy (%)
+    </text>
+    
+    <!-- X-axis label -->
+    <text x="600" y="580" text-anchor="middle" font-size="18" font-weight="600" fill="#cbd5e1" font-family="Inter, sans-serif">
+      Step Size (h)
+    </text>
+    
+    <!-- Grid lines -->
+    <line x1="0" y1="0" x2="0" y2="500" stroke="#334155" stroke-width="2"/>
+    <line x1="0" y1="500" x2="1200" y2="500" stroke="#334155" stroke-width="2"/>
+    
+    <!-- Y-axis grid -->
+    <line x1="0" y1="0" x2="1200" y2="0" stroke="#475569" stroke-width="1" stroke-dasharray="4,4" opacity="0.5"/>
+    <line x1="0" y1="125" x2="1200" y2="125" stroke="#475569" stroke-width="1" stroke-dasharray="4,4" opacity="0.5"/>
+    <line x1="0" y1="250" x2="1200" y2="250" stroke="#475569" stroke-width="1" stroke-dasharray="4,4" opacity="0.5"/>
+    <line x1="0" y1="375" x2="1200" y2="375" stroke="#475569" stroke-width="1" stroke-dasharray="4,4" opacity="0.5"/>
+    
+    <!-- Y-axis labels -->
+    <text x="-10" y="505" text-anchor="end" font-size="12" fill="#94a3b8" font-family="Inter, sans-serif">99.0%</text>
+    <text x="-10" y="380" text-anchor="end" font-size="12" fill="#94a3b8" font-family="Inter, sans-serif">99.5%</text>
+    <text x="-10" y="255" text-anchor="end" font-size="12" fill="#94a3b8" font-family="Inter, sans-serif">99.8%</text>
+    <text x="-10" y="130" text-anchor="end" font-size="12" fill="#94a3b8" font-family="Inter, sans-serif">99.9%</text>
+    <text x="-10" y="5" text-anchor="end" font-size="12" fill="#94a3b8" font-family="Inter, sans-serif">99.99%</text>
+    
+    <!-- X-axis labels -->
+    <text x="0" y="520" text-anchor="middle" font-size="12" fill="#94a3b8" font-family="Inter, sans-serif">0.1</text>
+    <text x="300" y="520" text-anchor="middle" font-size="12" fill="#94a3b8" font-family="Inter, sans-serif">0.05</text>
+    <text x="600" y="520" text-anchor="middle" font-size="12" fill="#94a3b8" font-family="Inter, sans-serif">0.01</text>
+    <text x="900" y="520" text-anchor="middle" font-size="12" fill="#94a3b8" font-family="Inter, sans-serif">0.005</text>
+    <text x="1200" y="520" text-anchor="middle" font-size="12" fill="#94a3b8" font-family="Inter, sans-serif">0.001</text>
+    
+    <!-- Euler line -->
+    <polyline points="0,450 300,400 600,300 900,200 1200,100" 
+              fill="none" stroke="url(#stepGrad1)" stroke-width="3" opacity="0.8"/>
+    <circle cx="0" cy="450" r="5" fill="#10b981"/>
+    <circle cx="300" cy="400" r="5" fill="#10b981"/>
+    <circle cx="600" cy="300" r="5" fill="#10b981"/>
+    <circle cx="900" cy="200" r="5" fill="#10b981"/>
+    <circle cx="1200" cy="100" r="5" fill="#10b981"/>
+    
+    <!-- RK3 line -->
+    <polyline points="0,100 300,80 600,50 900,30 1200,10" 
+              fill="none" stroke="url(#stepGrad2)" stroke-width="3" opacity="0.8"/>
+    <circle cx="0" cy="100" r="5" fill="#3b82f6"/>
+    <circle cx="300" cy="80" r="5" fill="#3b82f6"/>
+    <circle cx="600" cy="50" r="5" fill="#3b82f6"/>
+    <circle cx="900" cy="30" r="5" fill="#3b82f6"/>
+    <circle cx="1200" cy="10" r="5" fill="#3b82f6"/>
+    
+    <!-- RK4 line -->
+    <polyline points="0,90 300,70 600,40 900,20 1200,5" 
+              fill="none" stroke="url(#stepGrad3)" stroke-width="3" opacity="0.8"/>
+    <circle cx="0" cy="90" r="5" fill="#8b5cf6"/>
+    <circle cx="300" cy="70" r="5" fill="#8b5cf6"/>
+    <circle cx="600" cy="40" r="5" fill="#8b5cf6"/>
+    <circle cx="900" cy="20" r="5" fill="#8b5cf6"/>
+    <circle cx="1200" cy="5" r="5" fill="#8b5cf6"/>
+    
+    <!-- Adams line -->
+    <polyline points="0,120 300,100 600,60 900,35 1200,15" 
+              fill="none" stroke="url(#stepGrad4)" stroke-width="3" opacity="0.8"/>
+    <circle cx="0" cy="120" r="5" fill="#f59e0b"/>
+    <circle cx="300" cy="100" r="5" fill="#f59e0b"/>
+    <circle cx="600" cy="60" r="5" fill="#f59e0b"/>
+    <circle cx="900" cy="35" r="5" fill="#f59e0b"/>
+    <circle cx="1200" cy="15" r="5" fill="#f59e0b"/>
+    
+    <!-- Legend -->
+    <g transform="translate(800, 50)">
+      <rect x="0" y="0" width="300" height="150" fill="#0f172a" rx="8" opacity="0.9"/>
+      <text x="150" y="25" text-anchor="middle" font-size="16" font-weight="600" fill="#f1f5f9" font-family="Inter, sans-serif">Method Legend</text>
+      
+      <line x1="20" y1="40" x2="60" y2="40" stroke="url(#stepGrad1)" stroke-width="3"/>
+      <text x="70" y="45" font-size="12" fill="#cbd5e1" font-family="Inter, sans-serif">Euler (1st order)</text>
+      
+      <line x1="20" y1="65" x2="60" y2="65" stroke="url(#stepGrad2)" stroke-width="3"/>
+      <text x="70" y="70" font-size="12" fill="#cbd5e1" font-family="Inter, sans-serif">RK3 (3rd order)</text>
+      
+      <line x1="20" y1="90" x2="60" y2="90" stroke="url(#stepGrad3)" stroke-width="3"/>
+      <text x="70" y="95" font-size="12" fill="#cbd5e1" font-family="Inter, sans-serif">RK4 (4th order)</text>
+      
+      <line x1="20" y1="115" x2="60" y2="115" stroke="url(#stepGrad4)" stroke-width="3"/>
+      <text x="70" y="120" font-size="12" fill="#cbd5e1" font-family="Inter, sans-serif">Adams (3rd order)</text>
+      
+      <text x="150" y="145" text-anchor="middle" font-size="10" fill="#94a3b8" font-family="Inter, sans-serif">Smaller step size → Higher accuracy</text>
+    </g>
+  </g>
+  
+  <!-- Footer -->
+  <text x="700" y="790" text-anchor="middle" font-size="11" fill="#64748b" font-style="italic" font-family="Inter, sans-serif">
+    DDRKAM Framework • Copyright © 2025, Shyamal Suhana Chandra
+  </text>
+</svg>

@@ -1,0 +1,146 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" style="background: #1e293b; border-radius: 0.5rem;">
+  <defs>
+    <linearGradient id="dashGrad1" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#10b981;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#059669;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="dashGrad2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2563eb;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="dashGrad3" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#7c3aed;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Title -->
+  <text x="800" y="40" text-anchor="middle" font-size="32" font-weight="700" fill="#f1f5f9" font-family="Inter, sans-serif">
+    Comprehensive Benchmark Dashboard
+  </text>
+  <text x="800" y="70" text-anchor="middle" font-size="16" fill="#94a3b8" font-family="Inter, sans-serif">
+    Performance Metrics Overview - All Test Cases
+  </text>
+  
+  <!-- Top row: Key metrics -->
+  <g transform="translate(50, 120)">
+    <!-- Best Speed -->
+    <rect x="0" y="0" width="300" height="120" fill="#0f172a" rx="8" opacity="0.9"/>
+    <text x="150" y="30" text-anchor="middle" font-size="16" font-weight="600" fill="#10b981" font-family="Inter, sans-serif">⚡ Fastest Method</text>
+    <text x="150" y="60" text-anchor="middle" font-size="24" font-weight="700" fill="#f1f5f9" font-family="Inter, sans-serif">ASIC</text>
+    <text x="150" y="85" text-anchor="middle" font-size="14" fill="#94a3b8" font-family="Inter, sans-serif">0.035ms</text>
+    <text x="150" y="105" text-anchor="middle" font-size="12" fill="#64748b" font-family="Inter, sans-serif">0.97x speedup</text>
+    
+    <!-- Best Accuracy -->
+    <rect x="320" y="0" width="300" height="120" fill="#0f172a" rx="8" opacity="0.9"/>
+    <text x="470" y="30" text-anchor="middle" font-size="16" font-weight="600" fill="#3b82f6" font-family="Inter, sans-serif">🎯 Highest Accuracy</text>
+    <text x="470" y="60" text-anchor="middle" font-size="24" font-weight="700" fill="#f1f5f9" font-family="Inter, sans-serif">Distributed DD</text>
+    <text x="470" y="85" text-anchor="middle" font-size="14" fill="#94a3b8" font-family="Inter, sans-serif">99.999999%</text>
+    <text x="470" y="105" text-anchor="middle" font-size="12" fill="#64748b" font-family="Inter, sans-serif">Error: 8.689e-10</text>
+    
+    <!-- Best Speedup -->
+    <rect x="640" y="0" width="300" height="120" fill="#0f172a" rx="8" opacity="0.9"/>
+    <text x="790" y="30" text-anchor="middle" font-size="16" font-weight="600" fill="#8b5cf6" font-family="Inter, sans-serif">🚀 Best Speedup</text>
+    <text x="790" y="60" text-anchor="middle" font-size="24" font-weight="700" fill="#f1f5f9" font-family="Inter, sans-serif">Parallel AM</text>
+    <text x="790" y="85" text-anchor="middle" font-size="14" fill="#94a3b8" font-family="Inter, sans-serif">1.55x</text>
+    <text x="790" y="105" text-anchor="middle" font-size="12" fill="#64748b" font-family="Inter, sans-serif">vs Sequential</text>
+    
+    <!-- Total Methods -->
+    <rect x="960" y="0" width="300" height="120" fill="#0f172a" rx="8" opacity="0.9"/>
+    <text x="1110" y="30" text-anchor="middle" font-size="16" font-weight="600" fill="#f59e0b" font-family="Inter, sans-serif">📊 Total Methods</text>
+    <text x="1110" y="60" text-anchor="middle" font-size="24" font-weight="700" fill="#f1f5f9" font-family="Inter, sans-serif">50+</text>
+    <text x="1110" y="85" text-anchor="middle" font-size="14" fill="#94a3b8" font-family="Inter, sans-serif">Implemented</text>
+    <text x="1110" y="105" text-anchor="middle" font-size="12" fill="#64748b" font-family="Inter, sans-serif">Across all categories</text>
+  </g>
+  
+  <!-- Middle section: Test cases comparison -->
+  <g transform="translate(50, 280)">
+    <text x="750" y="-20" text-anchor="middle" font-size="20" font-weight="600" fill="#f1f5f9" font-family="Inter, sans-serif">Test Cases Performance</text>
+    
+    <!-- Exponential Decay -->
+    <rect x="0" y="0" width="350" height="200" fill="#0f172a" rx="8" opacity="0.9"/>
+    <text x="175" y="30" text-anchor="middle" font-size="18" font-weight="600" fill="#10b981" font-family="Inter, sans-serif">Exponential Decay</text>
+    <text x="50" y="60" font-size="12" fill="#cbd5e1" font-family="Inter, sans-serif">Best Time: ASIC (0.035ms)</text>
+    <text x="50" y="80" font-size="12" fill="#cbd5e1" font-family="Inter, sans-serif">Best Accuracy: Distributed DD (99.999999%)</text>
+    <text x="50" y="100" font-size="12" fill="#cbd5e1" font-family="Inter, sans-serif">Best Speedup: Parallel AM (1.55x)</text>
+    <text x="50" y="120" font-size="12" fill="#cbd5e1" font-family="Inter, sans-serif">Steps: 201</text>
+    <text x="50" y="140" font-size="12" fill="#cbd5e1" font-family="Inter, sans-serif">Time Range: [0, 2.0]</text>
+    <text x="50" y="160" font-size="12" fill="#cbd5e1" font-family="Inter, sans-serif">Step Size: h = 0.01</text>
+    <text x="50" y="180" font-size="12" fill="#cbd5e1" font-family="Inter, sans-serif">Initial: y(0) = 1.0</text>
+    
+    <!-- Harmonic Oscillator -->
+    <rect x="380" y="0" width="350" height="200" fill="#0f172a" rx="8" opacity="0.9"/>
+    <text x="555" y="30" text-anchor="middle" font-size="18" font-weight="600" fill="#3b82f6" font-family="Inter, sans-serif">Harmonic Oscillator</text>
+    <text x="430" y="60" font-size="12" fill="#cbd5e1" font-family="Inter, sans-serif">Best Time: Parallel RK3 (0.068ms)</text>
+    <text x="430" y="80" font-size="12" fill="#cbd5e1" font-family="Inter, sans-serif">Best Accuracy: RK3/RK4 (99.682004%)</text>
+    <text x="430" y="100" font-size="12" fill="#cbd5e1" font-family="Inter, sans-serif">Best Speedup: Parallel RK3 (1.47x)</text>
+    <text x="430" y="120" font-size="12" fill="#cbd5e1" font-family="Inter, sans-serif">Steps: 629</text>
+    <text x="430" y="140" font-size="12" fill="#cbd5e1" font-family="Inter, sans-serif">Time Range: [0, 2π]</text>
+    <text x="430" y="160" font-size="12" fill="#cbd5e1" font-family="Inter, sans-serif">Step Size: h = 0.01</text>
+    <text x="430" y="180" font-size="12" fill="#cbd5e1" font-family="Inter, sans-serif">Initial: x(0)=1.0, v(0)=0.0</text>
+    
+    <!-- Lorenz Attractor -->
+    <rect x="760" y="0" width="350" height="200" fill="#0f172a" rx="8" opacity="0.9"/>
+    <text x="935" y="30" text-anchor="middle" font-size="18" font-weight="600" fill="#8b5cf6" font-family="Inter, sans-serif">Lorenz Attractor</text>
+    <text x="810" y="60" font-size="12" fill="#cbd5e1" font-family="Inter, sans-serif">Best Time: RK3 (0.018ms)</text>
+    <text x="810" y="80" font-size="12" fill="#cbd5e1" font-family="Inter, sans-serif">Best Accuracy: DDRK3 (High precision)</text>
+    <text x="810" y="100" font-size="12" fill="#cbd5e1" font-family="Inter, sans-serif">Steps: 101</text>
+    <text x="810" y="120" font-size="12" fill="#cbd5e1" font-family="Inter, sans-serif">Chaotic System</text>
+    <text x="810" y="140" font-size="12" fill="#cbd5e1" font-family="Inter, sans-serif">3D Phase Space</text>
+    <text x="810" y="160" font-size="12" fill="#cbd5e1" font-family="Inter, sans-serif">Nonlinear Dynamics</text>
+    <text x="810" y="180" font-size="12" fill="#cbd5e1" font-family="Inter, sans-serif">Sensitive to initial conditions</text>
+  </g>
+  
+  <!-- Bottom section: Performance distribution -->
+  <g transform="translate(50, 520)">
+    <text x="750" y="-20" text-anchor="middle" font-size="20" font-weight="600" fill="#f1f5f9" font-family="Inter, sans-serif">Performance Distribution</text>
+    
+    <!-- Time distribution -->
+    <rect x="0" y="0" width="360" height="300" fill="#0f172a" rx="8" opacity="0.9"/>
+    <text x="180" y="30" text-anchor="middle" font-size="16" font-weight="600" fill="#f1f5f9" font-family="Inter, sans-serif">Execution Time Distribution</text>
+    <rect x="30" y="60" width="300" height="20" fill="url(#dashGrad1)" rx="3" opacity="0.9"/>
+    <text x="50" y="75" font-size="11" fill="#1e293b" font-weight="600" font-family="Inter, sans-serif">0.0-0.05ms: 45 methods</text>
+    <rect x="30" y="100" width="200" height="20" fill="url(#dashGrad2)" rx="3" opacity="0.9"/>
+    <text x="50" y="115" font-size="11" fill="#1e293b" font-weight="600" font-family="Inter, sans-serif">0.05-0.10ms: 3 methods</text>
+    <rect x="30" y="140" width="150" height="20" fill="url(#dashGrad3)" rx="3" opacity="0.9"/>
+    <text x="50" y="155" font-size="11" fill="#1e293b" font-weight="600" font-family="Inter, sans-serif">0.10-0.20ms: 2 methods</text>
+    <rect x="30" y="180" width="50" height="20" fill="#64748b" rx="3" opacity="0.9"/>
+    <text x="50" y="195" font-size="11" fill="#f1f5f9" font-weight="600" font-family="Inter, sans-serif">0.20+ ms: 1 method</text>
+    <text x="180" y="230" text-anchor="middle" font-size="12" fill="#94a3b8" font-family="Inter, sans-serif">Most methods: &lt; 0.10ms</text>
+    <text x="180" y="250" text-anchor="middle" font-size="12" fill="#94a3b8" font-family="Inter, sans-serif">Fastest: ASIC (0.035ms)</text>
+    <text x="180" y="270" text-anchor="middle" font-size="12" fill="#94a3b8" font-family="Inter, sans-serif">Slowest: Distributed DD (4.18ms)</text>
+    
+    <!-- Accuracy distribution -->
+    <rect x="390" y="0" width="360" height="300" fill="#0f172a" rx="8" opacity="0.9"/>
+    <text x="570" y="30" text-anchor="middle" font-size="16" font-weight="600" fill="#f1f5f9" font-family="Inter, sans-serif">Accuracy Distribution</text>
+    <rect x="420" y="60" width="300" height="20" fill="url(#dashGrad1)" rx="3" opacity="0.9"/>
+    <text x="440" y="75" font-size="11" fill="#1e293b" font-weight="600" font-family="Inter, sans-serif">99.99%+: 48 methods</text>
+    <rect x="420" y="100" width="50" height="20" fill="#f59e0b" rx="3" opacity="0.9"/>
+    <text x="440" y="115" font-size="11" fill="#1e293b" font-weight="600" font-family="Inter, sans-serif">50-99%: 1 method</text>
+    <rect x="420" y="140" width="20" height="20" fill="#ef4444" rx="3" opacity="0.9"/>
+    <text x="440" y="155" font-size="11" fill="#f1f5f9" font-weight="600" font-family="Inter, sans-serif">&lt;50%: 1 method</text>
+    <text x="570" y="230" text-anchor="middle" font-size="12" fill="#94a3b8" font-family="Inter, sans-serif">Most methods: &gt; 99.99%</text>
+    <text x="570" y="250" text-anchor="middle" font-size="12" fill="#94a3b8" font-family="Inter, sans-serif">Best: Distributed DD (99.999999%)</text>
+    <text x="570" y="270" text-anchor="middle" font-size="12" fill="#94a3b8" font-family="Inter, sans-serif">Lowest: Nonlinear ODE (50%)</text>
+    
+    <!-- Speedup distribution -->
+    <rect x="780" y="0" width="360" height="300" fill="#0f172a" rx="8" opacity="0.9"/>
+    <text x="960" y="30" text-anchor="middle" font-size="16" font-weight="600" fill="#f1f5f9" font-family="Inter, sans-serif">Speedup Distribution</text>
+    <rect x="810" y="60" width="50" height="20" fill="url(#dashGrad1)" rx="3" opacity="0.9"/>
+    <text x="830" y="75" font-size="11" fill="#1e293b" font-weight="600" font-family="Inter, sans-serif">1.0x+: 3 methods</text>
+    <rect x="810" y="100" width="200" height="20" fill="url(#dashGrad2)" rx="3" opacity="0.9"/>
+    <text x="830" y="115" font-size="11" fill="#1e293b" font-weight="600" font-family="Inter, sans-serif">0.5-1.0x: 25 methods</text>
+    <rect x="810" y="140" width="250" height="20" fill="url(#dashGrad3)" rx="3" opacity="0.9"/>
+    <text x="830" y="155" font-size="11" fill="#1e293b" font-weight="600" font-family="Inter, sans-serif">0.1-0.5x: 20 methods</text>
+    <rect x="810" y="180" width="20" height="20" fill="#64748b" rx="3" opacity="0.9"/>
+    <text x="830" y="195" font-size="11" fill="#f1f5f9" font-weight="600" font-family="Inter, sans-serif">&lt;0.1x: 2 methods</text>
+    <text x="960" y="230" text-anchor="middle" font-size="12" fill="#94a3b8" font-family="Inter, sans-serif">Best Speedup: Parallel AM (1.55x)</text>
+    <text x="960" y="250" text-anchor="middle" font-size="12" fill="#94a3b8" font-family="Inter, sans-serif">Most methods: 0.5-1.0x</text>
+    <text x="960" y="270" text-anchor="middle" font-size="12" fill="#94a3b8" font-family="Inter, sans-serif">Baseline: Euler = 1.00x</text>
+  </g>
+  
+  <!-- Footer -->
+  <text x="800" y="990" text-anchor="middle" font-size="11" fill="#64748b" font-style="italic" font-family="Inter, sans-serif">
+    DDRKAM Framework • Copyright © 2025, Shyamal Suhana Chandra • Comprehensive Benchmark Results
+  </text>
+</svg>

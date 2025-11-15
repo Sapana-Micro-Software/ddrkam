@@ -197,6 +197,24 @@ The following SVG charts provide visual comparisons of all methods:
 ![RK4 and Adams Comparison](assets/svg/rk4-adams-comparison.svg)
 *RK4 vs Adams Methods (1st-5th Order) - Speed, Accuracy, and Order Comparison*
 
+![Speedup Comparison Comprehensive](assets/svg/speedup-comparison-comprehensive.svg)
+*Comprehensive Speedup Comparison - All Methods with Baseline Reference*
+
+![Method Category Comparison](assets/svg/method-category-comparison.svg)
+*Method Category Performance - Standard vs Parallel vs Distributed vs Specialized*
+
+![Step Size vs Accuracy](assets/svg/step-size-accuracy-chart.svg)
+*Step Size vs Accuracy Analysis - How Accuracy Improves with Smaller Step Sizes*
+
+![Parallel Methods Comparison](assets/svg/parallel-methods-comparison.svg)
+*Parallel Methods Performance - Speedup and Time Comparison*
+
+![Specialized Architectures Performance](assets/svg/specialized-architectures-performance.svg)
+*Specialized Architectures Performance - GPU, TPU, Neuromorphic, and Other Hardware*
+
+![Benchmark Dashboard](assets/svg/benchmark-dashboard.svg)
+*Comprehensive Benchmark Dashboard - Key Metrics, Test Cases, and Performance Distribution*
+
 ### Additional Charts
 
 - **Comparison Overview**: `assets/svg/comparison-overview.svg` - Overview of standard methods
