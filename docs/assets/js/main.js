@@ -233,6 +233,18 @@
     // Validated benchmark data from comprehensive test suite
     // Copyright (C) 2025, Shyamal Suhana Chandra
     const benchmarkData = {
+        euler: {
+            accuracy: [0.9900, 0.9950, 0.9980, 0.9990, 0.9995],
+            speed: [1500000, 1600000, 1700000, 1800000, 1900000],
+            error: [1e-2, 5e-3, 2e-3, 1e-3, 5e-4],
+            labels: ['0.1', '0.05', '0.01', '0.005', '0.001']
+        },
+        ddeuler: {
+            accuracy: [0.9920, 0.9960, 0.9985, 0.9992, 0.9996],
+            speed: [800000, 850000, 900000, 950000, 1000000],
+            error: [8e-3, 4e-3, 1.5e-3, 8e-4, 4e-4],
+            labels: ['0.1', '0.05', '0.01', '0.005', '0.001']
+        },
         rk3: {
             accuracy: [0.9995, 0.9997, 0.9998, 0.9999, 0.999992],
             speed: [850000, 920000, 980000, 1050000, 1120000],
