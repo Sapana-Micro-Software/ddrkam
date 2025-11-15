@@ -9,6 +9,9 @@
 #include "rk3.h"
 #include "hierarchical_rk.h"
 #include "adams.h"
+#include "parallel_rk.h"
+#include "parallel_adams.h"
+#include "parallel_euler.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -324,6 +327,120 @@ int compare_methods(ODEFunction f, double t0, double t_end, const double* y0,
         }
         
         hierarchical_rk_free(&ddam_solver);
+        free(y0_copy);
+    }
+    
+    // Test Parallel RK3
+    ParallelRKSolver parallel_rk3_solver;
+    if (parallel_rk_init(&parallel_rk3_solver, n, 4, PARALLEL_OPENMP, NULL) == 0) {
+        y0_copy = (double*)malloc(n * sizeof(double));
+        memcpy(y0_copy, y0, n * sizeof(double));
+        
+        start = clock();
+        size_t parallel_rk3_steps = parallel_rk_solve(&parallel_rk3_solver, f, t0, t_end, y0_copy,
+                                                     h, params, t_out, y_out);
+        end = clock();
+        
+        results->parallel_rk3_time = ((double)(end - start)) / CLOCKS_PER_SEC;
+        results->parallel_rk3_steps = parallel_rk3_steps;
+        results->num_workers = 4;
+        
+        if (parallel_rk3_steps > 0) {
+            double* final_parallel_rk3 = &y_out[(parallel_rk3_steps - 1) * n];
+            results->parallel_rk3_error = compute_error(final_parallel_rk3, exact_solution, n);
+            results->parallel_rk3_accuracy = compute_accuracy(final_parallel_rk3, exact_solution, n);
+            if (results->rk3_time > 0) {
+                results->speedup_rk3 = results->rk3_time / results->parallel_rk3_time;
+            }
+        }
+        
+        parallel_rk_free(&parallel_rk3_solver);
+        free(y0_copy);
+    }
+    
+    // Test Stacked RK3
+    StackedConfig stacked_config = {
+        .num_layers = 3,
+        .layer_dims = NULL,
+        .hidden_dim = 32,
+        .learning_rate = 0.01,
+        .use_attention = 1,
+        .use_residual = 1
+    };
+    ParallelRKSolver stacked_rk3_solver;
+    if (parallel_rk_init(&stacked_rk3_solver, n, 4, PARALLEL_OPENMP, &stacked_config) == 0) {
+        y0_copy = (double*)malloc(n * sizeof(double));
+        memcpy(y0_copy, y0, n * sizeof(double));
+        
+        start = clock();
+        size_t stacked_rk3_steps = parallel_rk_solve(&stacked_rk3_solver, f, t0, t_end, y0_copy,
+                                                    h, params, t_out, y_out);
+        end = clock();
+        
+        results->stacked_rk3_time = ((double)(end - start)) / CLOCKS_PER_SEC;
+        results->stacked_rk3_steps = stacked_rk3_steps;
+        
+        if (stacked_rk3_steps > 0) {
+            double* final_stacked_rk3 = &y_out[(stacked_rk3_steps - 1) * n];
+            results->stacked_rk3_error = compute_error(final_stacked_rk3, exact_solution, n);
+            results->stacked_rk3_accuracy = compute_accuracy(final_stacked_rk3, exact_solution, n);
+        }
+        
+        parallel_rk_free(&stacked_rk3_solver);
+        free(y0_copy);
+    }
+    
+    // Test Parallel AM
+    ParallelAdamsSolver parallel_am_solver;
+    if (parallel_adams_init(&parallel_am_solver, n, 4, PARALLEL_OPENMP, NULL) == 0) {
+        y0_copy = (double*)malloc(n * sizeof(double));
+        memcpy(y0_copy, y0, n * sizeof(double));
+        
+        start = clock();
+        size_t parallel_am_steps = parallel_adams_solve(&parallel_am_solver, f, t0, t_end, y0_copy,
+                                                      h, params, t_out, y_out);
+        end = clock();
+        
+        results->parallel_am_time = ((double)(end - start)) / CLOCKS_PER_SEC;
+        results->parallel_am_steps = parallel_am_steps;
+        
+        if (parallel_am_steps > 0) {
+            double* final_parallel_am = &y_out[(parallel_am_steps - 1) * n];
+            results->parallel_am_error = compute_error(final_parallel_am, exact_solution, n);
+            results->parallel_am_accuracy = compute_accuracy(final_parallel_am, exact_solution, n);
+            if (results->am_time > 0) {
+                results->speedup_am = results->am_time / results->parallel_am_time;
+            }
+        }
+        
+        parallel_adams_free(&parallel_am_solver);
+        free(y0_copy);
+    }
+    
+    // Test Parallel Euler
+    ParallelEulerSolver parallel_euler_solver;
+    if (parallel_euler_init(&parallel_euler_solver, n, 4, PARALLEL_OPENMP, NULL) == 0) {
+        y0_copy = (double*)malloc(n * sizeof(double));
+        memcpy(y0_copy, y0, n * sizeof(double));
+        
+        start = clock();
+        size_t parallel_euler_steps = parallel_euler_solve(&parallel_euler_solver, f, t0, t_end, y0_copy,
+                                                          h, params, t_out, y_out);
+        end = clock();
+        
+        results->parallel_euler_time = ((double)(end - start)) / CLOCKS_PER_SEC;
+        results->parallel_euler_steps = parallel_euler_steps;
+        
+        if (parallel_euler_steps > 0) {
+            double* final_parallel_euler = &y_out[(parallel_euler_steps - 1) * n];
+            results->parallel_euler_error = compute_error(final_parallel_euler, exact_solution, n);
+            results->parallel_euler_accuracy = compute_accuracy(final_parallel_euler, exact_solution, n);
+            if (results->euler_time > 0) {
+                results->speedup_euler = results->euler_time / results->parallel_euler_time;
+            }
+        }
+        
+        parallel_euler_free(&parallel_euler_solver);
         free(y0_copy);
     }
     

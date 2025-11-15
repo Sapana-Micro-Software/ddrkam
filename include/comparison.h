@@ -23,6 +23,7 @@ typedef void (*ODEFunction)(double t, const double* y, double* dydt, void* param
  * Comparison results structure
  */
 typedef struct {
+    // Standard methods
     double euler_time;
     double ddeuler_time;
     double rk3_time;
@@ -30,26 +31,61 @@ typedef struct {
     double am_time;
     double ddam_time;
     
+    // Parallel methods
+    double parallel_rk3_time;
+    double parallel_am_time;
+    double parallel_euler_time;
+    double stacked_rk3_time;
+    double stacked_am_time;
+    double stacked_euler_time;
+    
+    // Errors
     double euler_error;
     double ddeuler_error;
     double rk3_error;
     double ddrk3_error;
     double am_error;
     double ddam_error;
+    double parallel_rk3_error;
+    double parallel_am_error;
+    double parallel_euler_error;
+    double stacked_rk3_error;
+    double stacked_am_error;
+    double stacked_euler_error;
     
+    // Accuracies
     double euler_accuracy;
     double ddeuler_accuracy;
     double rk3_accuracy;
     double ddrk3_accuracy;
     double am_accuracy;
     double ddam_accuracy;
+    double parallel_rk3_accuracy;
+    double parallel_am_accuracy;
+    double parallel_euler_accuracy;
+    double stacked_rk3_accuracy;
+    double stacked_am_accuracy;
+    double stacked_euler_accuracy;
     
+    // Steps
     size_t euler_steps;
     size_t ddeuler_steps;
     size_t rk3_steps;
     size_t ddrk3_steps;
     size_t am_steps;
     size_t ddam_steps;
+    size_t parallel_rk3_steps;
+    size_t parallel_am_steps;
+    size_t parallel_euler_steps;
+    size_t stacked_rk3_steps;
+    size_t stacked_am_steps;
+    size_t stacked_euler_steps;
+    
+    // Parallel performance metrics
+    double speedup_rk3;      // Speedup factor for parallel RK3
+    double speedup_am;        // Speedup factor for parallel AM
+    double speedup_euler;    // Speedup factor for parallel Euler
+    size_t num_workers;       // Number of parallel workers used
 } ComparisonResults;
 
 /**
