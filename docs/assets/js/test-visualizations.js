@@ -110,8 +110,13 @@
         const height = 400;
         
         if (width === 0) {
-            console.warn('[TestViz] Canvas has zero width: oscillator-time-series, retrying...');
-            setTimeout(() => drawOscillatorTimeSeries(), 100);
+            console.warn('[TestViz] HIGH PRIORITY: Canvas has zero width: oscillator-time-series, retrying immediately...');
+            // HIGH PRIORITY: Retry with immediate priority
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    drawOscillatorTimeSeries();
+                });
+            });
             return;
         }
         
@@ -530,8 +535,13 @@
         const height = 400;
         
         if (width === 0) {
-            console.warn('[TestViz] Canvas has zero width: exponential-time-series, retrying...');
-            setTimeout(() => drawExponentialTimeSeries(), 100);
+            console.warn('[TestViz] HIGH PRIORITY: Canvas has zero width: exponential-time-series, retrying immediately...');
+            // HIGH PRIORITY: Retry with immediate priority
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    drawExponentialTimeSeries();
+                });
+            });
             return;
         }
         
@@ -932,36 +942,66 @@
     // ============================================================================
     
     function initializeTestVisualizations() {
-        console.log('[TestViz] Initializing test visualizations...');
+        console.log('[TestViz] HIGH PRIORITY: Initializing test visualizations...');
         
-        // Wait for DOM and layout to be ready
+        // HIGH PRIORITY: Initialize immediately with minimal delay
         function init() {
             if (document.readyState === 'loading') {
-                console.log('[TestViz] Document still loading, waiting...');
+                console.log('[TestViz] Document loading, using immediate priority...');
+                // Use immediate execution with minimal delay
                 document.addEventListener('DOMContentLoaded', () => {
-                    setTimeout(init, 100);
+                    // HIGH PRIORITY: Execute immediately after DOM ready
+                    requestAnimationFrame(() => {
+                        requestAnimationFrame(() => {
+                            console.log('[TestViz] HIGH PRIORITY: Drawing immediately...');
+                            try {
+                                drawAllVisualizations();
+                                console.log('[TestViz] ✓ HIGH PRIORITY: All visualizations drawn');
+                            } catch (e) {
+                                console.error('[TestViz] Error drawing visualizations:', e);
+                                // Retry once
+                                setTimeout(() => drawAllVisualizations(), 50);
+                            }
+                        });
+                    });
                 });
                 return;
             }
             
-            console.log('[TestViz] Document ready, scheduling draw...');
+            console.log('[TestViz] HIGH PRIORITY: Document ready, drawing immediately...');
             
-            // Use requestAnimationFrame to ensure layout is complete
+            // HIGH PRIORITY: Use double requestAnimationFrame for immediate execution
             requestAnimationFrame(() => {
-                // Double-check with a small delay to ensure elements are visible
-                setTimeout(() => {
-                    console.log('[TestViz] Drawing all visualizations...');
+                requestAnimationFrame(() => {
+                    console.log('[TestViz] HIGH PRIORITY: Drawing all visualizations...');
                     try {
                         drawAllVisualizations();
-                        console.log('[TestViz] ✓ All visualizations drawn');
+                        console.log('[TestViz] ✓ HIGH PRIORITY: All visualizations drawn');
                     } catch (e) {
                         console.error('[TestViz] Error drawing visualizations:', e);
+                        // Retry once with minimal delay
+                        setTimeout(() => drawAllVisualizations(), 50);
                     }
-                }, 200);
+                });
             });
         }
         
+        // Start immediately
         init();
+        
+        // Also try immediate execution if DOM is already ready
+        if (document.readyState !== 'loading') {
+            console.log('[TestViz] HIGH PRIORITY: DOM already ready, executing immediately...');
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    try {
+                        drawAllVisualizations();
+                    } catch (e) {
+                        console.error('[TestViz] Immediate execution error:', e);
+                    }
+                });
+            });
+        }
         
         // Redraw on window resize
         let resizeTimer;
@@ -973,21 +1013,32 @@
             }, 250);
         });
         
-        // Also redraw when section becomes visible (Intersection Observer)
+        // HIGH PRIORITY: Also redraw when section becomes visible (Intersection Observer)
         const testSection = document.getElementById('test-visualizations');
         if (testSection) {
-            console.log('[TestViz] Setting up Intersection Observer');
+            console.log('[TestViz] HIGH PRIORITY: Setting up Intersection Observer');
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        console.log('[TestViz] Section visible, redrawing...');
-                        setTimeout(drawAllVisualizations, 100);
+                        console.log('[TestViz] HIGH PRIORITY: Section visible, redrawing immediately...');
+                        // HIGH PRIORITY: Immediate redraw with minimal delay
+                        requestAnimationFrame(() => {
+                            drawAllVisualizations();
+                        });
                     }
                 });
-            }, { threshold: 0.1 });
+            }, { threshold: 0.01 }); // Lower threshold for earlier trigger
             observer.observe(testSection);
         } else {
-            console.warn('[TestViz] test-visualizations section not found');
+            console.warn('[TestViz] test-visualizations section not found, will retry...');
+            // Retry finding the section
+            setTimeout(() => {
+                const retrySection = document.getElementById('test-visualizations');
+                if (retrySection) {
+                    console.log('[TestViz] Found section on retry, drawing...');
+                    drawAllVisualizations();
+                }
+            }, 100);
         }
     }
     
