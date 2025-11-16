@@ -2629,6 +2629,286 @@ void coprocessor_xeon_phi_ode_free(CoprocessorXeonPhiSolver* solver) {
 }
 
 // ============================================================================
+// Directed Diffusion with Manhattan Distance (Chandra, Shyamal)
+// Inspired by Deborah Estrin and Ramesh Govindan et al.
+// Flood fill focusing on statics rather than dynamics
+// ============================================================================
+
+// Manhattan distance calculation
+static size_t manhattan_distance_dd(size_t i1, size_t j1, size_t i2, size_t j2, size_t grid_size) {
+    (void)grid_size; // Unused
+    size_t di = (i1 > i2) ? (i1 - i2) : (i2 - i1);
+    size_t dj = (j1 > j2) ? (j1 - j2) : (j2 - j1);
+    return di + dj;
+}
+
+// Flood fill with Manhattan distance
+static void flood_fill_manhattan_dd(DirectedDiffusionSolver* solver, size_t start_idx) {
+    if (!solver || !solver->visited || !solver->grid_state) return;
+    
+    size_t grid_size = solver->config.grid_size;
+    size_t queue_size = grid_size * grid_size;
+    size_t* queue = (size_t*)malloc(queue_size * sizeof(size_t));
+    if (!queue) return;
+    
+    size_t front = 0, rear = 0;
+    queue[rear++] = start_idx;
+    solver->visited[start_idx] = 1;
+    
+    while (front < rear && rear < queue_size) {
+        size_t current = queue[front++];
+        size_t i = current / grid_size;
+        size_t j = current % grid_size;
+        
+        // Check neighbors (4-connected, Manhattan distance)
+        size_t neighbors[4][2] = {{i-1, j}, {i+1, j}, {i, j-1}, {i, j+1}};
+        
+        for (size_t n = 0; n < 4; n++) {
+            size_t ni = neighbors[n][0];
+            size_t nj = neighbors[n][1];
+            
+            if (ni < grid_size && nj < grid_size) {
+                size_t neighbor_idx = ni * grid_size + nj;
+                
+                if (!solver->visited[neighbor_idx]) {
+                    // Calculate Manhattan distance
+                    size_t dist = manhattan_distance_dd(i, j, ni, nj, grid_size);
+                    
+                    // Apply diffusion based on Manhattan distance
+                    if (dist <= (size_t)solver->config.flood_fill_threshold) {
+                        double diffusion = solver->config.diffusion_rate * 
+                                         exp(-solver->config.manhattan_weight * (double)dist);
+                        
+                        solver->grid_state[neighbor_idx] = 
+                            solver->grid_state[neighbor_idx] * (1.0 - diffusion) +
+                            solver->grid_state[current] * diffusion;
+                        
+                        queue[rear++] = neighbor_idx;
+                        solver->visited[neighbor_idx] = 1;
+                        solver->flood_iterations++;
+                    }
+                }
+            }
+        }
+    }
+    
+    free(queue);
+}
+
+// Gradient-based repair (from Estrin et al. directed diffusion)
+static void gradient_repair_dd(DirectedDiffusionSolver* solver) {
+    if (!solver || !solver->gradient_field || !solver->grid_state) return;
+    
+    size_t grid_size = solver->config.grid_size;
+    
+    // Compute gradient field
+    for (size_t i = 1; i < grid_size - 1; i++) {
+        for (size_t j = 1; j < grid_size - 1; j++) {
+            size_t idx = i * grid_size + j;
+            
+            // Gradient in x and y directions
+            double grad_x = (solver->grid_state[idx + 1] - solver->grid_state[idx - 1]) / 2.0;
+            double grad_y = (solver->grid_state[idx + grid_size] - solver->grid_state[idx - grid_size]) / 2.0;
+            
+            solver->gradient_field[idx] = sqrt(grad_x * grad_x + grad_y * grad_y);
+            solver->gradient_updates++;
+        }
+    }
+    
+    // Repair based on gradient
+    if (solver->config.enable_gradient_repair) {
+        for (size_t i = 1; i < grid_size - 1; i++) {
+            for (size_t j = 1; j < grid_size - 1; j++) {
+                size_t idx = i * grid_size + j;
+                
+                // Smooth based on gradient
+                double avg_neighbor = (
+                    solver->grid_state[idx - 1] +
+                    solver->grid_state[idx + 1] +
+                    solver->grid_state[idx - grid_size] +
+                    solver->grid_state[idx + grid_size]
+                ) / 4.0;
+                
+                double repair_weight = 1.0 / (1.0 + solver->gradient_field[idx]);
+                solver->grid_state[idx] = solver->grid_state[idx] * (1.0 - repair_weight) +
+                                          avg_neighbor * repair_weight;
+            }
+        }
+    }
+}
+
+int directed_diffusion_ode_init(DirectedDiffusionSolver* solver, size_t state_dim,
+                                const DirectedDiffusionConfig* config) {
+    if (!solver || !config) return -1;
+    
+    memset(solver, 0, sizeof(DirectedDiffusionSolver));
+    solver->state_dim = state_dim;
+    solver->config = *config;
+    
+    size_t grid_points = config->grid_size * config->grid_size;
+    
+    solver->grid_state = (double*)calloc(grid_points, sizeof(double));
+    solver->gradient_field = (double*)calloc(grid_points, sizeof(double));
+    solver->manhattan_distances = (size_t*)calloc(grid_points * grid_points, sizeof(size_t));
+    solver->visited = (int*)calloc(grid_points, sizeof(int));
+    solver->sources = (size_t*)malloc(config->num_sources * sizeof(size_t));
+    solver->sinks = (size_t*)malloc(config->num_sinks * sizeof(size_t));
+    
+    if (!solver->grid_state || !solver->gradient_field || !solver->manhattan_distances ||
+        !solver->visited || !solver->sources || !solver->sinks) {
+        directed_diffusion_ode_free(solver);
+        return -1;
+    }
+    
+    // Initialize Manhattan distance matrix (lazy computation - compute on demand)
+    // Pre-compute only for small grids to avoid O(n^4) initialization cost
+    if (grid_points <= 256) {  // Only for grids <= 16x16
+        for (size_t i1 = 0; i1 < config->grid_size; i1++) {
+            for (size_t j1 = 0; j1 < config->grid_size; j1++) {
+                for (size_t i2 = 0; i2 < config->grid_size; i2++) {
+                    for (size_t j2 = 0; j2 < config->grid_size; j2++) {
+                        size_t idx1 = i1 * config->grid_size + j1;
+                        size_t idx2 = i2 * config->grid_size + j2;
+                        solver->manhattan_distances[idx1 * grid_points + idx2] =
+                            manhattan_distance_dd(i1, j1, i2, j2, config->grid_size);
+                    }
+                }
+            }
+        }
+    }
+    
+    // Initialize sources and sinks
+    for (size_t i = 0; i < config->num_sources; i++) {
+        solver->sources[i] = (i * grid_points) / config->num_sources;
+    }
+    for (size_t i = 0; i < config->num_sinks; i++) {
+        solver->sinks[i] = ((i + 1) * grid_points) / (config->num_sinks + 1);
+    }
+    
+    return 0;
+}
+
+int directed_diffusion_ode_solve(DirectedDiffusionSolver* solver, ODEFunction f,
+                                  double t0, double t_end, const double* y0,
+                                  double h, void* params, double* y_out) {
+    if (!solver || !f || !y0 || !y_out) return -1;
+    
+    clock_t start = clock();
+    clock_t diff_start;
+    
+    size_t state_dim = solver->state_dim;
+    size_t grid_size = solver->config.grid_size;
+    size_t grid_points = grid_size * grid_size;
+    
+    double* current_state = (double*)malloc(state_dim * sizeof(double));
+    if (!current_state) return -1;
+    memcpy(current_state, y0, state_dim * sizeof(double));
+    
+    // Map state to grid (focus on statics)
+    if (solver->config.enable_static_focus) {
+        for (size_t i = 0; i < state_dim && i < grid_points; i++) {
+            solver->grid_state[i] = current_state[i];
+        }
+    } else {
+        // Distribute state across grid
+        for (size_t i = 0; i < grid_points; i++) {
+            solver->grid_state[i] = current_state[i % state_dim];
+        }
+    }
+    
+    double t = t0;
+    
+    while (t < t_end) {
+        double h_actual = (t + h > t_end) ? (t_end - t) : h;
+        
+        // Flood fill from sources
+        diff_start = clock();
+        memset(solver->visited, 0, grid_points * sizeof(int));
+        
+        for (size_t s = 0; s < solver->config.num_sources; s++) {
+            flood_fill_manhattan_dd(solver, solver->sources[s]);
+        }
+        
+        solver->diffusion_time += ((double)(clock() - diff_start)) / CLOCKS_PER_SEC;
+        
+        // Gradient repair if enabled
+        if (solver->config.enable_gradient_repair) {
+            gradient_repair_dd(solver);
+        }
+        
+        // Apply interest decay (from Estrin et al.)
+        for (size_t i = 0; i < grid_points; i++) {
+            solver->grid_state[i] *= (1.0 - solver->config.interest_decay_rate * h_actual);
+        }
+        
+        // Data aggregation at sinks
+        for (size_t s = 0; s < solver->config.num_sinks; s++) {
+            size_t sink_idx = solver->sinks[s];
+            double aggregated = 0.0;
+            size_t count = 0;
+            
+            // Aggregate from neighbors
+            for (size_t di = 0; di < 3; di++) {
+                for (size_t dj = 0; dj < 3; dj++) {
+                    size_t ni = (sink_idx / grid_size) + di - 1;
+                    size_t nj = (sink_idx % grid_size) + dj - 1;
+                    
+                    if (ni < grid_size && nj < grid_size) {
+                        size_t neighbor_idx = ni * grid_size + nj;
+                        aggregated += solver->grid_state[neighbor_idx];
+                        count++;
+                    }
+                }
+            }
+            
+            if (count > 0) {
+                solver->grid_state[sink_idx] = 
+                    solver->grid_state[sink_idx] * (1.0 - solver->config.data_aggregation_rate) +
+                    (aggregated / count) * solver->config.data_aggregation_rate;
+            }
+        }
+        
+        // Compute ODE derivative (minimal, focusing on statics)
+        double* dydt = (double*)malloc(state_dim * sizeof(double));
+        if (dydt) {
+            f(t, current_state, dydt, params);
+            
+            // Update state with diffusion influence
+            for (size_t i = 0; i < state_dim && i < grid_points; i++) {
+                double diffusion_influence = solver->grid_state[i] - current_state[i];
+                current_state[i] += h_actual * dydt[i] * (1.0 - solver->config.diffusion_rate) +
+                                   diffusion_influence * solver->config.diffusion_rate;
+            }
+            
+            free(dydt);
+        }
+        
+        t += h_actual;
+    }
+    
+    memcpy(y_out, current_state, state_dim * sizeof(double));
+    
+    solver->computation_time = ((double)(clock() - start)) / CLOCKS_PER_SEC;
+    
+    free(current_state);
+    
+    return 0;
+}
+
+void directed_diffusion_ode_free(DirectedDiffusionSolver* solver) {
+    if (!solver) return;
+    
+    if (solver->grid_state) free(solver->grid_state);
+    if (solver->gradient_field) free(solver->gradient_field);
+    if (solver->manhattan_distances) free(solver->manhattan_distances);
+    if (solver->visited) free(solver->visited);
+    if (solver->sources) free(solver->sources);
+    if (solver->sinks) free(solver->sinks);
+    
+    memset(solver, 0, sizeof(DirectedDiffusionSolver));
+}
+
+// ============================================================================
 // Utility Functions
 // ============================================================================
 
