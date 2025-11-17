@@ -157,6 +157,14 @@ $$y_{n+1} = y_n + \frac{h}{12}(5f_{n+1} + 8f_n - f_{n-1})$$
 \item Quantum annealing and tunneling for global optimization
 \end{itemize}
 
+\frametitle{Reverse Belief Propagation}
+\begin{itemize}
+\item Lossless tracing: Stores exact states, derivatives, Jacobians
+\item Reverse propagation: $P(t) = J^{-1} \cdot P(t+\Delta t) \cdot (J^{-1})^T$
+\item Smoothing: Combines forward and reverse passes
+\item Perfect reconstruction from lossless trace
+\end{itemize}
+
 \frametitle{Real-Time, Online, and Dynamic Methods}
 \begin{block}{Execution Modes}
 \begin{itemize}

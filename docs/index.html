@@ -192,6 +192,11 @@
                     <p><strong>Constant-time</strong> approximation methods for hard real-time constraints: lookup tables with bilinear interpolation, neural network approximators, and Chebyshev polynomial methods. All provide true O(1) per-step performance with pre-computation.</p>
                 </div>
                 <div class="feature-card">
+                    <div class="feature-icon">🔄</div>
+                    <h3>Reverse Belief Propagation</h3>
+                    <p><strong>Lossless tracing</strong> with backwards uncertainty propagation: stores complete state information (exact states, derivatives, Jacobians) for perfect reconstruction. Enables smoothing, parameter estimation, and optimal control with full uncertainty quantification.</p>
+                </div>
+                <div class="feature-card">
                     <div class="feature-icon">🔬</div>
                     <h3>DDMCMC Optimization</h3>
                     <p>Data-Driven MCMC for multinomial variables with efficient search algorithms for learning optimization functions.</p>
@@ -903,6 +908,23 @@
                         <li>✓ Neural networks: O(1) forward pass</li>
                         <li>✓ Chebyshev: O(k) ≈ O(1) evaluation</li>
                         <li>✓ Pre-computed offline, fast online</li>
+                    </ul>
+                </div>
+                
+                <div class="method-card">
+                    <div class="method-header">
+                        <h3>Reverse Belief Propagation</h3>
+                        <span class="method-badge">Smoothing</span>
+                    </div>
+                    <p class="method-description">Lossless tracing with backwards uncertainty propagation: stores exact states, derivatives, and Jacobians for perfect reconstruction. Enables smoothing and optimal state estimation.</p>
+                    <div class="method-formula">
+                        <code>P(t) = J⁻¹·P(t+Δt)·(J⁻¹)ᵀ</code>
+                    </div>
+                    <ul class="method-features">
+                        <li>✓ Lossless tracing: No information loss</li>
+                        <li>✓ Reverse propagation: Beliefs backwards</li>
+                        <li>✓ Smoothing: Forward + reverse combination</li>
+                        <li>✓ Uncertainty quantification</li>
                     </ul>
                 </div>
                 <div class="comparison-card">

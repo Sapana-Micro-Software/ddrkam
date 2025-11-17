@@ -321,6 +321,28 @@ Predict future states using quantum superposition.
 \subsection{quantum\_ode\_refine}
 Post-real-time refinement for improved accuracy.
 
+\section{Reverse Belief Propagation with Lossless Tracing}
+
+Backwards uncertainty propagation with lossless state tracing.
+
+\subsection{reverse\_belief\_init}
+Initialize reverse belief propagation solver with lossless tracing.
+
+\subsection{reverse\_belief\_forward\_solve}
+Solve forward and build lossless trace (stores exact states, derivatives, Jacobians).
+
+\subsection{reverse\_belief\_reverse\_solve}
+Propagate beliefs backwards using lossless trace.
+
+\subsection{reverse\_belief\_smooth}
+Combine forward and reverse passes for optimal smoothed estimates.
+
+\subsection{belief\_propagate\_forward}
+Propagate belief forward: $P(t+\Delta t) = J \cdot P(t) \cdot J^T$.
+
+\subsection{belief\_propagate\_backward}
+Propagate belief backward: $P(t) = J^{-1} \cdot P(t+\Delta t) \cdot (J^{-1})^T$.
+
 \section{Real-Time, Online, and Dynamic Methods}
 
 \subsection{Real-Time Methods}
