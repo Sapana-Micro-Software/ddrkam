@@ -293,53 +293,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // Create comparison section if it doesn't exist
     const comparisonSection = document.getElementById('comparison');
     if (comparisonSection) {
-        // Add chart containers
-        const chartsContainer = document.createElement('div');
-        chartsContainer.className = 'comparison-charts';
-        chartsContainer.style.cssText = 'display: grid; grid-template-columns: repeat(auto-fit, minmax(1200px, 1fr)); gap: 2rem; margin: 3rem 0; width: 100%; overflow-x: auto;';
-        
-        // Exponential Decay Charts
-        const expSection = document.createElement('div');
-        expSection.innerHTML = '<h4 style="text-align: center; color: var(--text-primary); margin-bottom: 1rem;">Exponential Decay Test</h4>';
-        
-        ['time', 'error', 'accuracy', 'loss'].forEach(type => {
-            const chartDiv = document.createElement('div');
-            chartDiv.id = `chart-exp-${type}`;
-            chartDiv.style.cssText = 'background: #1e293b; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1rem; border: 1px solid rgba(148, 163, 184, 0.1); width: 100%; overflow-x: auto;';
-            expSection.appendChild(chartDiv);
-            createSVGChart(`chart-exp-${type}`, comparisonData.exponential, type, 
-                          type === 'time' ? 'Execution Time - Exponential Decay' :
-                          type === 'error' ? 'Error Comparison - Exponential Decay' :
-                          type === 'accuracy' ? 'Accuracy Comparison - Exponential Decay' :
-                          'Loss Comparison - Exponential Decay');
-        });
-        
-        chartsContainer.appendChild(expSection);
-        
-        // Oscillator Charts
-        const oscSection = document.createElement('div');
-        oscSection.innerHTML = '<h4 style="text-align: center; color: var(--text-primary); margin-bottom: 1rem;">Harmonic Oscillator Test</h4>';
-        
-        ['time', 'error', 'accuracy', 'loss'].forEach(type => {
-            const chartDiv = document.createElement('div');
-            chartDiv.id = `chart-osc-${type}`;
-            chartDiv.style.cssText = 'background: #1e293b; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1rem; border: 1px solid rgba(148, 163, 184, 0.1); width: 100%; overflow-x: auto;';
-            oscSection.appendChild(chartDiv);
-            createSVGChart(`chart-osc-${type}`, comparisonData.oscillator, type,
-                          type === 'time' ? 'Execution Time - Harmonic Oscillator' :
-                          type === 'error' ? 'Error Comparison - Harmonic Oscillator' :
-                          type === 'accuracy' ? 'Accuracy Comparison - Harmonic Oscillator' :
-                          'Loss Comparison - Harmonic Oscillator');
-        });
-        
-        chartsContainer.appendChild(oscSection);
-        
-        // Insert after comparison cards
-        const comparisonGrid = comparisonSection.querySelector('.comparison-grid');
-        if (comparisonGrid && comparisonGrid.nextSibling) {
-            comparisonSection.insertBefore(chartsContainer, comparisonGrid.nextSibling);
-        } else {
-            comparisonSection.appendChild(chartsContainer);
-        }
+        // Exponential Decay and Harmonic Oscillator test charts - DISABLED: Removed from GitHub Pages
+        // Charts were previously created here but have been removed per user request
+        // If other charts need to be added in the future, add code here
     }
 });

@@ -1106,7 +1106,7 @@
         console.log('[TestViz] ✓ All visualizations complete');
     }
     
-    // Initialize
-    initializeTestVisualizations();
+    // Initialize - DISABLED: Exponential Decay and Harmonic Oscillator tests removed
+    // initializeTestVisualizations();
     
 })();
