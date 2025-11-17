@@ -1815,3 +1815,190 @@ button:focus {
 .skip-link:focus {
     top: 0;
 }
+
+/* ============================================================================
+   Complexity Proofs Accordion Styles
+   ============================================================================ */
+
+.complexity-proofs {
+    padding: 80px 0;
+}
+
+.proofs-accordion {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.proof-category {
+    margin-bottom: 3rem;
+}
+
+.proof-category:last-child {
+    margin-bottom: 0;
+}
+
+.category-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid var(--primary-color);
+}
+
+.accordion-item {
+    background: var(--bg-glass);
+    border-radius: 12px;
+    margin-bottom: 1rem;
+    overflow: hidden;
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    transition: var(--transition);
+}
+
+.accordion-item:hover {
+    border-color: var(--primary-color);
+    box-shadow: var(--shadow-glow);
+}
+
+.accordion-header {
+    width: 100%;
+    padding: 1.25rem 1.5rem;
+    background: transparent;
+    border: none;
+    text-align: left;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--text-primary);
+    font-size: 1.1rem;
+    font-weight: 600;
+    transition: var(--transition);
+    font-family: 'Inter', sans-serif;
+}
+
+.accordion-header:hover {
+    background: rgba(99, 102, 241, 0.1);
+    color: var(--primary-color);
+}
+
+.accordion-header[aria-expanded="true"] {
+    background: rgba(99, 102, 241, 0.15);
+    color: var(--primary-color);
+}
+
+.accordion-title {
+    flex: 1;
+    margin-right: 1rem;
+}
+
+.accordion-icon {
+    font-size: 0.875rem;
+    transition: transform 0.3s ease;
+    color: var(--primary-color);
+}
+
+.accordion-header[aria-expanded="true"] .accordion-icon {
+    transform: rotate(180deg);
+}
+
+.accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease-out, padding 0.4s ease-out;
+    padding: 0 1.5rem;
+}
+
+.accordion-header[aria-expanded="true"] + .accordion-content {
+    max-height: 5000px;
+    padding: 1.5rem;
+    border-top: 1px solid rgba(99, 102, 241, 0.2);
+}
+
+.theorem-statement {
+    background: rgba(99, 102, 241, 0.1);
+    border-left: 4px solid var(--primary-color);
+    padding: 1rem 1.25rem;
+    margin-bottom: 1.25rem;
+    border-radius: 4px;
+    font-size: 1.05rem;
+    line-height: 1.6;
+    color: var(--text-primary);
+}
+
+.theorem-statement strong {
+    color: var(--primary-color);
+    font-weight: 700;
+}
+
+.proof-content {
+    color: var(--text-secondary);
+    line-height: 1.8;
+    font-size: 1rem;
+}
+
+.proof-content strong {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.proof-content ul {
+    margin: 1rem 0;
+    padding-left: 2rem;
+    list-style-type: disc;
+}
+
+.proof-content li {
+    margin: 0.5rem 0;
+    color: var(--text-secondary);
+}
+
+.math-formula {
+    margin: 1.5rem 0;
+    padding: 1rem;
+    background: var(--bg-darker);
+    border-radius: 8px;
+    overflow-x: auto;
+    text-align: center;
+}
+
+.math-formula code,
+.math-formula pre {
+    background: transparent;
+    border: none;
+    padding: 0;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+/* MathJax styling */
+.MathJax {
+    color: var(--text-primary) !important;
+}
+
+.MathJax_Display {
+    margin: 1.5rem 0 !important;
+}
+
+@media (max-width: 768px) {
+    .accordion-header {
+        padding: 1rem;
+        font-size: 1rem;
+    }
+    
+    .accordion-content {
+        padding: 0 1rem;
+    }
+    
+    .accordion-header[aria-expanded="true"] + .accordion-content {
+        padding: 1rem;
+    }
+    
+    .category-title {
+        font-size: 1.5rem;
+    }
+    
+    .theorem-statement {
+        padding: 0.875rem 1rem;
+        font-size: 1rem;
+    }
+}

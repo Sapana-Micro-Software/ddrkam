@@ -38,6 +38,20 @@
     <link rel="stylesheet" href="assets/css/main.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
     
+    <!-- MathJax for LaTeX rendering -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                processEnvironments: true
+            }
+        };
+    </script>
+    
     <!-- Structured Data (JSON-LD) -->
     <script type="application/ld+json">
     {
@@ -82,6 +96,7 @@
                 <li><a href="#test-visualizations" class="nav-link">Test Visualizations</a></li>
                 <li><a href="#quantum-slam" class="nav-link">Quantum SLAM</a></li>
                 <li><a href="#documentation" class="nav-link">Documentation</a></li>
+                <li><a href="#complexity-proofs" class="nav-link">Complexity Proofs</a></li>
                 <li><a href="#references" class="nav-link">References</a></li>
             </ul>
             <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu">
@@ -1586,6 +1601,468 @@
                         <p>Complete guide for method comparison framework with examples and usage instructions for comparing RK3, DDRK3, AM, and DDAM.</p>
                         <span class="doc-link">View Guide →</span>
                     </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Complexity Proofs Section -->
+    <section id="complexity-proofs" class="complexity-proofs" style="background: var(--bg-darker);">
+        <div class="container">
+            <h2 class="section-title">Asymptotic Complexity Proofs</h2>
+            <p class="section-subtitle">Rigorous mathematical proofs for the time and space complexity of all ODE and PDE solvers</p>
+            
+            <div class="proofs-accordion">
+                <!-- ODE Solvers -->
+                <div class="proof-category">
+                    <h3 class="category-title">ODE Solvers</h3>
+                    
+                    <div class="accordion-item">
+                        <button class="accordion-header" aria-expanded="false">
+                            <span class="accordion-title">Theorem 1: Euler's Method</span>
+                            <span class="accordion-icon">▼</span>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="theorem-statement">
+                                <strong>Theorem 1.</strong> Euler's method has time complexity $O(n/h)$ where $n$ is the state dimension and $h$ is the step size.
+                            </div>
+                            <div class="proof-content">
+                                <strong>Proof.</strong> At each step $k$, Euler's method computes:
+                                <div class="math-formula">$$y_{k+1} = y_k + h \cdot f(t_k, y_k)$$</div>
+                                where $f: \mathbb{R}^n \rightarrow \mathbb{R}^n$ is evaluated once per step. The evaluation of $f$ requires $O(n)$ operations (assuming $f$ is a function of $n$ variables). Over $T/h$ steps to reach time $T$, the total complexity is:
+                                <div class="math-formula">$$T_{\text{Euler}} = \frac{T}{h} \cdot O(n) = O\left(\frac{n}{h}\right)$$</div>
+                                The space complexity is $O(n)$ for storing the state vector. $\square$
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <button class="accordion-header" aria-expanded="false">
+                            <span class="accordion-title">Theorem 2: Runge-Kutta 3rd Order (RK3)</span>
+                            <span class="accordion-icon">▼</span>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="theorem-statement">
+                                <strong>Theorem 2.</strong> RK3 has time complexity $O(n/h)$ where $n$ is the state dimension and $h$ is the step size.
+                            </div>
+                            <div class="proof-content">
+                                <strong>Proof.</strong> RK3 requires three function evaluations per step:
+                                <div class="math-formula">
+                                    $$\begin{align}
+                                    k_1 &= f(t_n, y_n) \\
+                                    k_2 &= f(t_n + h/2, y_n + hk_1/2) \\
+                                    k_3 &= f(t_n + h, y_n - hk_1 + 2hk_2)
+                                    \end{align}$$
+                                </div>
+                                Each evaluation requires $O(n)$ operations. Additionally, the linear combinations require $O(n)$ operations. Per step: $O(3n + n) = O(4n) = O(n)$. Over $T/h$ steps:
+                                <div class="math-formula">$$T_{\text{RK3}} = \frac{T}{h} \cdot O(n) = O\left(\frac{n}{h}\right)$$</div>
+                                The constant factor is larger than Euler's method due to three function evaluations, but the asymptotic complexity remains $O(n/h)$. $\square$
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <button class="accordion-header" aria-expanded="false">
+                            <span class="accordion-title">Theorem 3: Adams-Bashforth Methods</span>
+                            <span class="accordion-icon">▼</span>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="theorem-statement">
+                                <strong>Theorem 3.</strong> Adams-Bashforth $k$-th order method has time complexity $O(kn/h)$ where $n$ is the state dimension, $k$ is the order, and $h$ is the step size.
+                            </div>
+                            <div class="proof-content">
+                                <strong>Proof.</strong> Adams-Bashforth $k$-th order uses $k$ previous function values:
+                                <div class="math-formula">$$y_{n+1} = y_n + h \sum_{j=0}^{k-1} \beta_j f_{n-j}$$</div>
+                                The linear combination requires $O(kn)$ operations (summing $k$ vectors of dimension $n$). After the initial $k$ steps, each step requires $O(kn)$ operations. Over $T/h$ steps:
+                                <div class="math-formula">$$T_{\text{AB}_k} = O(k) + \frac{T}{h} \cdot O(kn) = O\left(\frac{kn}{h}\right)$$</div>
+                                The space complexity is $O(kn)$ for storing $k$ previous function values. $\square$
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <button class="accordion-header" aria-expanded="false">
+                            <span class="accordion-title">Theorem 4: Adams-Moulton Methods</span>
+                            <span class="accordion-icon">▼</span>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="theorem-statement">
+                                <strong>Theorem 4.</strong> Adams-Moulton $k$-th order method has time complexity $O(kn/h + n^3/h)$ in the worst case, where the $n^3$ term comes from solving the implicit system.
+                            </div>
+                            <div class="proof-content">
+                                <strong>Proof.</strong> Adams-Moulton is an implicit method:
+                                <div class="math-formula">$$y_{n+1} = y_n + h \sum_{j=0}^{k-1} \beta_j f_{n+1-j}$$</div>
+                                This requires solving a nonlinear system at each step. Using Newton's method with $m$ iterations, each iteration requires:
+                                <ul>
+                                    <li>Evaluating the Jacobian: $O(n^2)$</li>
+                                    <li>Solving the linear system: $O(n^3)$ (Gaussian elimination) or $O(n^{2.373})$ (fast matrix multiplication)</li>
+                                </ul>
+                                Per step: $O(kn + mn^3)$. Over $T/h$ steps:
+                                <div class="math-formula">$$T_{\text{AM}_k} = O\left(\frac{kn}{h} + \frac{mn^3}{h}\right) = O\left(\frac{n^3}{h}\right)$$</div>
+                                assuming $m$ is constant. With iterative solvers (e.g., conjugate gradient), this reduces to $O(kn/h + n^2/h)$ per step. $\square$
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- PDE Solvers -->
+                <div class="proof-category">
+                    <h3 class="category-title">PDE Solvers</h3>
+                    
+                    <div class="accordion-item">
+                        <button class="accordion-header" aria-expanded="false">
+                            <span class="accordion-title">Theorem 5: Heat Equation (1D)</span>
+                            <span class="accordion-icon">▼</span>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="theorem-statement">
+                                <strong>Theorem 5.</strong> The 1D heat equation solver using finite differences has time complexity $O(N_x N_t)$ where $N_x$ is the number of spatial grid points and $N_t$ is the number of time steps.
+                            </div>
+                            <div class="proof-content">
+                                <strong>Proof.</strong> The 1D heat equation $\partial u/\partial t = \alpha \partial^2 u/\partial x^2$ is discretized as:
+                                <div class="math-formula">$$u_i^{j+1} = u_i^j + \frac{\alpha \Delta t}{(\Delta x)^2}(u_{i+1}^j - 2u_i^j + u_{i-1}^j)$$</div>
+                                At each time step $j$, we update $N_x$ spatial points, each requiring $O(1)$ operations (three additions and one multiplication). Over $N_t$ time steps:
+                                <div class="math-formula">$$T_{\text{Heat-1D}} = N_t \cdot O(N_x) = O(N_x N_t)$$</div>
+                                The space complexity is $O(N_x)$ for storing the current and next time step. $\square$
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <button class="accordion-header" aria-expanded="false">
+                            <span class="accordion-title">Theorem 6: Heat Equation (2D)</span>
+                            <span class="accordion-icon">▼</span>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="theorem-statement">
+                                <strong>Theorem 6.</strong> The 2D heat equation solver has time complexity $O(N_x N_y N_t)$ where $N_x, N_y$ are spatial grid dimensions.
+                            </div>
+                            <div class="proof-content">
+                                <strong>Proof.</strong> The 2D discretization updates each grid point $(i,j)$:
+                                <div class="math-formula">$$u_{i,j}^{j+1} = u_{i,j}^j + \frac{\alpha \Delta t}{(\Delta x)^2}(u_{i+1,j}^j + u_{i-1,j}^j + u_{i,j+1}^j + u_{i,j-1}^j - 4u_{i,j}^j)$$</div>
+                                Each update requires $O(1)$ operations. Over $N_x N_y$ grid points and $N_t$ time steps:
+                                <div class="math-formula">$$T_{\text{Heat-2D}} = N_t \cdot O(N_x N_y) = O(N_x N_y N_t)$$</div>
+                                $\square$
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <button class="accordion-header" aria-expanded="false">
+                            <span class="accordion-title">Theorem 7: Wave Equation</span>
+                            <span class="accordion-icon">▼</span>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="theorem-statement">
+                                <strong>Theorem 7.</strong> The 1D wave equation solver has time complexity $O(N_x N_t)$.
+                            </div>
+                            <div class="proof-content">
+                                <strong>Proof.</strong> The wave equation $\partial^2 u/\partial t^2 = c^2 \partial^2 u/\partial x^2$ is discretized using the leapfrog scheme:
+                                <div class="math-formula">$$u_i^{j+1} = 2u_i^j - u_i^{j-1} + \frac{c^2 (\Delta t)^2}{(\Delta x)^2}(u_{i+1}^j - 2u_i^j + u_{i-1}^j)$$</div>
+                                Each update requires $O(1)$ operations. Over $N_x$ points and $N_t$ steps:
+                                <div class="math-formula">$$T_{\text{Wave-1D}} = O(N_x N_t)$$</div>
+                                $\square$
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <button class="accordion-header" aria-expanded="false">
+                            <span class="accordion-title">Theorem 8: Advection Equation</span>
+                            <span class="accordion-icon">▼</span>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="theorem-statement">
+                                <strong>Theorem 8.</strong> The advection equation solver using upwind differencing has time complexity $O(N_x N_t)$.
+                            </div>
+                            <div class="proof-content">
+                                <strong>Proof.</strong> The advection equation $\partial u/\partial t + a \partial u/\partial x = 0$ with upwind scheme:
+                                <div class="math-formula">$$u_i^{j+1} = u_i^j - \frac{a \Delta t}{\Delta x}(u_i^j - u_{i-1}^j)$$</div>
+                                Each update is $O(1)$. Over $N_x N_t$ operations:
+                                <div class="math-formula">$$T_{\text{Advection}} = O(N_x N_t)$$</div>
+                                $\square$
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Real-Time and Approximation Methods -->
+                <div class="proof-category">
+                    <h3 class="category-title">Real-Time and O(1) Approximation Methods</h3>
+                    
+                    <div class="accordion-item">
+                        <button class="accordion-header" aria-expanded="false">
+                            <span class="accordion-title">Theorem 9: Real-Time RK3</span>
+                            <span class="accordion-icon">▼</span>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="theorem-statement">
+                                <strong>Theorem 9.</strong> Real-time RK3 maintains $O(n/h)$ complexity with bounded latency $O(n)$ per step.
+                            </div>
+                            <div class="proof-content">
+                                <strong>Proof.</strong> Real-time RK3 uses the same algorithm as standard RK3 but with bounded computation time per step. Each step must complete within a fixed time budget. The complexity remains $O(n/h)$ since the algorithm is unchanged, but with the constraint that each step completes in $O(n)$ time (bounded by the state dimension). The total time is still:
+                                <div class="math-formula">$$T_{\text{RT-RK3}} = O\left(\frac{n}{h}\right)$$</div>
+                                with the additional guarantee that per-step latency is $O(n)$. $\square$
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <button class="accordion-header" aria-expanded="false">
+                            <span class="accordion-title">Theorem 10: Lookup Table Solver</span>
+                            <span class="accordion-icon">▼</span>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="theorem-statement">
+                                <strong>Theorem 10.</strong> Lookup table solver achieves $O(1)$ per-step complexity after $O(N)$ precomputation, where $N$ is the table size.
+                            </div>
+                            <div class="proof-content">
+                                <strong>Proof.</strong> After precomputation, each lookup requires:
+                                <ul>
+                                    <li>Hash computation: $O(1)$ (assuming perfect hash)</li>
+                                    <li>Table access: $O(1)$</li>
+                                    <li>Interpolation (if needed): $O(1)$ for bilinear interpolation in fixed dimensions</li>
+                                </ul>
+                                Per-step: $O(1)$. The precomputation phase requires $O(N)$ operations to fill the table. For $T/h$ steps:
+                                <div class="math-formula">$$T_{\text{Lookup}} = O(N) + \frac{T}{h} \cdot O(1) = O(N) + O\left(\frac{T}{h}\right)$$</div>
+                                For fixed $N$ and many steps, this is effectively $O(T/h)$ with $O(1)$ per-step overhead. $\square$
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <button class="accordion-header" aria-expanded="false">
+                            <span class="accordion-title">Theorem 11: Neural Network Approximator</span>
+                            <span class="accordion-icon">▼</span>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="theorem-statement">
+                                <strong>Theorem 11.</strong> Neural network approximator achieves $O(W)$ per-step complexity where $W$ is the number of weights (fixed network size).
+                            </div>
+                            <div class="proof-content">
+                                <strong>Proof.</strong> A neural network with fixed architecture performs:
+                                <ul>
+                                    <li>Forward pass through $L$ layers</li>
+                                    <li>Each layer: matrix-vector multiplication $O(n_{\text{in}} \cdot n_{\text{out}})$</li>
+                                    <li>Total: $O(\sum_{i=1}^{L} n_i \cdot n_{i+1}) = O(W)$ where $W$ is total weights</li>
+                                </ul>
+                                Since $W$ is fixed (network is pre-trained), per-step complexity is $O(W) = O(1)$ (constant with respect to problem size). Over $T/h$ steps:
+                                <div class="math-formula">$$T_{\text{NN}} = \frac{T}{h} \cdot O(W) = O\left(\frac{T}{h}\right)$$</div>
+                                with $O(1)$ per-step cost for fixed $W$. $\square$
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <button class="accordion-header" aria-expanded="false">
+                            <span class="accordion-title">Theorem 12: Chebyshev Polynomial Approximator</span>
+                            <span class="accordion-icon">▼</span>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="theorem-statement">
+                                <strong>Theorem 12.</strong> Chebyshev polynomial approximator achieves $O(k)$ per-step complexity where $k$ is the polynomial degree (fixed).
+                            </div>
+                            <div class="proof-content">
+                                <strong>Proof.</strong> Evaluating a Chebyshev polynomial of degree $k$:
+                                <div class="math-formula">$$P_k(x) = \sum_{i=0}^{k} a_i T_i(x)$$</div>
+                                where $T_i(x)$ are Chebyshev polynomials. Using Clenshaw's algorithm, evaluation requires $O(k)$ operations. Since $k$ is fixed (pre-determined degree), this is $O(1)$ per step. Over $T/h$ steps:
+                                <div class="math-formula">$$T_{\text{Chebyshev}} = \frac{T}{h} \cdot O(k) = O\left(\frac{T}{h}\right)$$</div>
+                                with $O(1)$ per-step cost for fixed $k$. $\square$
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Bayesian Methods -->
+                <div class="proof-category">
+                    <h3 class="category-title">Bayesian Methods</h3>
+                    
+                    <div class="accordion-item">
+                        <button class="accordion-header" aria-expanded="false">
+                            <span class="accordion-title">Theorem 13: Forward-Backward Algorithm</span>
+                            <span class="accordion-icon">▼</span>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="theorem-statement">
+                                <strong>Theorem 13.</strong> Forward-Backward algorithm has time complexity $O(S^2 T)$ where $S$ is the state space size and $T$ is the number of time steps.
+                            </div>
+                            <div class="proof-content">
+                                <strong>Proof.</strong> The forward pass computes:
+                                <div class="math-formula">$$\alpha_t(s) = \sum_{s'} \alpha_{t-1}(s') \cdot P(s|s') \cdot P(o_t|s)$$</div>
+                                For each time step $t$ and each state $s$, we sum over all previous states $s'$: $O(S^2)$ operations per step. Over $T$ steps:
+                                <div class="math-formula">$$T_{\text{Forward}} = T \cdot O(S^2) = O(S^2 T)$$</div>
+                                The backward pass has the same complexity. Total: $O(S^2 T)$. For fixed $S$ (discretized state space), this is $O(T)$ with $O(S^2) = O(1)$ per step. $\square$
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <button class="accordion-header" aria-expanded="false">
+                            <span class="accordion-title">Theorem 14: Viterbi Algorithm</span>
+                            <span class="accordion-icon">▼</span>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="theorem-statement">
+                                <strong>Theorem 14.</strong> Viterbi algorithm has time complexity $O(S^2 T)$ for finding the MAP estimate.
+                            </div>
+                            <div class="proof-content">
+                                <strong>Proof.</strong> At each time step, Viterbi computes:
+                                <div class="math-formula">$$\delta_t(s) = \max_{s'} [\delta_{t-1}(s') \cdot P(s|s')] \cdot P(o_t|s)$$</div>
+                                For each state $s$, we maximize over all previous states $s'$: $O(S)$ operations. Over $S$ states and $T$ steps:
+                                <div class="math-formula">$$T_{\text{Viterbi}} = T \cdot O(S^2) = O(S^2 T)$$</div>
+                                For fixed $S$, this is $O(T)$ with $O(S^2) = O(1)$ per step. $\square$
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <button class="accordion-header" aria-expanded="false">
+                            <span class="accordion-title">Theorem 15: Particle Filter</span>
+                            <span class="accordion-icon">▼</span>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="theorem-statement">
+                                <strong>Theorem 15.</strong> Particle filter has time complexity $O(NT)$ where $N$ is the number of particles and $T$ is the number of time steps.
+                            </div>
+                            <div class="proof-content">
+                                <strong>Proof.</strong> At each time step:
+                                <ul>
+                                    <li>Propagate particles: $O(N)$ (evaluate ODE for each particle)</li>
+                                    <li>Compute weights: $O(N)$</li>
+                                    <li>Resample: $O(N)$ (systematic resampling)</li>
+                                </ul>
+                                Per step: $O(N)$. Over $T$ steps:
+                                <div class="math-formula">$$T_{\text{Particle}} = T \cdot O(N) = O(NT)$$</div>
+                                For fixed $N$, this is $O(T)$ with $O(N) = O(1)$ per step. $\square$
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Other Methods -->
+                <div class="proof-category">
+                    <h3 class="category-title">Other Advanced Methods</h3>
+                    
+                    <div class="accordion-item">
+                        <button class="accordion-header" aria-expanded="false">
+                            <span class="accordion-title">Theorem 16: Randomized Dynamic Programming</span>
+                            <span class="accordion-icon">▼</span>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="theorem-statement">
+                                <strong>Theorem 16.</strong> Randomized dynamic programming has time complexity $O(MCT)$ where $M$ is the number of Monte Carlo samples, $C$ is the number of control actions, and $T$ is the number of time steps.
+                            </div>
+                            <div class="proof-content">
+                                <strong>Proof.</strong> At each time step:
+                                <ul>
+                                    <li>Sample $M$ states: $O(M)$</li>
+                                    <li>For each sample, evaluate $C$ control actions: $O(MC)$</li>
+                                    <li>Select best action using UCB: $O(C)$</li>
+                                    <li>Step ODE: $O(1)$ per sample</li>
+                                </ul>
+                                Per step: $O(MC)$. Over $T$ steps:
+                                <div class="math-formula">$$T_{\text{RDP}} = T \cdot O(MC) = O(MCT)$$</div>
+                                For fixed $M$ and $C$, this is $O(T)$ with $O(1)$ per-step decisions. $\square$
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <button class="accordion-header" aria-expanded="false">
+                            <span class="accordion-title">Theorem 17: Map/Reduce Framework</span>
+                            <span class="accordion-icon">▼</span>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="theorem-statement">
+                                <strong>Theorem 17.</strong> Map/Reduce achieves time complexity $O(\sqrt{n} \log n)$ with optimal configuration ($m = r = \sqrt{n}$ mappers and reducers).
+                            </div>
+                            <div class="proof-content">
+                                <strong>Proof.</strong> With $m = \sqrt{n}$ mappers:
+                                <ul>
+                                    <li>Map phase: Each mapper processes $n/m = \sqrt{n}$ elements in parallel: $O(\sqrt{n})$</li>
+                                    <li>Shuffle phase: Network communication with $O(n)$ data transfer, but parallelized across $m$ mappers: $O(n/m) = O(\sqrt{n})$</li>
+                                    <li>Reduce phase: Each reducer processes $n/r = \sqrt{n}$ elements: $O(\sqrt{n})$</li>
+                                </ul>
+                                The shuffle phase involves sorting/grouping, which adds $O(\sqrt{n} \log \sqrt{n}) = O(\sqrt{n} \log n)$ complexity. Total:
+                                <div class="math-formula">$$T_{\text{MapReduce}} = O(\sqrt{n}) + O(\sqrt{n} \log n) + O(\sqrt{n}) = O(\sqrt{n} \log n)$$</div>
+                                $\square$
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <button class="accordion-header" aria-expanded="false">
+                            <span class="accordion-title">Theorem 18: Apache Spark Framework</span>
+                            <span class="accordion-icon">▼</span>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="theorem-statement">
+                                <strong>Theorem 18.</strong> Apache Spark achieves time complexity $O(\sqrt{n} \log n)$ with optimal configuration, but $O(1)$ per iteration after caching.
+                            </div>
+                            <div class="proof-content">
+                                <strong>Proof.</strong> Similar to Map/Reduce, Spark has:
+                                <ul>
+                                    <li>Initial pass: $O(\sqrt{n} \log n)$ (same as Map/Reduce)</li>
+                                    <li>Cached iterations: RDDs stored in memory, subsequent iterations access cached data: $O(1)$ per iteration (assuming cache hits)</li>
+                                </ul>
+                                For iterative algorithms:
+                                <div class="math-formula">$$T_{\text{Spark}} = O(\sqrt{n} \log n) + k \cdot O(1) = O(\sqrt{n} \log n)$$</div>
+                                where $k$ is the number of iterations. After the first pass, each iteration is $O(1)$ with caching. $\square$
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <button class="accordion-header" aria-expanded="false">
+                            <span class="accordion-title">Theorem 19: Karmarkar's Algorithm</span>
+                            <span class="accordion-icon">▼</span>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="theorem-statement">
+                                <strong>Theorem 19.</strong> Karmarkar's algorithm has time complexity $O(n^{3.5} L)$ where $n$ is the number of variables and $L$ is the input size in bits.
+                            </div>
+                            <div class="proof-content">
+                                <strong>Proof.</strong> Each iteration of Karmarkar's algorithm requires:
+                                <ul>
+                                    <li>Projective transformation: $O(n^2)$</li>
+                                    <li>Solving the transformed system: $O(n^3)$ (matrix operations)</li>
+                                    <li>Computing search direction: $O(n^2)$</li>
+                                </ul>
+                                Per iteration: $O(n^3)$. The number of iterations is $O(n^{0.5} L)$ where $L$ is the input size. Total:
+                                <div class="math-formula">$$T_{\text{Karmarkar}} = O(n^{0.5} L) \cdot O(n^3) = O(n^{3.5} L)$$</div>
+                                This is polynomial in $n$ and $L$, proving polynomial-time complexity. $\square$
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <button class="accordion-header" aria-expanded="false">
+                            <span class="accordion-title">Theorem 20: Reverse Belief Propagation</span>
+                            <span class="accordion-icon">▼</span>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="theorem-statement">
+                                <strong>Theorem 20.</strong> Reverse belief propagation has time complexity $O(n^2 T)$ for forward pass and $O(n^2 T)$ for reverse pass, where $n$ is the state dimension and $T$ is the number of time steps.
+                            </div>
+                            <div class="proof-content">
+                                <strong>Proof.</strong> Forward pass:
+                                <ul>
+                                    <li>At each step: Store lossless trace (state, derivative, Jacobian): $O(n^2)$ for Jacobian</li>
+                                    <li>Propagate belief: $O(n^2)$ for matrix multiplication $J \cdot P \cdot J^T$</li>
+                                </ul>
+                                Per step: $O(n^2)$. Over $T$ steps: $O(n^2 T)$.
+                                <br><br>
+                                Reverse pass:
+                                <ul>
+                                    <li>Retrieve from trace: $O(1)$</li>
+                                    <li>Propagate belief backward: $O(n^2)$ for matrix operations</li>
+                                </ul>
+                                Per step: $O(n^2)$. Over $T$ steps: $O(n^2 T)$.
+                                <br><br>
+                                Total: $O(n^2 T)$ for both passes. $\square$
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
