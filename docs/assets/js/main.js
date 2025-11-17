@@ -666,12 +666,44 @@
     // Start loading screen
     showLoadingScreen();
 
+    // ============================================================================
+    // Accordion Functionality for Complexity Proofs
+    // ============================================================================
+    
+    function initAccordions() {
+        const accordionHeaders = document.querySelectorAll('.accordion-header');
+        
+        accordionHeaders.forEach(header => {
+            header.addEventListener('click', function() {
+                const isExpanded = this.getAttribute('aria-expanded') === 'true';
+                const content = this.nextElementSibling;
+                
+                // Toggle current accordion
+                this.setAttribute('aria-expanded', !isExpanded);
+                
+                if (!isExpanded) {
+                    content.style.maxHeight = content.scrollHeight + 'px';
+                    // Re-render MathJax when accordion opens
+                    if (window.MathJax && window.MathJax.typesetPromise) {
+                        window.MathJax.typesetPromise([content]).catch(function (err) {
+                            console.error('MathJax rendering error:', err);
+                        });
+                    }
+                } else {
+                    content.style.maxHeight = '0';
+                }
+            });
+        });
+    }
+
     // Initialize on DOM ready
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', function() {
             console.log('DDRKAM website DOM loaded');
+            initAccordions();
         });
     } else {
         console.log('DDRKAM website initialized');
+        initAccordions();
     }
 })();
