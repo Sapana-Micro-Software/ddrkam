@@ -321,6 +321,98 @@ Predict future states using quantum superposition.
 \subsection{quantum\_ode\_refine}
 Post-real-time refinement for improved accuracy.
 
+\section{Genetic Programming Solver with Cascading Hash Tables}
+
+The genetic programming solver uses evolutionary algorithms to evolve symbolic expressions representing solutions to ODEs and PDEs. It operates in offline mode, pre-computing solutions and storing them in cascading hash tables for fast runtime lookup.
+
+\subsection{Overview}
+
+The genetic programming approach:
+\begin{itemize}
+\item Represents solutions as tree-structured programs
+\item Evolves population through selection, crossover, and mutation
+\item Uses cascading hash tables for multi-level caching
+\item Supports offline pre-computation and online lookup
+\end{itemize}
+
+\subsection{C API}
+
+\subsubsection{Data Structures}
+
+\begin{verbatim}
+typedef struct GeneticProgram {
+    GPNode* root;
+    double fitness;
+    double* parameters;
+    size_t param_count;
+    size_t complexity;
+} GeneticProgram;
+
+typedef struct CascadingHashTables {
+    HashTable** levels;
+    size_t level_count;
+    size_t* level_sizes;
+    double* similarity_thresholds;
+} CascadingHashTables;
+
+typedef struct GeneticSolver {
+    ProblemDef problem;
+    GAParams ga_params;
+    GeneticProgram** population;
+    CascadingHashTables* hash_tables;
+    FitnessFunction fitness_func;
+    // ... statistics and state
+} GeneticSolver;
+\end{verbatim}
+
+\subsubsection{Key Functions}
+
+\begin{itemize}
+\item \texttt{genetic\_solver\_create()}: Create a new genetic solver
+\item \texttt{genetic\_solver\_solve()}: Run genetic algorithm to find solution
+\item \texttt{cascading\_hash\_insert()}: Insert solution into hash tables
+\item \texttt{cascading\_hash\_lookup()}: Lookup cached solution
+\item \texttt{genetic\_solver\_set\_offline\_mode()}: Enable offline caching
+\end{itemize}
+
+\subsection{Objective-C API}
+
+\begin{verbatim}
+DDRKAMProblemDefinition* problem = 
+    [[DDRKAMProblemDefinition alloc] 
+     initWithType:DDRKAMProblemTypeODE
+         dimension:1
+  spatialDimension:0
+   initialConditions:@[@0.0]
+        domainBounds:@[@0.0, @10.0]
+          tolerance:1e-6
+            maxSteps:1000];
+
+DDRKAMGAParameters* params = [DDRKAMGAParameters defaultParameters];
+
+DDRKAMGeneticODESolver* solver = 
+    [[DDRKAMGeneticODESolver alloc] 
+     initWithProblem:problem
+          parameters:params
+    fitnessFunction:^double(DDRKAMGeneticProgram* program, 
+                            DDRKAMProblemDefinition* problem) {
+        // Evaluate fitness
+        return fitness;
+    }];
+
+// Set cascading hash tables
+[solver setHashTablesWithLevelCount:3
+                          levelSizes:@[@1000, @5000, @10000]
+                 similarityThresholds:@[@0.9, @0.7, @0.5]];
+
+// Enable offline mode
+solver.offlineMode = YES;
+solver.cacheFilePath = @"/path/to/cache.dat";
+
+// Solve
+DDRKAMGeneticProgram* solution = [solver solve];
+\end{verbatim}
+
 \section{Reverse Belief Propagation with Lossless Tracing}
 
 Backwards uncertainty propagation with lossless state tracing.
