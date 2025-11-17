@@ -682,14 +682,36 @@
                 this.setAttribute('aria-expanded', !isExpanded);
                 
                 if (!isExpanded) {
+                    // Expand accordion
                     content.style.maxHeight = content.scrollHeight + 'px';
-                    // Re-render MathJax when accordion opens
-                    if (window.MathJax && window.MathJax.typesetPromise) {
-                        window.MathJax.typesetPromise([content]).catch(function (err) {
-                            console.error('MathJax rendering error:', err);
-                        });
-                    }
+                    
+                    // Wait for transition, then render MathJax
+                    setTimeout(function() {
+                        if (window.MathJax) {
+                            // Check if MathJax is loaded and ready
+                            if (window.MathJax.typesetPromise) {
+                                window.MathJax.typesetPromise([content]).then(function() {
+                                    // Adjust height after MathJax renders (formulas may change height)
+                                    content.style.maxHeight = content.scrollHeight + 'px';
+                                }).catch(function (err) {
+                                    console.error('MathJax rendering error:', err);
+                                });
+                            } else if (window.MathJax.startup && window.MathJax.startup.promise) {
+                                // MathJax not ready yet, wait for it
+                                window.MathJax.startup.promise.then(function() {
+                                    if (window.MathJax.typesetPromise) {
+                                        window.MathJax.typesetPromise([content]).then(function() {
+                                            content.style.maxHeight = content.scrollHeight + 'px';
+                                        }).catch(function (err) {
+                                            console.error('MathJax rendering error:', err);
+                                        });
+                                    }
+                                });
+                            }
+                        }
+                    }, 150);
                 } else {
+                    // Collapse accordion
                     content.style.maxHeight = '0';
                 }
             });
