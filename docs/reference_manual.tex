@@ -233,6 +233,94 @@ O(1) step: estimate value and choose optimal control.
 \subsubsection{randomized\_dp\_solve}
 Solve ODE using randomized DP with backward induction.
 
+\section{O(1) Approximation Solvers}
+
+Constant-time approximation methods for hard real-time constraints.
+
+\subsection{Lookup Table Solver}
+
+Pre-computed solutions with O(1) lookup and bilinear interpolation.
+
+\subsubsection{lookup\_table\_init}
+Initialize lookup table solver with grid dimensions.
+
+\subsubsection{lookup\_table\_precompute}
+Pre-compute solution grid offline (can use any method).
+
+\subsubsection{lookup\_table\_solve}
+O(1) lookup with bilinear interpolation.
+
+\subsection{Neural Network Approximator}
+
+Neural network for O(1) solution approximation.
+
+\subsubsection{neural\_approximator\_init}
+Initialize neural network with layer sizes.
+
+\subsubsection{neural\_approximator\_solve}
+O(1) forward pass to approximate solution.
+
+\subsection{Chebyshev Polynomial Approximator}
+
+Polynomial approximation with O(k) ≈ O(1) evaluation.
+
+\subsubsection{chebyshev\_approximator\_init}
+Initialize Chebyshev approximator.
+
+\subsubsection{chebyshev\_approximator\_solve}
+O(1) Chebyshev evaluation using Clenshaw's algorithm.
+
+\section{Causal and Granger Causality Solvers}
+
+\subsection{Causal RK4 Solver}
+
+Strictly causal RK4 using only past information.
+
+\subsubsection{causal\_rk4\_init}
+Initialize causal RK4 solver.
+
+\subsubsection{causal\_rk4\_step}
+O(1) causal RK4 step.
+
+\subsection{Causal Adams Solver}
+
+Multi-step Adams method with causal constraints.
+
+\subsubsection{causal\_adams\_init}
+Initialize causal Adams solver.
+
+\subsubsection{causal\_adams\_step}
+O(1) causal Adams step.
+
+\subsection{Granger Causality Solver}
+
+Analyzes causal relationships and adapts solving strategy.
+
+\subsubsection{granger\_causality\_init}
+Initialize Granger causality solver.
+
+\subsubsection{granger\_causality\_step}
+O(1) step with adaptive solving based on causality.
+
+\subsubsection{granger\_causality\_get\_matrix}
+Get Granger causality matrix.
+
+\section{Quantum ODE Solver}
+
+Quantum-inspired nonlinear ODE solver for post-real-time future prediction.
+
+\subsection{quantum\_ode\_init}
+Initialize quantum ODE solver.
+
+\subsection{quantum\_ode\_step}
+Quantum-inspired optimization step.
+
+\subsection{quantum\_ode\_predict\_future}
+Predict future states using quantum superposition.
+
+\subsection{quantum\_ode\_refine}
+Post-real-time refinement for improved accuracy.
+
 \section{Real-Time, Online, and Dynamic Methods}
 
 \subsection{Real-Time Methods}

@@ -133,6 +133,30 @@ $$y_{n+1} = y_n + \frac{h}{12}(5f_{n+1} + 8f_n - f_{n-1})$$
 \item Adaptive method selection (RK3 vs AM)
 \end{itemize}
 
+\frametitle{O(1) Approximation Solvers}
+\begin{itemize}
+\item Lookup tables: Pre-computed solutions, $O(1)$ hash lookup
+\item Neural networks: $O(1)$ forward pass with fixed depth
+\item Chebyshev polynomials: $O(k) \approx O(1)$ with fixed degree
+\item Hard real-time: Guaranteed constant-time performance
+\end{itemize}
+
+\frametitle{Causal \& Granger Causality Solvers}
+\begin{itemize}
+\item Causal RK4/Adams: Strictly causal (only past information)
+\item Granger causality: Detects causal relationships between variables
+\item Adaptive solving based on detected causalities
+\item Real-time with causal constraints
+\end{itemize}
+
+\frametitle{Quantum ODE Solver}
+\begin{itemize}
+\item Quantum-inspired optimization for nonlinear ODEs
+\item Future prediction using quantum superposition
+\item Post-real-time refinement for improved accuracy
+\item Quantum annealing and tunneling for global optimization
+\end{itemize}
+
 \frametitle{Real-Time, Online, and Dynamic Methods}
 \begin{block}{Execution Modes}
 \begin{itemize}

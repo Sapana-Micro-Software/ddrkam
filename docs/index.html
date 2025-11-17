@@ -187,6 +187,11 @@
                     <p>Adaptive step size and method selection using <strong>Monte Carlo value estimation</strong> and UCB exploration for optimal control in O(1) per-step decisions.</p>
                 </div>
                 <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>O(1) Approximation Solvers</h3>
+                    <p><strong>Constant-time</strong> approximation methods for hard real-time constraints: lookup tables with bilinear interpolation, neural network approximators, and Chebyshev polynomial methods. All provide true O(1) per-step performance with pre-computation.</p>
+                </div>
+                <div class="feature-card">
                     <div class="feature-icon">🔬</div>
                     <h3>DDMCMC Optimization</h3>
                     <p>Data-Driven MCMC for multinomial variables with efficient search algorithms for learning optimization functions.</p>
@@ -881,6 +886,23 @@
                         <li>✓ UCB-based exploration</li>
                         <li>✓ Adaptive control selection</li>
                         <li>✓ O(1) per-step decisions</li>
+                    </ul>
+                </div>
+                
+                <div class="method-card">
+                    <div class="method-header">
+                        <h3>O(1) Approximation Solvers</h3>
+                        <span class="method-badge">Real-Time</span>
+                    </div>
+                    <p class="method-description">Constant-time approximation methods for hard real-time constraints: lookup tables, neural networks, and Chebyshev polynomials with O(1) per-step complexity.</p>
+                    <div class="method-formula">
+                        <code>y(t) ≈ lookup(t, θ) or NN(t, y₀, θ)</code>
+                    </div>
+                    <ul class="method-features">
+                        <li>✓ Lookup tables: O(1) hash lookup</li>
+                        <li>✓ Neural networks: O(1) forward pass</li>
+                        <li>✓ Chebyshev: O(k) ≈ O(1) evaluation</li>
+                        <li>✓ Pre-computed offline, fast online</li>
                     </ul>
                 </div>
                 <div class="comparison-card">
