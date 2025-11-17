@@ -15,9 +15,7 @@ are protected by copyright law.
 
 ## Contact for Licensing
 
-For licensing information, commercial use inquiries, or permission requests, please contact:
-
-**Email:** sapanamicrosoftware@duck.com
+For licensing information, please contact: sapanamicrosoftware@duck.com
 
 ## Inventor
 

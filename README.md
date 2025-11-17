@@ -123,8 +123,7 @@ See `docs/PDE_GUIDE.md` for complete PDE documentation.
 
 Copyright (C) 2025, Shyamal Suhana Chandra. All rights reserved.
 
-For licensing information, please contact:
-**sapanamicrosoftware@duck.com**
+For licensing information, please contact: sapanamicrosoftware@duck.com
 
 ## Repository
 
