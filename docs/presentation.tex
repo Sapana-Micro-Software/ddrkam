@@ -116,6 +116,24 @@ $$y_{n+1} = y_n + \frac{h}{12}(5f_{n+1} + 8f_n - f_{n-1})$$
 
 \begin{frame}
 \frametitle{Real-Time, Online, and Dynamic Methods}
+
+\frametitle{Bayesian ODE Solvers with Dynamic Programming}
+\begin{itemize}
+\item Forward-Backward: Full posterior $p(y(t) | \text{obs})$ in $O(S^2) \approx O(1)$
+\item Viterbi: MAP estimate (exact solution) in $O(S^2) \approx O(1)$
+\item Particle Filter: Monte Carlo approximation for nonlinear systems
+\item Uncertainty quantification and robust control
+\end{itemize}
+
+\frametitle{Randomized Dynamic Programming}
+\begin{itemize}
+\item Monte Carlo value estimation for adaptive control
+\item UCB-based exploration for step size selection
+\item $O(1)$ per-step decisions with probabilistic guarantees
+\item Adaptive method selection (RK3 vs AM)
+\end{itemize}
+
+\frametitle{Real-Time, Online, and Dynamic Methods}
 \begin{block}{Execution Modes}
 \begin{itemize}
 \item Real-Time: Streaming data, minimal latency

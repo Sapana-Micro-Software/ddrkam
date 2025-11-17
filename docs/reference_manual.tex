@@ -192,6 +192,47 @@ int concurrent_rk_execute(ParallelRKSolver* solvers[], size_t num_solvers,
                           void* params, double** results);
 \end{lstlisting}
 
+\section{Bayesian ODE Solvers with Dynamic Programming}
+
+\subsection{Forward-Backward Solver}
+
+Probabilistic solver computing full posterior distribution.
+
+\subsubsection{forward\_backward\_init}
+Initialize forward-backward solver with state space discretization and transition matrix.
+
+\subsubsection{forward\_backward\_step}
+Update forward probabilities with new observation. Complexity: $O(S^2)$ where $S$ is fixed state space size.
+
+\subsubsection{forward\_backward\_get\_statistics}
+Get mean, variance, and full posterior distribution.
+
+\subsection{Viterbi Solver}
+
+Exact (MAP) solver finding most likely solution path.
+
+\subsubsection{viterbi\_init}
+Initialize Viterbi solver.
+
+\subsubsection{viterbi\_step}
+Update Viterbi table with new observation.
+
+\subsubsection{viterbi\_get\_map}
+Get MAP estimate and path probability.
+
+\subsection{Randomized Dynamic Programming}
+
+Adaptive control via Monte Carlo value estimation.
+
+\subsubsection{randomized\_dp\_init}
+Initialize randomized DP solver with sampling parameters.
+
+\subsubsection{randomized\_dp\_step}
+O(1) step: estimate value and choose optimal control.
+
+\subsubsection{randomized\_dp\_solve}
+Solve ODE using randomized DP with backward induction.
+
 \section{Real-Time, Online, and Dynamic Methods}
 
 \subsection{Real-Time Methods}

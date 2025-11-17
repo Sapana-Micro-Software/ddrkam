@@ -99,6 +99,28 @@ Multiple methods can execute simultaneously, enabling real-time comparison and e
 
 We extend all numerical methods with real-time, online, and dynamic execution capabilities:
 
+\subsubsection{Bayesian ODE Solvers with Dynamic Programming}
+
+We introduce \textbf{Bayesian ODE solvers} that treat ODE solving as a state estimation problem, providing both probabilistic and exact (MAP) solutions in O(1) time:
+
+\begin{itemize}
+\item \textbf{Forward-Backward Algorithm}: Computes full posterior distribution $p(y(t) | \text{observations})$ using dynamic programming. Complexity: $O(S^2)$ per step where $S$ is the fixed state space size, effectively $O(1)$.
+\item \textbf{Viterbi Algorithm}: Finds most likely solution path (MAP estimate) using dynamic programming. Provides exact solutions with $O(S^2)$ complexity per step.
+\item \textbf{Particle Filter}: Monte Carlo approximation for nonlinear/non-Gaussian systems with $O(N)$ complexity where $N$ is the fixed number of particles.
+\end{itemize}
+
+\subsubsection{Randomized Dynamic Programming}
+
+We introduce \textbf{randomized dynamic programming} for adaptive step size and method selection:
+
+\begin{itemize}
+\item \textbf{Monte Carlo Value Estimation}: Samples random states and estimates value function via Monte Carlo, enabling $O(1)$ per-step decisions.
+\item \textbf{UCB-based Exploration}: Uses Upper Confidence Bound to balance exploration and exploitation in control selection.
+\item \textbf{Adaptive Control}: Dynamically selects optimal step sizes and numerical methods based on system characteristics.
+\end{itemize}
+
+These methods enable real-time ODE solving with uncertainty quantification and adaptive optimization.
+
 \subsubsection{Real-Time Methods}
 
 Real-time methods process streaming data with minimal latency, suitable for live data feeds and continuous monitoring applications. They feature:
@@ -819,6 +841,8 @@ The framework now includes:
 \item Standard methods (RK3, DDRK3, AM, DDAM)
 \item Parallel methods (Parallel RK3, Parallel AM, Stacked RK3)
 \item Real-time and online methods (Real-Time RK3, Online RK3, Dynamic RK3)
+\item Bayesian ODE solvers with dynamic programming (Forward-Backward, Viterbi, Particle Filter)
+\item Randomized dynamic programming for adaptive control and step size selection
 \item Nonlinear programming solvers (Nonlinear ODE, Nonlinear PDE)
 \item Karmarkar's Algorithm for polynomial-time linear programming
 \item Interior Point Methods for non-convex, nonlinear, and online algorithms

@@ -177,6 +177,16 @@
                     <p>Adaptive step size control and method selection based on system characteristics, error history, and performance requirements.</p>
                 </div>
                 <div class="feature-card">
+                    <div class="feature-icon">🔮</div>
+                    <h3>Bayesian ODE Solvers</h3>
+                    <p><strong>Forward-Backward and Viterbi algorithms</strong> for probabilistic and exact (MAP) ODE solutions in O(1) time with full uncertainty quantification and robust control.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎲</div>
+                    <h3>Randomized Dynamic Programming</h3>
+                    <p>Adaptive step size and method selection using <strong>Monte Carlo value estimation</strong> and UCB exploration for optimal control in O(1) per-step decisions.</p>
+                </div>
+                <div class="feature-card">
                     <div class="feature-icon">🔬</div>
                     <h3>DDMCMC Optimization</h3>
                     <p>Data-Driven MCMC for multinomial variables with efficient search algorithms for learning optimization functions.</p>
@@ -840,6 +850,38 @@
                 <div class="comparison-card">
                     <h3>Real-Time RK3</h3>
                     <p>Real-Time Runge-Kutta<br>Streaming data</p>
+                </div>
+                <div class="method-card">
+                    <div class="method-header">
+                        <h3>Bayesian ODE Solvers</h3>
+                        <span class="method-badge">Probabilistic</span>
+                    </div>
+                    <p class="method-description">Forward-Backward and Viterbi algorithms for probabilistic and exact (MAP) ODE solutions in O(1) time with uncertainty quantification.</p>
+                    <div class="method-formula">
+                        <code>p(y(t) | observations)</code>
+                    </div>
+                    <ul class="method-features">
+                        <li>✓ Forward-Backward: Full posterior</li>
+                        <li>✓ Viterbi: MAP estimate</li>
+                        <li>✓ O(1) per-step complexity</li>
+                        <li>✓ Uncertainty quantification</li>
+                    </ul>
+                </div>
+                <div class="method-card">
+                    <div class="method-header">
+                        <h3>Randomized DP</h3>
+                        <span class="method-badge">Adaptive</span>
+                    </div>
+                    <p class="method-description">Randomized dynamic programming for adaptive step size and method selection using Monte Carlo value estimation and UCB exploration.</p>
+                    <div class="method-formula">
+                        <code>V(s) ≈ (1/N) Σᵢ R(pathᵢ)</code>
+                    </div>
+                    <ul class="method-features">
+                        <li>✓ Monte Carlo value estimation</li>
+                        <li>✓ UCB-based exploration</li>
+                        <li>✓ Adaptive control selection</li>
+                        <li>✓ O(1) per-step decisions</li>
+                    </ul>
                 </div>
                 <div class="comparison-card">
                     <h3>Online RK3</h3>
